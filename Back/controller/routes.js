@@ -1,10 +1,14 @@
-const tales = require("./product")
+const product = require("./product")
 
 
 
 module.exports = function (app) {
     // app.delete('/tales', tales.delTale);
-    app.put('/tales', tales.addTale);
-    app.get('/tales', tales.getTales);
-    app.delete('/tales', tales.delTales);
+    
+    //add product for a producer
+    app.put('/producer', product.addProduct);
+
+
+    // app.get('/producer', product.getTales);
+    // app.delete('/producer', product.delTales);
 }
