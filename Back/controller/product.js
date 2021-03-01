@@ -2,13 +2,13 @@ const Product = require("../schema/product")
 const axios = require('axios').default
 
 async function addProduct(req, res) {
-    const { product, duration_in_days } = req.body;
-    if (!product || !duration_in_days) {
+    const { product, duration_in_days, amount } = req.body;
+    if (!product || !duration_in_days || !amount) {
         return res.status(400).json({
             text: "invalid request"
         });
     }
-    
+
     var openData = "no data received";
     var productData;
 
@@ -16,7 +16,7 @@ async function addProduct(req, res) {
         await axios.get(`https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-food-facts-products%40public&q=&refine.product_name=${product}`)
             .then((res) => {
                 openData = res.data.records.fields;
-                
+
                 productData = {
 
                     labels_fr: res.data.records[0].fields.labels_fr,
@@ -56,17 +56,24 @@ async function addProduct(req, res) {
 
                     expiration_datetime: new Date(Date.now() + duration_in_days * 86400000),
                     location: "Producer",
-                    
+
                 }
             }).then(async function () {
-
+                var text = [];
                 try {
                     // save user in DB
-                    const Data = new Product(productData);
+                    for (let index = 0; index < amount; index++) {
+                        
+                        const Data = new Product(productData);
 
-                    await Data.save();
+                        await Data.save();
+                        text.push(Data._id)
+                    }
+                    // const Data = new Product(productData);
+
+                    // await Data.save();
                     return res.status(200).json({
-                        text: `product added with id: ${Data._id}`,
+                        text: `product added with id: ${text}`,
                     });
                 } catch (error) {
                     console.log(error)
