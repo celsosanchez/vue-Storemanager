@@ -1,7 +1,8 @@
 const Product = require("../schema/product")
+const ProducerStockEntry = require("../schema/producer_stock")
 const axios = require('axios').default
 
-async function addProduct(req, res) {
+async function addProducts(req, res) {
     const { product, duration_in_days, amount } = req.body;
     if (!product || !duration_in_days || !amount) {
         return res.status(400).json({
@@ -53,72 +54,111 @@ async function addProduct(req, res) {
                     quantity: res.data.records[0].fields.quantity,
                     production_datetime: Date.now(),
 
-
                     expiration_datetime: new Date(Date.now() + duration_in_days * 86400000),
                     location: "Producer",
-
                 }
             }).then(async function () {
-                var text = [];
+                var ids = [];
                 try {
-                    // save user in DB
-                    for (let index = 0; index < amount; index++) {
-                        
-                        const Data = new Product(productData);
-
-                        await Data.save();
-                        text.push(Data._id)
+                    //adding to Producer_Stock 
+                    prod_stock = {
+                        brands: productData.brands,
+                        product_name: productData.product_name,
+                        amount: amount,
+                        where: 'Produced',
+                        time_stamp: productData.production_datetime
                     }
-                    // const Data = new Product(productData);
-
-                    // await Data.save();
+                    const stock = new ProducerStockEntry(prod_stock);
+                    stock.save();
+                    //adding to Product
+                    for (let index = 0; index < amount; index++) {
+                        const Data = new Product(productData);
+                        await Data.save();
+                        ids.push(Data._id)
+                    }
                     return res.status(200).json({
-                        text: `product added with id: ${text}`,
+                        text: `products added with ids: `,
+                        ids: ids
                     });
                 } catch (error) {
                     console.log(error)
                     return res.status(500).json({ error });
                 }
-
             })
-        // console.log(response);
-
-
-
-
-
     } catch (error) {
         console.log(error)
         return res.status(500).json({ error });
     }
-
-
-
 }
 
 
+async function getProducts(req, res) {
+    console.log(req.body)
+    query = {};
+    query.location = "expired"; 
+    
+    
+    try {
+        const found = await Product.find(req.body);
+        return res.status(200).json({
+            count: found.length,
+            found
+        })
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+}
 
 
-// var a = new Date(Date.now());
-// const tale = {
-//     Title,
-//     Body,
-//     Type,
-//     Add_Time: a
-// };
-// try {
-//     // save user in DB
-//     const taleData = new Tales(tale);
-//     await taleData.save();
-//     return res.status(200).json({
-//         text: "tale added",
-//     });
-// } catch (error) {
-//     return res.status(500).json({ error });
-// }
+async function rmProducerEntry(req, res) {
+    const { productName, amount, location } = req.body;
+    if (!productName || !amount || !location) {
+        return res.status(400).json({
+            text: "invalid request, specify product name, amount to remove, reason and new location"
+        });
+    }
+    try {
+        await moveProducts(productName, amount, location, "Producer")
+        const found = await Product.find({ product_name: productName });
+        const entry = {
+            brands: found[0].brands,
+            product_name: found[0].product_name,
+            amount: Math.abs(amount)*-1,
+            where: location,
+            time_stamp: Date.now(),
+        }
+        const Data = new ProducerStockEntry(entry);
+        await Data.save();
+        
+        return res.status(200).json({
+            text: `moved ${amount} of ${productName} to ${location} from its Producer`
+        })
+    } catch (error) {
+        return res.status(500).json({
+            error
+        })
+    }
+}
 
-// }
 
+async function moveProducts(productName, amount, location, ...args) {
+    try {
+        var found = args[0] ? await Product.find({ product_name: productName, location: args[0] }) : await Product.find({ product_name: productName });
+        if (found.length < Math.abs(amount))
+        throw `no enough products on location: ${args[0]} to complete the request`
+            found.sort((a, b) => {
+                return a.production_datetime - b.production_datetime
+            });
+        for (let index = 0; index < Math.abs(amount); index++) {
+            found[index].location = location;
+            const Data = new Product(found[index])
+            await Data.save();
+        }
+    } catch (error) {
+        throw error
+    }
+};
+ 
 
 async function addTale(req, res) {
     const { Title, Body, Type } = req.body;
@@ -166,8 +206,6 @@ async function delTales(req, res) {
             text: "invalid request"
         });
     }
-
-
     try {
         // save user in DB
         const taleData = await Tales.findOneAndDelete({ "Title": Title });
@@ -181,9 +219,10 @@ async function delTales(req, res) {
 
 }
 
-exports.delTales = delTales;
-exports.getTales = getTales;
-exports.addTale = addTale;
 
 
-exports.addProduct = addProduct;
+exports.addProducts = addProducts;
+exports.moveProducts = moveProducts;
+exports.rmProducerEntry = rmProducerEntry;
+
+exports.getProducts = getProducts;
