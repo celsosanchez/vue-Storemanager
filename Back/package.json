@@ -1,10 +1,11 @@
 {
-  "name": "talesapi",
+  "name": "BackProj",
   "version": "1.0.0",
-  "description": "tales api",
-  "main": "index.js",
+  "description": "Express server for 4Proj",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "nodemon ./server.js --exec babel-node -e js"
   },
   "author": "Celso Sanchez",
   "license": "ISC",
@@ -15,6 +16,12 @@
     "express": "^4.17.1",
     "express-generator": "^4.2.0",
     "mongoose": "^5.9.16",
-    "mongose": "0.0.2-security"
+    "mongose": "0.0.2-security",
+    "nodemon": "^2.0.7"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1"
   }
 }

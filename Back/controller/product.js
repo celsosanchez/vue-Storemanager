@@ -94,10 +94,7 @@ async function addProducts(req, res) {
 
 async function getProducts(req, res) {
     console.log(req.body)
-    query = {};
-    query.location = "expired"; 
-    
-    
+   
     try {
         const found = await Product.find(req.body);
         return res.status(200).json({
