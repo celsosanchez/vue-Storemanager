@@ -7,8 +7,7 @@ module.exports = function (app) {
     
     //add product for a producer
     app.put('/producer', product.addProduct);
-
-
+    app.get('/producer', product.getProducts);
     // app.get('/producer', product.getTales);
     // app.delete('/producer', product.delTales);
 }

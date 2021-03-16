@@ -73,7 +73,8 @@ async function addProduct(req, res) {
 
                     // await Data.save();
                     return res.status(200).json({
-                        text: `product added with id: ${text}`,
+                        text: `products added with ids: `,
+                        ids: text
                     });
                 } catch (error) {
                     console.log(error)
@@ -99,25 +100,20 @@ async function addProduct(req, res) {
 
 
 
-// var a = new Date(Date.now());
-// const tale = {
-//     Title,
-//     Body,
-//     Type,
-//     Add_Time: a
-// };
-// try {
-//     // save user in DB
-//     const taleData = new Tales(tale);
-//     await taleData.save();
-//     return res.status(200).json({
-//         text: "tale added",
-//     });
-// } catch (error) {
-//     return res.status(500).json({ error });
-// }
+async function getProducts(req, res) {
+    const {brands} = req.body
+    try {
+        const found = await Product.find({brands: brands});
+        return res.status(200).json({
+            count: found.length,
+            found
+        })
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
 
-// }
+
+}
 
 
 async function addTale(req, res) {
@@ -187,3 +183,4 @@ exports.addTale = addTale;
 
 
 exports.addProduct = addProduct;
+exports.getProducts = getProducts;
