@@ -1,14 +1,16 @@
 require('dotenv').config();
 import express from "express";
-import { connect } from "mongoose";
-import { urlencoded, json } from 'body-parser';
-import routes from './controller/routes';
-import cors from 'cors';
+import { connect, mongoose }from "mongoose";
 
- 
-const db = process.env.MONGO_DB;
- 
-connect(db, { useNewUrlParser: true ,useUnifiedTopology: true})
+import session from 'express-session';
+import { urlencoded, json } from 'body-parser';
+import cors from 'cors';
+import routes from './controller/routes';
+
+import cookieParser from 'cookie-parser';
+import MongoStore from 'connect-mongo'
+  
+connect(process.env.MONGO_DB, { useNewUrlParser: true ,useUnifiedTopology: true})
     .then(() => {
         console.log("Connected to mongoDB");
     })
@@ -22,12 +24,22 @@ const app = express();
 //allow from any origin
 app.use(cors());
 // session store definiton onto mongo
+app.use(session({
+    secret: process.env.SECRET,
+    resave: true,
+    saveUninitialized: false,
+    cookie: {maxAge: 60000},
+     
+    // store: MongoStore.create({mongoUrl: process.env.MONGO_DB})
 
+}))
 //Body Parser
+
 const urlencodedParser = urlencoded({
     extended: true
 });
 app.use(urlencodedParser);
+app.use(cookieParser())
 app.use(json());
 
 //Routing
