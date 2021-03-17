@@ -1,13 +1,12 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require('body-parser');
-const routes = require('./controller/routes');
+import express from "express";
+import { connect } from "mongoose";
+import { urlencoded, json } from 'body-parser';
+import routes from './controller/routes';
 
-var cors = require('cors');
+import cors from 'cors';
 
 
-mongoose
-    .connect("mongodb+srv://admin:admin123@cluster0.4i7l5.mongodb.net/store?retryWrites=true&w=majority", { useNewUrlParser: true ,useUnifiedTopology: true})
+connect("mongodb+srv://admin:admin123@cluster0.4i7l5.mongodb.net/store?retryWrites=true&w=majority", { useNewUrlParser: true ,useUnifiedTopology: true})
     .then(() => {
         console.log("Connected to mongoDB");
     })
@@ -23,11 +22,11 @@ app.use(cors());
 // session store definiton onto mongo
 
 //Body Parser
-const urlencodedParser = bodyParser.urlencoded({
+const urlencodedParser = urlencoded({
     extended: true
 });
 app.use(urlencodedParser);
-app.use(bodyParser.json());
+app.use(json());
 
 //Routing
 routes(app)

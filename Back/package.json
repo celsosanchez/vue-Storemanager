@@ -1,5 +1,5 @@
 {
-  "name": "BackProj",
+  "name": "back-proj",
   "version": "1.0.0",
   "description": "Express server for 4Proj",
   "main": "server.js",
