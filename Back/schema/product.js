@@ -41,13 +41,7 @@ const product = mongoose.Schema(
         expiration_datetime: Date,
         location: String,
         duration_in_days: Number 
-
-
-
-
-
-
-
+ 
     });
 
 module.exports = mongoose.model("Product", product)

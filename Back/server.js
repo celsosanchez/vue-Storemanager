@@ -1,12 +1,14 @@
+require('dotenv').config();
 import express from "express";
 import { connect } from "mongoose";
 import { urlencoded, json } from 'body-parser';
 import routes from './controller/routes';
-
 import cors from 'cors';
 
-
-connect("mongodb+srv://admin:admin123@cluster0.4i7l5.mongodb.net/store?retryWrites=true&w=majority", { useNewUrlParser: true ,useUnifiedTopology: true})
+ 
+const db = process.env.MONGO_DB;
+ 
+connect(db, { useNewUrlParser: true ,useUnifiedTopology: true})
     .then(() => {
         console.log("Connected to mongoDB");
     })
