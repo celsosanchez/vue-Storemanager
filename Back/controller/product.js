@@ -12,7 +12,6 @@ async function addProducts(req, res) {
 
     var openData = "no data received";
     var productData;
-
     try {
         await axios.get(`https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-food-facts-products%40public&q=&refine.product_name=${product}`)
             .then((res) => {
@@ -94,7 +93,8 @@ async function addProducts(req, res) {
 
 async function getProducts(req, res) {
     console.log(req.body)
-   
+    req.session.visit = req.session.visit ? req.session.visit + 1 : 1
+    console.log(req.session.visit)
     try {
         const found = await Product.find(req.body);
         return res.status(200).json({
@@ -221,5 +221,4 @@ async function delTales(req, res) {
 exports.addProducts = addProducts;
 exports.moveProducts = moveProducts;
 exports.rmProducerEntry = rmProducerEntry;
-
 exports.getProducts = getProducts;
