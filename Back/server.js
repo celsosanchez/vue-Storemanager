@@ -1,7 +1,6 @@
 require('dotenv').config();
 import express from "express";
-import { connect, mongoose }from "mongoose";
-
+import { connect }from "mongoose";
 import session from 'express-session';
 import { urlencoded, json } from 'body-parser';
 import cors from 'cors';
@@ -29,9 +28,7 @@ app.use(session({
     resave: true,
     saveUninitialized: false,
     cookie: {maxAge: 60000},
-     
-    // store: MongoStore.create({mongoUrl: process.env.MONGO_DB})
-
+    store: MongoStore.create({mongoUrl: process.env.MONGO_DB})
 }))
 //Body Parser
 

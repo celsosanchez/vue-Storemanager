@@ -16,9 +16,7 @@ async function addProducts(req, res) {
         await axios.get(`https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-food-facts-products%40public&q=&refine.product_name=${product}`)
             .then((res) => {
                 openData = res.data.records.fields;
-
                 productData = {
-
                     labels_fr: res.data.records[0].fields.labels_fr,
                     carbohydrates_100g: res.data.records[0].fields.carbohydrates_100g,
                     salt_100g: res.data.records[0].fields.salt_100g,
