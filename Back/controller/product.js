@@ -92,7 +92,9 @@ async function addProducts(req, res) {
 async function getProducts(req, res) {
     console.log(req.body)
     req.session.visit = req.session.visit ? req.session.visit + 1 : 1
-    console.log(req.session.visit)
+    console.log(req.session.visit);
+    console.log(req.session);
+    
     try {
         const found = await Product.find(req.body);
         return res.status(200).json({
