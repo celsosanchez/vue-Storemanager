@@ -1,6 +1,8 @@
-const Product = require("../schema/product")
-const ProducerStockEntry = require("../schema/producer_stock")
-const axios = require('axios').default
+const Product = require("../schema/product");
+const ProducerStockEntry = require("../schema/producer_stock");
+const axios = require('axios').default;
+const User = require('../schema/user');
+
 
 async function addProducts(req, res) {
     const { product, duration_in_days, amount } = req.body;
@@ -90,11 +92,13 @@ async function addProducts(req, res) {
 
 
 async function getProducts(req, res) {
-    console.log(req.body)
-    req.session.visit = req.session.visit ? req.session.visit + 1 : 1
+    console.log(req.user)
+    var user = await User.findById(req.user);
+    user.visits = user.visits ? user.visits +1 : 1;
+    user.save();
     console.log(req.session.visit);
     console.log(req.session);
-    
+    req.session.visit = req.session.visit ? req.session.visit + 1 : 1
     try {
         const found = await Product.find(req.body);
         return res.status(200).json({
@@ -120,13 +124,13 @@ async function rmProducerEntry(req, res) {
         const entry = {
             brands: found[0].brands,
             product_name: found[0].product_name,
-            amount: Math.abs(amount)*-1,
+            amount: Math.abs(amount) * -1,
             where: location,
             time_stamp: Date.now(),
         }
         const Data = new ProducerStockEntry(entry);
         await Data.save();
-        
+
         return res.status(200).json({
             text: `moved ${amount} of ${productName} to ${location} from its Producer`
         })
@@ -142,10 +146,10 @@ async function moveProducts(productName, amount, location, ...args) {
     try {
         var found = args[0] ? await Product.find({ product_name: productName, location: args[0] }) : await Product.find({ product_name: productName });
         if (found.length < Math.abs(amount))
-        throw `no enough products on location: ${args[0]} to complete the request`
-            found.sort((a, b) => {
-                return a.production_datetime - b.production_datetime
-            });
+            throw `no enough products on location: ${args[0]} to complete the request`
+        found.sort((a, b) => {
+            return a.production_datetime - b.production_datetime
+        });
         for (let index = 0; index < Math.abs(amount); index++) {
             found[index].location = location;
             const Data = new Product(found[index])
@@ -155,7 +159,7 @@ async function moveProducts(productName, amount, location, ...args) {
         throw error
     }
 };
- 
+
 
 async function addTale(req, res) {
     const { Title, Body, Type } = req.body;
