@@ -80,7 +80,7 @@ app.get("/auth/google", passport.authenticate("google", {
 
 
 app.get("/auth/google/redirect", passport.authenticate('google'), async (req, res) => {
-  console.log(req.session)
+  
   const user = await User.findById(req.user);
   res.send(`Hi there ${user.name}`)
 }); 

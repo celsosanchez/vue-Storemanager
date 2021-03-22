@@ -92,11 +92,12 @@ async function addProducts(req, res) {
 
 
 async function getProducts(req, res) {
-    console.log(req.user)
+    // console.log(`user: ${req.user}`)
+    
     var user = await User.findById(req.user);
     user.visits = user.visits ? user.visits +1 : 1;
     user.save();
-    console.log(req.session.visit);
+    req.session.fake = Date.now();
     console.log(req.session);
     req.session.visit = req.session.visit ? req.session.visit + 1 : 1
     try {
