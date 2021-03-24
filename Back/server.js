@@ -9,10 +9,12 @@ import auth from './lib/auth';
 import cookieParser from 'cookie-parser';
 import MongoStore from 'connect-mongo'
 import log from './lib/logger'
+const helmet = require('helmet');
 import credentials from './lib/credentials'
 const os = require('os')
 const cluster = require('cluster')
 const numCPUs = os.cpus().length;
+
 
 //Create express object 
 const app = express();
@@ -53,7 +55,7 @@ app.use(session({
 //Body Parser
 app.use(auth.initialize);
 app.use(auth.session);
-
+app.use(helmet)
 const urlencodedParser = urlencoded({
   extended: true
 });
