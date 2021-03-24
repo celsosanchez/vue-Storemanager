@@ -2,7 +2,7 @@ const Product = require("../schema/product");
 const ProducerStockEntry = require("../schema/producer_stock");
 const axios = require('axios').default;
 const User = require('../schema/user');
-
+const log = require('../lib/logger')
 
 async function addProducts(req, res) {
     const { product, duration_in_days, amount } = req.body;
@@ -80,12 +80,12 @@ async function addProducts(req, res) {
                         ids: ids
                     });
                 } catch (error) {
-                    console.log(error)
+                    log.error(error)
                     return res.status(500).json({ error });
                 }
             })
     } catch (error) {
-        console.log(error)
+        log.error(error)
         return res.status(500).json({ error });
     }
 }

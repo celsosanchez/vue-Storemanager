@@ -35,13 +35,11 @@ const product = mongoose.Schema(
         brands: String,
         image_url: String,
         quantity: String,
-
         // added data 
         production_datetime: Date,
         expiration_datetime: Date,
         location: String,
-        duration_in_days: Number 
- 
+        duration_in_days: Number
     });
 
 module.exports = mongoose.model("Product", product)

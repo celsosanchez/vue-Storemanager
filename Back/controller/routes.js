@@ -1,21 +1,28 @@
-const product = require("./product")
-
-
-const protectRoute = ( req,res, next) => {
+const product = require("./product");
+const passport = require("passport");
+const User = require('../schema/user');
+const protectRoute = (req, res, next) => {
     if (req.user) return next();
     return res.redirect('/auth/google');
 }
 
 
 module.exports = function (app) {
-    // app.delete('/tales', tales.delTale);
-    
-    //add product for a producer
+
     app.put('/producer', product.addProducts);
-    app.get('/products', protectRoute,product.getProducts);
+    app.get('/products', protectRoute, product.getProducts);
     app.patch('/producer', product.moveProducts);
     app.delete('/producer', product.rmProducerEntry);
 
-    // app.get('/producer', product.getTales);
-    // app.delete('/producer', product.delTales);
+    //-----auth---
+    app.get("/auth/google", passport.authenticate("google", {
+        scope: ["profile", "email"]
+    }));
+    app.get("/auth/google/redirect", passport.authenticate('google'), async (req, res) => {
+        const user = await User.findById(req.user);
+        res.send(`Hi there ${user.name}`)
+    });
 }
+
+
+
