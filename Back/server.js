@@ -47,6 +47,7 @@ app.use(cors());
 // session store definiton onto mongo
 app.use(session({
   secret: process.env.SECRET,
+  name: 'sessionId',
   resave: true,
   saveUninitialized: false,
   cookie: { maxAge: 60000 },
@@ -55,12 +56,12 @@ app.use(session({
 //Body Parser
 app.use(auth.initialize);
 app.use(auth.session);
-app.use(helmet)
+app.use(helmet());
 const urlencodedParser = urlencoded({
   extended: true
 });
 app.use(urlencodedParser);
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(json());
 //Routing
-routes(app)
+routes(app);
