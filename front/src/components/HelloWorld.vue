@@ -12,21 +12,19 @@
 
       <v-col class="mb-4">
         <h1 class="display-2 font-weight-bold mb-3">
-          Welcome to Vuetify
+          Welcome to ProductionChain
         </h1>
 
         <p class="subheading font-weight-regular">
           For help and collaboration with other Vuetify developers,
           <br />please join our online
 
-          <v-btn :elevation="elevation" to="/about">to about</v-btn>
-          <v-slider
+          <v-btn :elevation="elevation" to="/producer">to Producer</v-btn>
+          <!-- <v-slider
             v-model="elevation"
-            
-            
             max="10"
             thumb-label="always"
-          ></v-slider>
+          ></v-slider> -->
           <a
             @click.prevent="elevate"
             href="https://community.vuetifyjs.com"
@@ -98,7 +96,7 @@ export default {
   name: "HelloWorld",
 
   data: () => ({
-    elevation: "1",
+    elevation: "0",
     ecosystem: [
       {
         text: "vuetify-loader",
@@ -156,6 +154,11 @@ export default {
       this.elevation = `${num}`;
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
+  },
+  created() {
+    setTimeout(() => {
+      this.elevation = 6;
+    }, "1000");
   },
 };
 </script>

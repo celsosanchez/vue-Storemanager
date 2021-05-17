@@ -3,14 +3,10 @@
     dark
     src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
   >
-    <v-row
-      align="center"
-      justify="center"
-    >
-      <v-col
-        class="text-center"
-        cols="12"
-      >
+    <v-row align="center" justify="center">
+      <v-col class="text-center" cols="12">
+       
+
         <h1 class="display-1 font-weight-thin mb-4">
           Vuetify
         </h1>
@@ -21,3 +17,17 @@
     </v-row>
   </v-parallax>
 </template>
+<script>
+import Parallax from "parallax-js";
+export default {
+  methods: {
+    cool() {
+      var scene = this.$refs.scene;
+      new Parallax(scene);
+    },
+  },
+  mounted() {
+    this.cool();
+  },
+};
+</script>
