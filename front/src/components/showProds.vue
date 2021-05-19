@@ -4,12 +4,12 @@
       <v-col>
         <v-card>
           <v-card-title>
-            New Product
+            Add New Product
           </v-card-title>
           <v-card-actions class="ma-5">
             <v-autocomplete
-              v-model="chosenProducts"
-              :items="possibleProducts "
+              v-model="chosenProduct"
+              :items="possibleProducts"
               label="Name"
             ></v-autocomplete
             ><v-btn icon @click="showSelected" color="blue">
@@ -20,12 +20,17 @@
           <div class="d-flex justify-start ">
             <v-card-actions>
               <v-text-field
-                label="Amount"
+                v-model="amount"
                 :rules="rules"
+                label="Amount"
                 hide-details="auto"
                 class="ma-6 pd-6"
               ></v-text-field>
-              <v-text-field label="Duration" hide-details="auto"></v-text-field>
+              <v-text-field
+                v-model="duration"
+                label="Duration"
+                hide-details="auto"
+              ></v-text-field>
             </v-card-actions>
           </div>
         </v-card>
@@ -76,9 +81,13 @@
 import axios from "axios";
 export default {
   data: () => ({
+    chosenProduct: "",
+    duration: "",
+    amount: "",
+
     search: "",
     selected: [],
-    posibleProducts: [],
+    possibleProducts: ["La pizza du moulin"],
     rules: [(value) => !!value || "Required."],
     singleSelect: false,
     headers: [
@@ -114,7 +123,7 @@ export default {
     sendData() {
       axios
         .put("http://192.168.31.175:3000/producer", {
-          product: "Fred",
+          product: this.chosenProduct,
           duration_in_days: this.duration,
           amount: this.amount,
         })
