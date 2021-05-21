@@ -8,11 +8,11 @@
           </v-card-title>
           <v-card-actions class="ma-5">
             <v-autocomplete
-              v-model="chosenProduct"
+              :search-input.sync="chosenProduct"
               :items="possibleProducts"
               label="Name"
             ></v-autocomplete
-            ><v-btn icon @click="showSelected" color="blue">
+            ><v-btn icon @click="sendData" color="blue">
               <v-icon>mdi-send</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
@@ -26,6 +26,7 @@
                 hide-details="auto"
                 class="ma-6 pd-6"
               ></v-text-field>
+
               <v-text-field
                 v-model="duration"
                 label="Duration"
@@ -81,13 +82,14 @@
 import axios from "axios";
 export default {
   data: () => ({
-    chosenProduct: "",
+    chosenProduct: null,
     duration: "",
     amount: "",
-
+    watching: null,
+    name: ["ff", "UU", "CC"],
     search: "",
     selected: [],
-    possibleProducts: ["La pizza du moulin"],
+    possibleProducts: [],
     rules: [(value) => !!value || "Required."],
     singleSelect: false,
     headers: [
@@ -127,8 +129,8 @@ export default {
           duration_in_days: this.duration,
           amount: this.amount,
         })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          this.getData();
         });
     },
     showSelected() {
@@ -138,6 +140,22 @@ export default {
 
   created() {
     this.getData();
+  },
+  mounted() {},
+  watch: {
+    chosenProduct(value) {
+      fetch(
+        `https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-food-facts-products%40public&q=product_name%3A${value}&rows=10000&facet=creator&facet=created_datetime&facet=packaging_tags&facet=brands_tags&facet=categories_tags&facet=categories_fr&facet=origins_tags&facet=manufacturing_places_tags&facet=labels_tags&facet=labels_fr&facet=cities_tags&facet=countries_tags&facet=allergens&facet=traces_tags&facet=additives_n&facet=additives_tags&facet=ingredients_from_palm_oil_n&facet=ingredients_that_may_be_from_palm_oil_n&facet=nutrition_grade_fr&facet=pnns_groups_1&facet=pnns_groups_2&facet=main_category&facet=energy_100g&facet=fat_100g&facet=sugars_100g&refine.origins_tags=france`
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          var receivedNames = [];
+          res.records.forEach((el) => {
+            receivedNames.push(el.fields.product_name);
+          });
+          this.possibleProducts = receivedNames;
+        });
+    },
   },
 };
 </script>
