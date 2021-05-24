@@ -1,8 +1,8 @@
 const Product = require("../schema/product");
 const ProducerStockEntry = require("../schema/producer_stock");
 const axios = require("axios").default;
-const User = require("../schema/user");
-const log = require("../lib/logger");
+// const User = require("../schema/user");
+// const log = require("../lib/logger");
 
 async function addProducts(req, res) {
   const { product, duration_in_days, amount } = req.body;
@@ -98,21 +98,12 @@ async function addProducts(req, res) {
         }
       });
   } catch (error) {
-    // log.error(error)
     console.log(error);
     return res.status(500).json({ error });
   }
 }
 
 async function getProducts(req, res) {
-  // console.log(`user: ${req.user}`)
-
-  // var user = await User.findById(req.user);
-  // user.visits = user.visits ? user.visits +1 : 1;
-  // user.save();
-  // req.session.fake = Date.now();
-  // console.log(req.session);
-  // req.session.visit = req.session.visit ? req.session.visit + 1 : 1
   try {
     const found = await Product.find(req.body);
     return res.status(200).json({
@@ -131,21 +122,21 @@ async function rmProducerEntry(req, res) {
       text: "invalid request, specify product name, amount to remove, reason and new location",
     });
   }
+  var count = 0;
   try {
-    await moveProducts(productName, amount, location, "Producer");
-    const found = await Product.find({ product_name: productName });
-    const entry = {
-      brands: found[0].brands,
-      product_name: found[0].product_name,
-      amount: Math.abs(amount) * -1,
-      where: location,
-      time_stamp: Date.now(),
-    };
-    const Data = new ProducerStockEntry(entry);
-    await Data.save();
-
+    for (let index = 0; index < amount; index++) {
+      const found = await Product.findOneAndDelete({
+        product_name: productName,
+        location: location,
+      });
+      if (found) {
+        count += 1;
+      } else {
+        break;
+      }
+    }
     return res.status(200).json({
-      text: `moved ${amount} of ${productName} to ${location} from its Producer`,
+      text: `deleted ${count} of ${productName} from ${location}`,
     });
   } catch (error) {
     return res.status(500).json({
@@ -174,60 +165,60 @@ async function moveProducts(productName, amount, location, ...args) {
   }
 }
 
-async function addTale(req, res) {
-  const { Title, Body, Type } = req.body;
-  if (!Title || !Body || !Type) {
-    return res.status(400).json({
-      text: "invalid request",
-    });
-  }
-  var a = new Date(Date.now());
-  const tale = {
-    Title,
-    Body,
-    Type,
-    Add_Time: a,
-  };
-  try {
-    // save user in DB
-    const taleData = new Tales(tale);
-    await taleData.save();
-    return res.status(200).json({
-      text: "tale added",
-    });
-  } catch (error) {
-    return res.status(500).json({ error });
-  }
-}
+// async function addTale(req, res) {
+//   const { Title, Body, Type } = req.body;
+//   if (!Title || !Body || !Type) {
+//     return res.status(400).json({
+//       text: "invalid request",
+//     });
+//   }
+//   var a = new Date(Date.now());
+//   const tale = {
+//     Title,
+//     Body,
+//     Type,
+//     Add_Time: a,
+//   };
+//   try {
+//     // save user in DB
+//     const taleData = new Tales(tale);
+//     await taleData.save();
+//     return res.status(200).json({
+//       text: "tale added",
+//     });
+//   } catch (error) {
+//     return res.status(500).json({ error });
+//   }
+// }
 
-async function getTales(req, res) {
-  try {
-    const found = await Tales.find();
-    return res.status(200).json({
-      found,
-    });
-  } catch (error) {
-    return res.status(500).json({ error });
-  }
-}
-async function delTales(req, res) {
-  const { Title } = req.body;
-  if (!Title) {
-    return res.status(400).json({
-      text: "invalid request",
-    });
-  }
-  try {
-    // save user in DB
-    const taleData = await Tales.findOneAndDelete({ Title: Title });
-    // await taleData.save();
-    return res.status(200).json({
-      text: "tale " + taleData.Title + " Deleted ",
-    });
-  } catch (error) {
-    return res.status(500).json({ error });
-  }
-}
+// async function getTales(req, res) {
+//   try {
+//     const found = await Tales.find();
+//     return res.status(200).json({
+//       found,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({ error });
+//   }
+// }
+// async function delTales(req, res) {
+//   const { Title } = req.body;
+//   if (!Title) {
+//     return res.status(400).json({
+//       text: "invalid request",
+//     });
+//   }
+//   try {
+//     // save user in DB
+//     const taleData = await Tales.findOneAndDelete({ Title: Title });
+//     // await taleData.save();
+//     return res.status(200).json({
+//       text: "tale " + taleData.Title + " Deleted ",
+//     });
+//   } catch (error) {
+//     return res.status(500).json({ error });
+//   }
+// }
 
 exports.addProducts = addProducts;
 exports.moveProducts = moveProducts;
