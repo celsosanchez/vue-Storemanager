@@ -154,6 +154,12 @@
                 :items-per-page="15"
                 class="elevation-4"
               >
+                <template v-slot:item.detail="{ item }">
+                  <!-- <v-btn icon @click="console.log(item.product_name)"><v-icon>mdi-eye</v-icon></v-btn> -->
+                  <v-btn icon @click="showDetails(item)"
+                    ><v-icon>mdi-eye</v-icon></v-btn
+                  >
+                </template>
               </v-data-table>
             </v-card>
           </div>
@@ -168,6 +174,44 @@
         </template>
       </v-snackbar>
     </v-row>
+
+    <v-dialog v-model="dataDetail" scrollable persistent>
+      <!-- max-width="290" -->
+      <v-card>
+        <v-card-title class="headline">
+          Product Details
+          <v-btn
+            color="red darken-1"
+            class="ml-5"
+            text
+            @click="dataDetail = false"
+          >
+            Close
+          </v-btn>
+        </v-card-title>
+        <v-simple-table>
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-center font-weight-black ">
+                  Characteristic
+                </th>
+                <th class="text-center font-weight-black">
+                  Value
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(value, key) of showingItem" :key="key">
+                <td>{{ key }}</td>
+                <td v-if="key == 'image_url'" align="center"> <v-img max-width="300" :src="value"></v-img></td>
+                <td v-else>{{ value }}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -176,7 +220,9 @@ export default {
   data: () => ({
     chosenProduct: null,
     duration: "",
+    showingItem: null,
     amount: "",
+    dataDetail: false,
     overlay: false,
     receivedElements: [],
     autocomplete: null,
@@ -196,6 +242,7 @@ export default {
         sortable: false,
         value: "product_name",
       },
+      { text: "Details", value: "detail" },
       { text: "Brands", value: "brands" },
       { text: "Location", value: "location" },
       { text: "Production", value: "production_datetime" },
@@ -267,6 +314,11 @@ export default {
             }
           });
       });
+    },
+    showDetails(item) {
+      console.log(item);
+      this.showingItem = item;
+      this.dataDetail = true;
     },
   },
   created() {
