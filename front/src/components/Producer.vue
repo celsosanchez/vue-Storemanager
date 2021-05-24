@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-row justify="center" >
-      <v-col >
+    <v-row justify="center">
+      <v-col cols="12" md="6" sm="12">
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <v-card :elevation="hover ? 12 : 2">
             <v-card-title>
@@ -66,12 +66,15 @@
     <v-row justify="center">
       <v-col>
         <div v-if="loading">
-          <v-progress-circular
-            :size="70"
-            :width="7"
-            color="purple"
-            indeterminate
-          ></v-progress-circular>
+          <v-sheet
+            :color="`grey ${false ? 'darken-2' : 'lighten-4'}`"
+            class="pa-3"
+          >
+            <v-skeleton-loader
+              class="mx-auto"
+              type="article, article,article"
+            ></v-skeleton-loader>
+          </v-sheet>
         </div>
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <div>
@@ -205,7 +208,7 @@ export default {
       this.loading = true;
       axios.get("http://192.168.31.175:3000/products").then((res) => {
         this.items = res.data.found;
-        if(this.items) this.loading = false;
+        if (this.items) this.loading = false;
         this.items.forEach((element) => {
           var receivedExp = new Date(element.expiration_datetime);
           var receivedprod = new Date(element.production_datetime);
@@ -213,7 +216,7 @@ export default {
             1}/${receivedExp.getDate()}`;
           element.production_datetime = `${receivedprod.getFullYear()}/${receivedprod.getMonth() +
             1}/${receivedprod.getDate()}`;
-            this.loading = false;
+          this.loading = false;
         });
       });
     },
