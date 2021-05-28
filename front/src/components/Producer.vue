@@ -11,6 +11,8 @@
               <v-autocomplete
                 v-model="autocomplete"
                 :search-input.sync="chosenProduct"
+                :loading="loading"
+                hide-no-data
                 :items="possibleProducts"
                 label="Name"
               ></v-autocomplete
@@ -58,6 +60,19 @@
                 <v-list-item-subtitle
                   v-text="description.producer"
                 ></v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>Image</v-list-item-title>
+                <div class="d-flex justify-center mt-3">
+                <v-img 
+                  contain
+                  max-height="200"
+                  max-width="200"
+                  :src="description.image_url"
+                ></v-img>
+                </div>
               </v-list-item-content>
             </v-list-item>
           </v-list> </v-expand-x-transition
@@ -154,8 +169,14 @@
                 :items-per-page="15"
                 class="elevation-4"
               >
+                <template v-slot:item.expirationIn="{ item }">
+                  <v-icon :color="status(item.expirationIn).color">
+                    {{ status(item.expirationIn).icon }}
+                  </v-icon>
+                  {{ item.expirationIn }} days left
+                </template>
+
                 <template v-slot:item.detail="{ item }">
-                  <!-- <v-btn icon @click="console.log(item.product_name)"><v-icon>mdi-eye</v-icon></v-btn> -->
                   <v-btn icon @click="showDetails(item)"
                     ><v-icon>mdi-eye</v-icon></v-btn
                   >
@@ -204,7 +225,9 @@
             <tbody>
               <tr v-for="(value, key) of showingItem" :key="key">
                 <td>{{ key }}</td>
-                <td v-if="key == 'image_url'" align="center"> <v-img max-width="300" :src="value"></v-img></td>
+                <td v-if="key == 'image_url'" align="center">
+                  <v-img contain max-width="300" :src="value"></v-img>
+                </td>
                 <td v-else>{{ value }}</td>
               </tr>
             </tbody>
@@ -234,6 +257,7 @@ export default {
     possibleProducts: [],
     singleSelect: false,
     snackbar: false,
+    // LoadingAutocomplete: false,
     snackbarText: "",
     headers: [
       {
@@ -242,6 +266,7 @@ export default {
         sortable: false,
         value: "product_name",
       },
+      { text: "Expiration Status", value: "expirationIn" },
       { text: "Details", value: "detail" },
       { text: "Brands", value: "brands" },
       { text: "Location", value: "location" },
@@ -316,9 +341,18 @@ export default {
       });
     },
     showDetails(item) {
-      console.log(item);
       this.showingItem = item;
       this.dataDetail = true;
+    },
+    status(value) {
+      if (value > 7) return { color: "green", icon: "mdi-circle-slice-8" };
+      if (value == 7) return { color: "green", icon: "mdi-circle-slice-7" };
+      if (value == 6) return { color: "orange", icon: "mdi-circle-slice-6" };
+      if (value == 5) return { color: "orange", icon: "mdi-circle-slice-5" };
+      if (value == 4) return { color: "orange", icon: "mdi-circle-slice-4" };
+      if (value == 3) return { color: "red", icon: "mdi-circle-slice-3" };
+      if (value == 2) return { color: "red", icon: "mdi-circle-slice-2" };
+      if (value == 1) return { color: "red", icon: "mdi-circle-slice-1" };
     },
   },
   created() {
@@ -354,6 +388,7 @@ export default {
             var nameProd = {};
             nameProd.name = el.fields.product_name;
             nameProd.producer = el.fields.brands;
+            nameProd.image_url = el.fields.image_url;
             this.receivedNames.push(nameProd);
             this.possibleProducts.push(nameProd.name);
           });

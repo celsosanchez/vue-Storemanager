@@ -39,7 +39,13 @@ const product = mongoose.Schema(
         production_datetime: Date,
         expiration_datetime: Date,
         location: String,
-        duration_in_days: Number
+        duration_in_days: Number,
+        expirationIn: {
+            type: Number,
+            default: function(){
+                return Math.round((this.expiration_datetime - Date.now())/86400000)
+            }
+        }
     });
 
 module.exports = mongoose.model("Product", product)
