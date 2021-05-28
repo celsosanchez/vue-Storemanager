@@ -5,78 +5,20 @@
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <v-card :elevation="hover ? 12 : 2">
             <v-card-title>
-              Add New Product
+              Select User
             </v-card-title>
             <v-card-actions class="ma-5">
               <v-autocomplete
                 v-model="autocomplete"
-                :search-input.sync="chosenProduct"
+                :search-input.sync="chosenUser"
                 :loading="loading"
-                hide-no-data
-                :items="possibleProducts"
-                label="Name"
-              ></v-autocomplete
-              ><v-btn icon @click="sendData()" color="blue">
-                <v-icon>mdi-send</v-icon>
-              </v-btn>
+                :items="possibleUsers"
+                label="email"
+              ></v-autocomplete>
             </v-card-actions>
-            <div class="d-flex justify-start ">
-              <v-card-actions>
-                <v-text-field
-                  v-model="amount"
-                  label="Amount"
-                  hide-details="auto"
-                  class="ma-6 pd-6"
-                ></v-text-field>
-                <v-text-field
-                  v-model="duration"
-                  label="Duration"
-                  hide-details="auto"
-                ></v-text-field>
-              </v-card-actions>
-            </div>
-            <v-overlay :absolute="true" :value="overlay">
-              <v-btn color="orange lighten-2" @click="overlay = false">
-                type a valid input
-              </v-btn>
-            </v-overlay>
           </v-card>
         </v-hover>
       </v-col>
-      <v-col>
-        <v-expand-x-transition align="right">
-          <v-list v-if="autocomplete" class="green lighten-5 ma-5">
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>Product Name</v-list-item-title>
-                <v-list-item-subtitle
-                  v-text="description.name"
-                ></v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>Producer(s)</v-list-item-title>
-                <v-list-item-subtitle
-                  v-text="description.producer"
-                ></v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>Image</v-list-item-title>
-                <div class="d-flex justify-center mt-3">
-                  <v-img
-                    contain
-                    max-height="200"
-                    max-width="200"
-                    :src="description.image_url"
-                  ></v-img>
-                </div>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list> </v-expand-x-transition
-      ></v-col>
     </v-row>
     <v-row justify="center">
       <v-col>
@@ -95,7 +37,8 @@
           <div>
             <v-card :elevation="hover ? 12 : 2" v-if="items.length !== 0">
               <v-card-title>
-                Products
+                My Fridge
+                <v-icon color="blue" class="pl-2">mdi-fridge</v-icon>
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" width="500">
                   <template v-slot:activator="{ on, attrs }">
@@ -242,7 +185,7 @@ import axios from "axios";
 // import qs from "qs";
 export default {
   data: () => ({
-    chosenProduct: null,
+    chosenUser: null,
     duration: "",
     showingItem: null,
     amount: "",
@@ -255,7 +198,7 @@ export default {
     loading: false,
     dialog: false,
     selected: [],
-    possibleProducts: [],
+    possibleUsers: [],
     singleSelect: false,
     snackbar: false,
     // LoadingAutocomplete: false,
@@ -270,7 +213,7 @@ export default {
       { text: "Expiration Status", value: "expirationIn" },
       { text: "Details", value: "detail" },
       { text: "Brands", value: "brands" },
-      { text: "Location", value: "location" },
+      // { text: "Location", value: "location" },
       { text: "Production", value: "production_datetime" },
       { text: "Expiration", value: "expiration_datetime" },
     ],
@@ -279,49 +222,54 @@ export default {
   methods: {
     getData() {
       this.loading = true;
-      axios.post('http://192.168.31.175:3000/products', {location:"Producer"}).then((res) => {
-        this.items = res.data.found;
-        if (this.items) this.loading = false;
-        this.items.forEach((element) => {
-          var receivedExp = new Date(element.expiration_datetime);
-          var receivedprod = new Date(element.production_datetime);
-          element.expiration_datetime = `${receivedExp.getFullYear()}/${receivedExp.getMonth() +
-            1}/${receivedExp.getDate()}`;
-          element.production_datetime = `${receivedprod.getFullYear()}/${receivedprod.getMonth() +
-            1}/${receivedprod.getDate()}`;
-          this.loading = false;
-        });
-      });
-    },
-    sendData() {
-      const numberRegex = new RegExp("^[0-9]+$");
-      if (
-        numberRegex.test(this.amount) &&
-        numberRegex.test(this.duration) &&
-        this.chosenProduct !== null
-      ) {
-        axios
-          .put("http://192.168.31.175:3000/producer", {
-            product: this.chosenProduct,
-            duration_in_days: this.duration,
-            amount: this.amount,
-          })
-          .then(() => {
-            this.snackbarText = `${this.amount} units of ${this.chosenProduct} have been added successfully!`;
-            this.snackbar = true;
-            this.clearNewProduct();
-            this.getData();
+      console.log(this.currentUser)
+      axios
+        .post("http://192.168.31.175:3000/products", { location: this.currentUser })
+        .then((res) => {
+          this.items = res.data.found;
+          if (this.items) this.loading = false;
+          this.items.forEach((element) => {
+            var receivedExp = new Date(element.expiration_datetime);
+            var receivedprod = new Date(element.production_datetime);
+            element.expiration_datetime = `${receivedExp.getFullYear()}/${receivedExp.getMonth() +
+              1}/${receivedExp.getDate()}`;
+            element.production_datetime = `${receivedprod.getFullYear()}/${receivedprod.getMonth() +
+              1}/${receivedprod.getDate()}`;
+            this.loading = false;
           });
-      } else {
-        this.overlay = true;
-      }
+        });
+
+     
     },
-    clearNewProduct() {
-      this.amount = "";
-      this.duration = "";
-      this.chosenProduct = null;
-      this.autocomplete = null;
-    },
+    // sendData() {
+    //   const numberRegex = new RegExp("^[0-9]+$");
+    //   if (
+    //     numberRegex.test(this.amount) &&
+    //     numberRegex.test(this.duration) &&
+    //     this.chosenProduct !== null
+    //   ) {
+    //     axios
+    //       .put("http://192.168.31.175:3000/producer", {
+    //         product: this.chosenProduct,
+    //         duration_in_days: this.duration,
+    //         amount: this.amount,
+    //       })
+    //       .then(() => {
+    //         this.snackbarText = `${this.amount} units of ${this.chosenProduct} have been added successfully!`;
+    //         this.snackbar = true;
+    //         this.clearNewProduct();
+    //         this.getData();
+    //       });
+    //   } else {
+    //     this.overlay = true;
+    //   }
+    // },
+    // clearNewProduct() {
+    //   this.amount = "";
+    //   this.duration = "";
+    //   this.chosenProduct = null;
+    //   this.autocomplete = null;
+    // },
     confirmedDeletion() {
       this.selected.forEach(async (element, index, array) => {
         await axios
@@ -357,7 +305,14 @@ export default {
     },
   },
   created() {
-    this.getData();
+     axios.post(`http://192.168.31.175:3000/users`).then((res) => {
+        // this.receivedNames = [];
+        this.possibleUsers = [];
+        res.data.found.forEach((el) => {
+          // this.receivedNames.push(nameProd);
+          this.possibleUsers.push(el.email);
+        });
+      });
 
     setTimeout(() => {
       this.elevation = 6;
@@ -365,36 +320,35 @@ export default {
   },
   mounted() {},
   computed: {
-    description() {
-      if (!this.autocomplete) return;
-      return this.receivedNames.find(
-        (element) => element.name == this.autocomplete
-      );
-    },
+    // currentUser() {
+    //   if (!this.autocomplete) return;
+    //   return this.possibleUsers.find(
+    //     (element) => element.name == this.autocomplete
+    //   );
+    // },
     deleteButton() {
       if (this.selected.length == 0) return false;
       else return true;
     },
   },
   watch: {
-    chosenProduct(value) {
-      fetch(
-        `https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-food-facts-products%40public&q=product_name%3A${value}&rows=10000&facet=creator&facet=created_datetime&facet=packaging_tags&facet=brands_tags&facet=categories_tags&facet=categories_fr&facet=origins_tags&facet=manufacturing_places_tags&facet=labels_tags&facet=labels_fr&facet=cities_tags&facet=countries_tags&facet=allergens&facet=traces_tags&facet=additives_n&facet=additives_tags&facet=ingredients_from_palm_oil_n&facet=ingredients_that_may_be_from_palm_oil_n&facet=nutrition_grade_fr&facet=pnns_groups_1&facet=pnns_groups_2&facet=main_category&facet=energy_100g&facet=fat_100g&facet=sugars_100g&refine.origins_tags=france`
-      )
-        .then((res) => res.json())
-        .then((res) => {
-          this.receivedNames = [];
-          this.possibleProducts = [];
-          res.records.forEach((el) => {
-            var nameProd = {};
-            nameProd.name = el.fields.product_name;
-            nameProd.producer = el.fields.brands;
-            nameProd.image_url = el.fields.image_url;
-            this.receivedNames.push(nameProd);
-            this.possibleProducts.push(nameProd.name);
-          });
-        });
-    },
+    autocomplete(value){
+      this.currentUser = value
+      this.getData()
+    }
+    // chosenUser(value) {
+    //   axios
+    //     .post(`http://192.168.31.175:3000/users` )
+    //     .then((res) => {
+    //       // this.receivedNames = [];
+    //       this.possibleUsers = [];
+    //       res.data.found.forEach((el) => {
+    //         // this.receivedNames.push(nameProd);
+    //         this.possibleUsers.push(el.name);
+    //       });
+    //       console.log(this.possibleUsers);
+    //     });
+    // },
   },
 };
 </script>

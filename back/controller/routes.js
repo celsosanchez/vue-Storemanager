@@ -1,6 +1,7 @@
 const product = require("./product");
+const user = require("./user");
 const passport = require("passport");
-const User = require('../schema/user');
+// const User = require('../schema/user');
 
 const protectRoute = (req, res, next) => {
     if (req.user) return next();
@@ -11,6 +12,7 @@ const protectRoute = (req, res, next) => {
 module.exports = function (app) {
 
     app.put('/producer', product.addProducts);
+    app.post('/users', user.getUsers);
     // app.get('/products', protectRoute, product.getProducts);
     app.post('/products',  product.getProducts);
     app.patch('/producer', product.moveProducts);

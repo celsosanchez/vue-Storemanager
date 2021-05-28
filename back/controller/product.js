@@ -7,7 +7,7 @@ const axios = require("axios").default;
 async function addProducts(req, res) {
   const { product, duration_in_days, amount } = req.body;
   if (!product || !duration_in_days || !amount) {
-    return res.status(400).json({
+    return res.status(400).json({ 
       text: "invalid request",
     });
   }

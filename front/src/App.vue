@@ -1,12 +1,6 @@
 <template>
   <v-app>
-    <v-tabs
-    
-      v-model="tab"
-      background-color="transparent"
-      color="basil"
-      grow
-    >
+    <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
       <v-tab v-for="item in items" :key="item.name" :to="item.value">
         {{ item.name }}
       </v-tab>
@@ -24,8 +18,9 @@ export default {
     tab: null,
     items: {
       Home: { name: "Home", value: "/" },
-      About: { name: "About", value: "/about" },
       Producer: { name: "Producer", value: "/producer" },
+      Consumer: { name: "Consumer", value: "/consumer" },
+      About: { name: "About", value: "/about" },
       Store: { name: "Store", value: "/store" },
     },
   }),
