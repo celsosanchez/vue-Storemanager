@@ -12,7 +12,7 @@ module.exports = function (app) {
 
     app.put('/producer', product.addProducts);
     // app.get('/products', protectRoute, product.getProducts);
-    app.get('/products',  product.getProducts);
+    app.post('/products',  product.getProducts);
     app.patch('/producer', product.moveProducts);
     app.delete('/producer', product.rmProducerEntry);
 

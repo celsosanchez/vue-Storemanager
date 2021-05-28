@@ -66,12 +66,12 @@
               <v-list-item-content>
                 <v-list-item-title>Image</v-list-item-title>
                 <div class="d-flex justify-center mt-3">
-                <v-img 
-                  contain
-                  max-height="200"
-                  max-width="200"
-                  :src="description.image_url"
-                ></v-img>
+                  <v-img
+                    contain
+                    max-height="200"
+                    max-width="200"
+                    :src="description.image_url"
+                  ></v-img>
                 </div>
               </v-list-item-content>
             </v-list-item>
@@ -239,6 +239,7 @@
 </template>
 <script>
 import axios from "axios";
+// import qs from "qs";
 export default {
   data: () => ({
     chosenProduct: null,
@@ -278,7 +279,7 @@ export default {
   methods: {
     getData() {
       this.loading = true;
-      axios.get("http://192.168.31.175:3000/products").then((res) => {
+      axios.post('http://192.168.31.175:3000/products', {location:"Producer"}).then((res) => {
         this.items = res.data.found;
         if (this.items) this.loading = false;
         this.items.forEach((element) => {
