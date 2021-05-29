@@ -11,7 +11,9 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "qs": "^6.5.2",
+    "quagga": "^0.12.1",
     "vue": "^2.6.11",
+    "vue-barcode-scanner": "^0.8.1",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0"
   },

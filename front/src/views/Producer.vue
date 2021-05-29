@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-col cols="12" md="6" sm="12">
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
-          <v-card :elevation="hover ? 12 : 2">
+          <v-card :elevation="hover ? 12 : 2" class="mt-6">
             <v-card-title>
               Add New Product
             </v-card-title>
@@ -16,18 +16,17 @@
                 :items="possibleProducts"
                 label="Name"
               ></v-autocomplete
-              ><v-btn icon @click="sendData()" color="blue">
+              ><v-btn icon large x-large @click="sendData()" color="blue">
                 <v-icon>mdi-send</v-icon>
               </v-btn>
             </v-card-actions>
 
-            <v-card-actions >
+            <v-card-actions>
               <v-text-field
                 v-model="amount"
                 class="ml-6"
                 label="Amount"
                 hide-details="auto"
-                 
               ></v-text-field>
 
               <v-text-field
@@ -41,9 +40,9 @@
                 icon
                 large
                 x-large
-                class="pr-6"
+                class="mr-6"
                 color="blue"
-                @click="scannerDialog = true"
+                @click="scan()"
                 ><v-icon>mdi-barcode-scan</v-icon></v-btn
               >
             </v-card-actions>
@@ -209,8 +208,8 @@
       </v-snackbar>
     </v-row>
 
-    <v-dialog v-model="scannerDialog" scrollable persistent>
-      <!-- max-width="290" -->
+    <v-dialog v-model="scannerDialog" max-width="290">
+      <!--  -->
       <v-card>
         <v-card-title class="headline">
           Product Scanner
@@ -223,6 +222,7 @@
             Close
           </v-btn>
         </v-card-title>
+        <div id="decoder"></div>
       </v-card>
     </v-dialog>
 
@@ -269,8 +269,9 @@
 </template>
 <script>
 import axios from "axios";
-// import qs from "qs";
+
 export default {
+  components: {},
   data: () => ({
     chosenProduct: null,
     duration: "",
@@ -322,8 +323,11 @@ export default {
               1}/${receivedExp.getDate()}`;
             element.production_datetime = `${receivedprod.getFullYear()}/${receivedprod.getMonth() +
               1}/${receivedprod.getDate()}`;
-            this.loading = false;
+            element.expirationIn = Math.round(
+              (receivedExp - Date.now()) / 86400000
+            );
           });
+          this.loading = false;
         });
     },
     sendData() {
@@ -348,6 +352,13 @@ export default {
       } else {
         this.overlay = true;
       }
+    },
+    scan() {
+      this.$barcodeScanner.init(this.onBarcodeScanned);
+    },
+    onBarcodeScanned(barcode) {
+      console.log(`scanning`);
+      console.log(barcode);
     },
     clearNewProduct() {
       this.amount = "";
@@ -387,10 +398,13 @@ export default {
       if (value == 3) return { color: "red", icon: "mdi-circle-slice-3" };
       if (value == 2) return { color: "red", icon: "mdi-circle-slice-2" };
       if (value == 1) return { color: "red", icon: "mdi-circle-slice-1" };
+      else return { color: "red", icon: "mdi-close-box" };
     },
   },
   created() {
     this.getData();
+
+    this.$barcodeScanner.init(this.onBarcodeScanned);
 
     setTimeout(() => {
       this.elevation = 6;
