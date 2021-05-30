@@ -4,13 +4,29 @@ const axios = require("axios").default;
 // const User = require("../schema/user");
 // const log = require("../lib/logger");
 
-// async function addProducts(req, res) {
-//   const { product, duration_in_days, amount } = req.body;
-//   if (!product || !duration_in_days || !amount) {
-//     return res.status(400).json({ 
-//       text: "invalid request",
-//     });
-//   }
+async function addToDS(req, res) {
+   
+  const { user, list } = req.body;
+  if (!user || !list) {
+    return res.status(400).json({
+      text: "invalid request",
+    });
+  }
+  try {
+   await User.findOneAndUpdate(
+      { email: user },
+      { desiredStock: list },(err,doc)=> {
+        if(err)console.log(`error: ${err}`)
+ 
+        return res.send(doc)
+      }
+    );
+  
+   
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+}
 
 //   var openData = "no data received";
 //   var productData;
@@ -221,6 +237,7 @@ async function getUsers(req, res) {
 // }
 
 exports.getUsers = getUsers;
+exports.addToDS = addToDS;
 // exports.addProducts = addProducts;
 // exports.moveProducts = moveProducts;
 // exports.rmProducerEntry = rmProducerEntry;

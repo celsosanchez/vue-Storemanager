@@ -2,7 +2,18 @@
   <div>
     <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
       <div>
-        <v-card :elevation="hover ? 12 : 2" v-if="items.length !== 0">
+          <div v-if="loading">
+          <v-sheet
+            :color="`grey ${false ? 'darken-2' : 'lighten-4'}`"
+            class="pa-3"
+          >
+            <v-skeleton-loader
+              class="mx-auto"
+              type="article, article,article"
+            ></v-skeleton-loader>
+          </v-sheet>
+        </div>
+        <v-card :elevation="hover ? 12 : 2" v-if="!loading">
           <v-card-title>
             <slot name="tableTitle"><h3>Products</h3></slot>
             <v-spacer></v-spacer>
@@ -21,6 +32,7 @@
                   ><v-icon>mdi-delete</v-icon></v-btn
                 >
               </template>
+              
               <v-card>
                 <v-card-title class="headline red lighten-2">
                   Confirm Deletion
@@ -69,6 +81,7 @@
               hide-details
             ></v-text-field>
           </v-card-title>
+          
           <v-data-table 
             @pagination="counter"
             :headers="headers"
@@ -85,7 +98,8 @@
               <v-icon :color="status(item.expirationIn).color">
                 {{ status(item.expirationIn).icon }}
               </v-icon>
-              {{ item.expirationIn }} days left
+             <template v-if="item.expirationIn >=0"> {{ item.expirationIn }} days left</template>
+             <template v-else=""> Expired! </template>
             </template>
             <template v-slot:item.detail="{ item }">
               <v-btn icon @click="showDetails(item)"
@@ -227,7 +241,7 @@ export default {
       if (value == 2) return { color: "red", icon: "mdi-circle-slice-2" };
       if (value == 1) return { color: "red", icon: "mdi-circle-slice-1" };
       if (value == 0) return { color: "red", icon: "mdi-circle-outline" };
-      else return { color: "red", icon: "mdi-close-circle-outline" };
+      else return { color: "red", icon: "mdi-alert-circle" };
     },
   },
   created() {

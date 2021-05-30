@@ -12,7 +12,8 @@ const protectRoute = (req, res, next) => {
 module.exports = function (app) {
 
     app.put('/producer', product.addProducts);
-    app.post('/users', user.getUsers);
+    app.get('/users', user.getUsers);
+    app.put('/users', user.addToDS);
     // app.get('/products', protectRoute, product.getProducts);
     app.post('/products',  product.getProducts);
     app.patch('/producer', product.moveProducts);

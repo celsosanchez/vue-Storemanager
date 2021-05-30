@@ -9,7 +9,7 @@ const User = mongoose.Schema({
   email: String,
   name: String,
   localistaion: [Number],
-  normalStock: [String],
+  desiredStock: [{ Amount: Number, Image: String, Producer: String, name: String  }],
   actualStock: [String],
   shoppingCart: [String],
   expirationWarning: [String],

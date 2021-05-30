@@ -8,184 +8,166 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
+          @click="getData"
           :disabled="!activeUser"
           color="primary"
           icon
           v-bind="attrs"
           v-on="on"
         >
-          <v-icon>
-            mdi-cart-outline
+          <v-icon large>
+           mdi-warehouse
           </v-icon>
         </v-btn>
       </template>
-      <v-card>
-        <v-toolbar dark color="primary">
-          <v-btn icon dark @click="dialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-          <v-toolbar-title
-            >Shopping List
-            <v-icon>mdi-text-box-check-outline</v-icon></v-toolbar-title
-          >
-          <v-spacer></v-spacer>
-          <v-toolbar-items>
-            <v-btn dark text @click="dialog = false">
-              Save
+      <div>
+        <v-card tile min-height="100vh">
+          <v-toolbar dark color="primary">
+            <v-btn icon dark @click="dialog = false">
+              <v-icon>mdi-close</v-icon>
             </v-btn>
-          </v-toolbar-items>
-        </v-toolbar>
-        <v-row>
-          <v-col>
-            <v-card>
-              <v-card-title>
-                Add New Product
-              </v-card-title>
-              <v-card-actions class=" d-flex justify-space-around  ma-5">
-                <v-autocomplete
-                  v-model="autocomplete"
-                  :search-input.sync="chosenProduct"
-                  :loading="loading"
-                  hide-no-data
-                  :items="possibleProducts"
-                  label="Name"
-                ></v-autocomplete
-                ><v-btn icon large x-large @click="sendData()" color="blue">
-                  <v-icon>mdi-send</v-icon>
-                </v-btn>
-              </v-card-actions>
-              <v-card-actions>
-                <v-text-field
-                  v-model="amount"
-                  class="mb-3"
-                  label="Amount"
-                  hide-details="auto"
-                ></v-text-field>
-              </v-card-actions>
-              <v-overlay :absolute="true" :value="overlay">
-                <v-btn color="orange lighten-2" @click="overlay = false">
-                  type a valid input
-                </v-btn>
-              </v-overlay>
-            </v-card>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col>
-            <v-expand-x-transition align="right">
-              <v-list v-if="autocomplete" class="blue lighten-5  ">
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>Product Name</v-list-item-title>
-                    <v-list-item-subtitle
-                      v-text="description.name"
-                    ></v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>Producer(s)</v-list-item-title>
-                    <v-list-item-subtitle
-                      v-text="description.producer"
-                    ></v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>Image</v-list-item-title>
-                    <div class="d-flex justify-center mt-3">
-                      <v-img
-                        contain
-                        max-height="200"
-                        max-width="200"
-                        :src="description.image_small_url"
-                      ></v-img>
-                    </div>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list> </v-expand-x-transition
-          ></v-col>
-        </v-row>
-        <v-divider></v-divider>
-        <v-list three-line subheader>
-          <v-subheader>General</v-subheader>
-          <v-list-item>
-            <v-list-item-action>
-              <v-checkbox></v-checkbox>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Notifications</v-list-item-title>
-              <v-list-item-subtitle
-                >Notify me about updates to apps or games that I
-                downloaded</v-list-item-subtitle
-              >
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-action>
-              <v-checkbox></v-checkbox>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Sound</v-list-item-title>
-              <v-list-item-subtitle
-                >Auto-update apps at any time. Data charges may
-                apply</v-list-item-subtitle
-              >
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-action>
-              <v-checkbox></v-checkbox>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Auto-add widgets</v-list-item-title>
-              <v-list-item-subtitle
-                >Automatically add home screen widgets</v-list-item-subtitle
-              >
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-card>
+            <v-toolbar-title
+              >Desired stock
+              <v-icon class="ml-3" color="white">mdi-warehouse</v-icon></v-toolbar-title
+            >
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn dark text @click="save()">
+                Save
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <v-row no-gutters>
+            <v-col cols="12" md="8">
+              <v-card align="left" min-height="35vh" max-height="35vh">
+                <v-card-title>
+                  Add New Product
+                </v-card-title>
+                <v-col cols="12" sm="10">
+                  <v-card-actions
+                    class=" d-flex justify-space-around  ml-7 ma-5"
+                  >
+                    <v-autocomplete
+                      v-model="autocomplete"
+                      :search-input.sync="chosenProduct"
+                      :loading="LoadingAutocomplete"
+                      hide-no-data
+                      :items="possibleProducts"
+                      label="Name"
+                    ></v-autocomplete>
+                  </v-card-actions>
+                </v-col>
+                <v-col cols="12" sm="12">
+                  <v-card-actions class="ml-8 mr-8">
+                    <v-text-field
+                      v-model="amount"
+                      class="mb-6"
+                      label="Amount"
+                      hide-details="auto"
+                    ></v-text-field>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      icon
+                      large
+                      x-large
+                      @click="addToList"
+                      color="blue"
+                      class="ml-10"
+                    >
+                      <v-icon>mdi-plus</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                </v-col>
+                <v-overlay :absolute="true" :value="overlay">
+                  <v-btn color="orange lighten-2" @click="overlay = false">
+                    type a valid input
+                  </v-btn>
+                </v-overlay>
+              </v-card>
+            </v-col>
+
+            <v-col>
+              <v-expand-x-transition align="right">
+                <v-card
+                  v-if="autocomplete"
+                  class="blue lighten-5 d-flex"
+                  min-height="35vh"
+                  min-width="30vw"
+                >
+                  <v-spacer></v-spacer>
+                  <div>
+                    <v-card-title> Name</v-card-title>
+                    <v-card-text>
+                      {{ description.name }}
+                    </v-card-text>
+                  </div>
+                  <v-spacer></v-spacer>
+                  <div>
+                    <v-card-title> Brand</v-card-title>
+                    <v-card-text>
+                      {{ description.producer }}
+                    </v-card-text>
+                  </div>
+                  <v-spacer></v-spacer>
+                  <div class=" ma-3">
+                    <v-img
+                      contain
+                      max-height="200"
+                      max-width="200"
+                      :src="description.image_small_url"
+                    ></v-img>
+                  </div>
+                </v-card>
+              </v-expand-x-transition>
+            </v-col>
+          </v-row>
+          <v-divider></v-divider>
+          <shopping-list ref="shoppingList" :activeUser="activeUser" />
+        </v-card>
+      </div>
     </v-dialog>
   </v-row>
 </template>
 <script>
-export default {
-  props: ["activeUser"],
-  data() {
-    return {
-      dialog: false,
-    };
-  },
-};
-</script>
-
-<style></style>
-<script>
 import axios from "axios";
-import ProductData from "@/components/ProductData.vue";
+import ShoppingList from "./ShoppingList.vue";
+// import ProductData from "@/components/ProductData.vue";
 export default {
   components: {
-    ProductData,
+    ShoppingList,
   },
   props: ["activeUser"],
   data: () => ({
     dialog: false,
     chosenProduct: null,
-
+    currentList: [],
     amount: "",
     overlay: false,
     receivedElements: [],
     autocomplete: null,
     elevation: 2,
-    loading: false,
-
     possibleProducts: [],
     snackbar: false,
     LoadingAutocomplete: false,
     snackbarText: "",
   }),
   methods: {
-    sendData() {
+    getData() {
+      if (this.$refs.shoppingList) {
+        this.$refs.shoppingList.getData();
+      }
+    },
+    save() {
+      axios
+        .put("http://192.168.31.175:3000/users", {
+          user: this.activeUser,
+          list: this.$refs.shoppingList.items,
+        })
+        .then(() => {
+          this.dialog = false;
+        });
+    },
+    addToDS() {
       const numberRegex = new RegExp("^[0-9]+$");
       if (numberRegex.test(this.amount) && this.chosenProduct !== null) {
         axios
@@ -204,7 +186,21 @@ export default {
         this.overlay = true;
       }
     },
+    addToList() {
+      const numberRegex = new RegExp("^[0-9]+$");
+      if (numberRegex.test(this.amount) && this.chosenProduct !== null) {
+        this.$refs.shoppingList.items.push({
+          name: this.description.name,
+          Image: this.description.image_url,
+          Producer: this.description.producer,
+          Amount: parseInt(this.amount),
+        });
 
+        this.clearNewProduct();
+      } else {
+        this.overlay = true;
+      }
+    },
     clearNewProduct() {
       this.amount = "";
 
@@ -217,7 +213,7 @@ export default {
       this.elevation = 6;
     }, "2000");
   },
-  mounted() {},
+
   computed: {
     description() {
       if (!this.autocomplete) return;
@@ -227,7 +223,11 @@ export default {
     },
   },
   watch: {
+    // activeUser(value) {
+    //   console.log(value);
+    // },
     chosenProduct(value) {
+      this.LoadingAutocomplete = true;
       try {
         fetch(
           // `https://data.opendatasoft.com/explore/embed/dataset/open-food-facts-products@public/table/?disjunctive.created_datetime&disjunctive.packaging_tags&disjunctive.brands_tags&disjunctive.categories_tags&disjunctive.origins_tags&disjunctive.manufacturing_places_tags&disjunctive.labels_tags&disjunctive.cities_tags&disjunctive.countries_tags&disjunctive.traces_tags&disjunctive.additives_tags&q=${value}&refine.countries_tags=en:france`
@@ -243,9 +243,11 @@ export default {
               nameProd.name = el.fields.product_name;
               nameProd.producer = el.fields.brands;
               nameProd.image_small_url = el.fields.image_small_url;
+              nameProd.image_url = el.fields.image_url;
               this.receivedNames.push(nameProd);
               this.possibleProducts.push(nameProd.name);
             });
+            this.LoadingAutocomplete = false;
           });
       } catch (e) {
         console.log(`error: ${e}`);
@@ -254,3 +256,4 @@ export default {
   },
 };
 </script>
+<style></style>

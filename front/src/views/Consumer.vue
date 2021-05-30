@@ -20,12 +20,34 @@
       </v-col>
       <v-col class="d-flex justify-center">
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
-          <v-card :elevation="hover ? 12 : 2" min-width="400" min-height="150" class="mb-8">
+          <v-card
+            :elevation="hover ? 12 : 2"
+            min-width="400"
+            min-height="150"
+            class="mb-8"
+          >
             <v-card-title>
-             Groceries List
+              Desired stock
             </v-card-title>
             <v-card-actions>
-            <list-dialog  :activeUser="currentUser"/>
+              <list-dialog :activeUser="currentUser" />
+            </v-card-actions>
+          </v-card>
+        </v-hover>
+      </v-col>
+      <v-col class="d-flex justify-center">
+        <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
+          <v-card
+            :elevation="hover ? 12 : 2"
+            min-width="400"
+            min-height="150"
+            class="mb-8"
+          >
+            <v-card-title>
+              Shopping List
+            </v-card-title>
+            <v-card-actions>
+              <list-dialog :activeUser="currentUser" />
             </v-card-actions>
           </v-card>
         </v-hover>
@@ -33,6 +55,7 @@
     </v-row>
 
     <ProductData
+      v-if="currentUser"
       ref="productData"
       :url="`http://192.168.31.175:3000/products`"
       :location="this.currentUser"
@@ -69,7 +92,7 @@ export default {
   }),
   methods: {},
   created() {
-    axios.post(`http://192.168.31.175:3000/users`).then((res) => {
+    axios.get(`http://192.168.31.175:3000/users`).then((res) => {
       // this.receivedNames = [];
       this.possibleUsers = [];
       res.data.found.forEach((el) => {

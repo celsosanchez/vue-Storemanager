@@ -11,7 +11,7 @@
               <v-autocomplete
                 v-model="autocomplete"
                 :search-input.sync="chosenProduct"
-                :loading="loading"
+                :loading="LoadingAutocomplete"
                 hide-no-data
                 :items="possibleProducts"
                 label="Name"
@@ -34,13 +34,7 @@
                 hide-details="auto"
               ></v-text-field>
 
-              <v-btn
-                icon
-                large
-                x-large
-                class="mr-6"
-                color="blue"
-               
+              <v-btn icon large x-large class="mr-6" color="blue"
                 ><v-icon>mdi-barcode-scan</v-icon></v-btn
               >
             </v-card-actions>
@@ -88,19 +82,7 @@
       ></v-col>
     </v-row>
     <v-row justify="center">
-      <v-col>
-        <div v-if="loading">
-          <v-sheet
-            :color="`grey ${false ? 'darken-2' : 'lighten-4'}`"
-            class="pa-3"
-          >
-            <v-skeleton-loader
-              class="mx-auto"
-              type="article, article,article"
-            ></v-skeleton-loader>
-          </v-sheet>
-        </div>
-      </v-col>
+      <v-col> </v-col>
       <v-snackbar v-model="snackbar" timeout="2000">
         {{ snackbarText }}
         <template v-slot:action="{ attrs }">
@@ -127,13 +109,11 @@
       </v-card>
     </v-dialog>
 
- <ProductData
+    <ProductData
       ref="productData"
       :url="`http://192.168.31.175:3000/products`"
       :location="`Producer`"
     />
-
-
   </div>
 </template>
 <script>
@@ -141,7 +121,7 @@ import axios from "axios";
 import ProductData from "@/components/ProductData.vue";
 export default {
   components: {
- ProductData,
+    ProductData,
   },
   data: () => ({
     chosenProduct: null,
@@ -159,7 +139,7 @@ export default {
     snackbarText: "",
   }),
   methods: {
-     sendData() {
+    sendData() {
       const numberRegex = new RegExp("^[0-9]+$");
       if (
         numberRegex.test(this.amount) &&
@@ -182,17 +162,15 @@ export default {
         this.overlay = true;
       }
     },
-    
+
     clearNewProduct() {
       this.amount = "";
       this.duration = "";
       this.chosenProduct = null;
       this.autocomplete = null;
     },
-  
   },
   created() {
-     
     setTimeout(() => {
       this.elevation = 6;
     }, "2000");
@@ -208,34 +186,32 @@ export default {
   },
   watch: {
     chosenProduct(value) {
-      try{
-      fetch(
-        // `https://data.opendatasoft.com/explore/embed/dataset/open-food-facts-products@public/table/?disjunctive.created_datetime&disjunctive.packaging_tags&disjunctive.brands_tags&disjunctive.categories_tags&disjunctive.origins_tags&disjunctive.manufacturing_places_tags&disjunctive.labels_tags&disjunctive.cities_tags&disjunctive.countries_tags&disjunctive.traces_tags&disjunctive.additives_tags&q=${value}&refine.countries_tags=en:france`
-        // `https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-food-facts-products%40public&q=product_name%3A${value}&rows=10000&facet=creator&facet=created_datetime&facet=packaging_tags&facet=brands_tags&facet=categories_tags&facet=categories_fr&facet=origins_tags&facet=manufacturing_places_tags&facet=labels_tags&facet=labels_fr&facet=cities_tags&facet=countries_tags&facet=allergens&facet=traces_tags&facet=additives_n&facet=additives_tags&facet=ingredients_from_palm_oil_n&facet=ingredients_that_may_be_from_palm_oil_n&facet=nutrition_grade_fr&facet=pnns_groups_1&facet=pnns_groups_2&facet=main_category&facet=energy_100g&facet=fat_100g&facet=sugars_100g&refine.countries_tags=en:france`
-        `https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-food-facts-products%40public&q=product_name%3A${value}&rows=10000&facet=creator&facet=created_datetime&facet=packaging_tags&facet=brands_tags&facet=categories_tags&facet=categories_fr&facet=origins_tags&facet=manufacturing_places_tags&facet=labels_tags&facet=labels_fr&facet=cities_tags&facet=countries_tags&facet=allergens&facet=traces_tags&facet=additives_n&facet=additives_tags&facet=ingredients_from_palm_oil_n&facet=ingredients_that_may_be_from_palm_oil_n&facet=nutrition_grade_fr&facet=pnns_groups_1&facet=pnns_groups_2&facet=main_category&facet=energy_100g&facet=fat_100g&facet=sugars_100g&refine.origins_tags=france`
-      )
-        .then((res) => res.json())
-        .then((res) => {
-          this.receivedNames = [];
-          this.possibleProducts = [];
-          res.records.forEach((el) => {
-            var nameProd = {};
-            nameProd.name = el.fields.product_name;
-            nameProd.producer = el.fields.brands;
-            nameProd.image_small_url = el.fields.image_small_url;
-            this.receivedNames.push(nameProd);
-            this.possibleProducts.push(nameProd.name);
+      try {
+        this.LoadingAutocomplete = true;
+        fetch(
+          // `https://data.opendatasoft.com/explore/embed/dataset/open-food-facts-products@public/table/?disjunctive.created_datetime&disjunctive.packaging_tags&disjunctive.brands_tags&disjunctive.categories_tags&disjunctive.origins_tags&disjunctive.manufacturing_places_tags&disjunctive.labels_tags&disjunctive.cities_tags&disjunctive.countries_tags&disjunctive.traces_tags&disjunctive.additives_tags&q=${value}&refine.countries_tags=en:france`
+          // `https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-food-facts-products%40public&q=product_name%3A${value}&rows=10000&facet=creator&facet=created_datetime&facet=packaging_tags&facet=brands_tags&facet=categories_tags&facet=categories_fr&facet=origins_tags&facet=manufacturing_places_tags&facet=labels_tags&facet=labels_fr&facet=cities_tags&facet=countries_tags&facet=allergens&facet=traces_tags&facet=additives_n&facet=additives_tags&facet=ingredients_from_palm_oil_n&facet=ingredients_that_may_be_from_palm_oil_n&facet=nutrition_grade_fr&facet=pnns_groups_1&facet=pnns_groups_2&facet=main_category&facet=energy_100g&facet=fat_100g&facet=sugars_100g&refine.countries_tags=en:france`
+          `https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-food-facts-products%40public&q=product_name%3A${value}&rows=10000&facet=creator&facet=created_datetime&facet=packaging_tags&facet=brands_tags&facet=categories_tags&facet=categories_fr&facet=origins_tags&facet=manufacturing_places_tags&facet=labels_tags&facet=labels_fr&facet=cities_tags&facet=countries_tags&facet=allergens&facet=traces_tags&facet=additives_n&facet=additives_tags&facet=ingredients_from_palm_oil_n&facet=ingredients_that_may_be_from_palm_oil_n&facet=nutrition_grade_fr&facet=pnns_groups_1&facet=pnns_groups_2&facet=main_category&facet=energy_100g&facet=fat_100g&facet=sugars_100g&refine.origins_tags=france`
+        )
+          .then((res) => res.json())
+          .then((res) => {
+            this.receivedNames = [];
+            this.possibleProducts = [];
+            res.records.forEach((el) => {
+              var nameProd = {};
+              nameProd.name = el.fields.product_name;
+              nameProd.producer = el.fields.brands;
+              nameProd.image_small_url = el.fields.image_small_url;
+              this.receivedNames.push(nameProd);
+              this.possibleProducts.push(nameProd.name);
+            });
+            this.LoadingAutocomplete = false;
           });
-        });
-
-    }catch(e){
-      console.log(`error: ${e}`)
-    }
-
+      } catch (e) {
+        console.log(`error: ${e}`);
+      }
     },
   },
 };
 </script>
 <style></style>
-
-
