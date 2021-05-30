@@ -30,7 +30,7 @@
               Desired stock
             </v-card-title>
             <v-card-actions>
-              <list-dialog :activeUser="currentUser" />
+              <warehouse-dialog :activeUser="currentUser" />
             </v-card-actions>
           </v-card>
         </v-hover>
@@ -70,13 +70,20 @@
 import axios from "axios";
 import ProductData from "@/components/ProductData.vue";
 import ListDialog from "@/components/ListDialog.vue";
+import WarehouseDialog from "@/components/WarehouseDialog.vue";
+
+
 
 export default {
   components: {
     ProductData,
     ListDialog,
+    WarehouseDialog,
   },
   data: () => ({
+
+    fridgeStock: ['2s'],
+
     chosenUser: null,
     autocomplete: null,
     elevation: 2,
@@ -106,6 +113,12 @@ export default {
   mounted() {},
   computed: {},
   watch: {
+    loading: {
+     handler(val){
+       console.log(val)
+     },
+     deep: true
+  },
     autocomplete(value) {
       // this.activeUser = true
       this.currentUser = value;

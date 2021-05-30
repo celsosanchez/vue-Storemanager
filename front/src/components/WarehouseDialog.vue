@@ -16,7 +16,7 @@
           v-on="on"
         >
           <v-icon large>
-          mdi-notebook-edit-outline
+           mdi-warehouse
           </v-icon>
         </v-btn>
       </template>
@@ -27,8 +27,8 @@
               <v-icon>mdi-close</v-icon>
             </v-btn>
             <v-toolbar-title
-              >Shopping List
-              <v-icon class="ml-3" color="white">mdi-notebook-edit</v-icon></v-toolbar-title
+              >Desired stock
+              <v-icon class="ml-3" color="white">mdi-warehouse</v-icon></v-toolbar-title
             >
             <v-spacer></v-spacer>
             <v-toolbar-items>
@@ -122,7 +122,7 @@
             </v-col>
           </v-row>
           <v-divider></v-divider>
-          <shopping-list ref="shoppingList" :activeUser="activeUser" />
+          <desired-stock ref="DesiredStock" :activeUser="activeUser" />
         </v-card>
       </div>
     </v-dialog>
@@ -130,11 +130,11 @@
 </template>
 <script>
 import axios from "axios";
-import ShoppingList from './ShoppingList.vue';
+import DesiredStock from "@/components/DesiredStock.vue";
 // import ProductData from "@/components/ProductData.vue";
 export default {
   components: {
-    ShoppingList,
+    DesiredStock,
   },
   props: ["activeUser"],
   data: () => ({
@@ -153,15 +153,15 @@ export default {
   }),
   methods: {
     getData() {
-      if (this.$refs.shoppingList) {
-        this.$refs.shoppingList.getData();
+      if (this.$refs.DesiredStock) {
+        this.$refs.DesiredStock.getData();
       }
     },
     save() {
       axios
         .put("http://192.168.31.175:3000/users", {
           user: this.activeUser,
-          list: this.$refs.shoppingList.items,
+          list: this.$refs.DesiredStock.items,
         })
         .then(() => {
           this.dialog = false;
@@ -189,7 +189,7 @@ export default {
     addToList() {
       const numberRegex = new RegExp("^[0-9]+$");
       if (numberRegex.test(this.amount) && this.chosenProduct !== null) {
-        this.$refs.shoppingList.items.push({
+        this.$refs.DesiredStock.items.push({
           name: this.description.name,
           Image: this.description.image_url,
           Producer: this.description.producer,

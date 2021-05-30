@@ -2,7 +2,7 @@
   <div>
     <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
       <div>
-          <div v-if="loading">
+        <div v-if="loading">
           <v-sheet
             :color="`grey ${false ? 'darken-2' : 'lighten-4'}`"
             class="pa-3"
@@ -17,8 +17,8 @@
           <v-card-title>
             <slot name="tableTitle"><h3>Products</h3></slot>
             <v-spacer></v-spacer>
-            <div style="color: gray"   >{{searchCounter}} items</div>
-             <v-spacer></v-spacer>
+            <div style="color: gray">{{ searchCounter }} items</div>
+            <v-spacer></v-spacer>
             <v-dialog v-model="dialog" width="500">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -32,7 +32,7 @@
                   ><v-icon>mdi-delete</v-icon></v-btn
                 >
               </template>
-              
+
               <v-card>
                 <v-card-title class="headline red lighten-2">
                   Confirm Deletion
@@ -81,8 +81,8 @@
               hide-details
             ></v-text-field>
           </v-card-title>
-          
-          <v-data-table 
+
+          <v-data-table
             @pagination="counter"
             :headers="headers"
             :items="items"
@@ -98,8 +98,10 @@
               <v-icon :color="status(item.expirationIn).color">
                 {{ status(item.expirationIn).icon }}
               </v-icon>
-             <template v-if="item.expirationIn >=0"> {{ item.expirationIn }} days left</template>
-             <template v-else=""> Expired! </template>
+              <template v-if="item.expirationIn >= 0">
+                {{ item.expirationIn }} days left</template
+              >
+              <template v-else=""> Expired! </template>
             </template>
             <template v-slot:item.detail="{ item }">
               <v-btn icon @click="showDetails(item)"
@@ -182,30 +184,28 @@ export default {
     items: [],
   }),
   methods: {
-      counter(pagination){
-          this.searchCounter = pagination.itemsLength;
-      },
+    counter(pagination) {
+      this.searchCounter = pagination.itemsLength;
+    },
     getData() {
-        if(this.location){
-            
-      this.loading = true;
-      axios.post(this.url, { location: this.location }).then((res) => {
-        this.items = res.data.found;
-        if (this.items) this.loading = false;
-        this.items.forEach((element) => {
-          var receivedExp = new Date(element.expiration_datetime);
-          var receivedprod = new Date(element.production_datetime);
-          element.expiration_datetime = `${receivedExp.getFullYear()}/${receivedExp.getMonth() +
-            1}/${receivedExp.getDate()}`;
-          element.production_datetime = `${receivedprod.getFullYear()}/${receivedprod.getMonth() +
-            1}/${receivedprod.getDate()}`;
-          element.expirationIn = Math.round(
-            (receivedExp - Date.now()) / 86400000
-          );
+      if (this.location) {
+        this.loading = true;
+        axios.post(this.url, { location: this.location }).then((res) => {
+          this.items = res.data.found;
+          if (this.items) this.loading = false;
+          this.items.forEach((element) => {
+            var receivedExp = new Date(element.expiration_datetime);
+            var receivedprod = new Date(element.production_datetime);
+            element.expiration_datetime = `${receivedExp.getFullYear()}/${receivedExp.getMonth() +
+              1}/${receivedExp.getDate()}`;
+            element.production_datetime = `${receivedprod.getFullYear()}/${receivedprod.getMonth() +
+              1}/${receivedprod.getDate()}`;
+            element.expirationIn = Math.round(
+              (receivedExp - Date.now()) / 86400000
+            );
+          });
+          this.loading = false;
         });
-        this.loading = false;
-      });
-     
       }
     },
     confirmedDeletion() {
@@ -257,9 +257,7 @@ export default {
       else return true;
     },
   },
-  watch: {
-  
-  },
+  watch: {},
 };
 </script>
 <style></style>
