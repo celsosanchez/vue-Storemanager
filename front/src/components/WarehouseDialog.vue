@@ -16,7 +16,7 @@
           v-on="on"
         >
           <v-icon large>
-           mdi-warehouse
+            mdi-warehouse
           </v-icon>
         </v-btn>
       </template>
@@ -28,7 +28,9 @@
             </v-btn>
             <v-toolbar-title
               >Desired stock
-              <v-icon class="ml-3" color="white">mdi-warehouse</v-icon></v-toolbar-title
+              <v-icon class="ml-3" color="white"
+                >mdi-warehouse</v-icon
+              ></v-toolbar-title
             >
             <v-spacer></v-spacer>
             <v-toolbar-items>
@@ -189,13 +191,22 @@ export default {
     addToList() {
       const numberRegex = new RegExp("^[0-9]+$");
       if (numberRegex.test(this.amount) && this.chosenProduct !== null) {
-        this.$refs.DesiredStock.items.push({
-          name: this.description.name,
-          Image: this.description.image_url,
-          Producer: this.description.producer,
-          Amount: parseInt(this.amount),
-        });
-
+        const exists = this.$refs.DesiredStock.items.filter(
+          (x) => x.name == this.description.name
+        );
+        if (exists.length == 0) {
+          this.$refs.DesiredStock.items.push({
+            name: this.description.name,
+            Image: this.description.image_url,
+            Producer: this.description.producer,
+            Amount: parseInt(this.amount),
+          });
+        } else {
+          console.log(exists[0]);
+          this.$refs.DesiredStock.items[
+            this.$refs.DesiredStock.items.indexOf(exists[0])
+          ].Amount += parseInt(this.amount);
+        }
         this.clearNewProduct();
       } else {
         this.overlay = true;

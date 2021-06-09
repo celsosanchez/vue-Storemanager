@@ -4,8 +4,9 @@ const axios = require("axios").default;
 // const User = require("../schema/user");
 // const log = require("../lib/logger");
 
+// add to Desired Stock
 async function addToDS(req, res) {
-   
+  console.log(`addtods`)
   const { user, list } = req.body;
   if (!user || !list) {
     return res.status(400).json({
@@ -13,16 +14,52 @@ async function addToDS(req, res) {
     });
   }
   try {
-   await User.findOneAndUpdate(
+    const desiredStock = list;
+    const found = await User.find({ email: user });
+    const shoppingList = found[0].shoppingList;
+    let add = true;
+    desiredStock.forEach(desired => {
+      add = true;
+      shoppingList.forEach(inList => {
+        if(desired.name == inList.name){
+          add = false;
+          if(desired.Amount > inList.Amount){
+            inList.Amount += desired.Amount - inList.Amount; 
+          }
+        }
+       })
+       if (add) shoppingList.push(desired)
+    });
+
+    await User.findOneAndUpdate(
       { email: user },
-      { desiredStock: list },(err,doc)=> {
-        if(err)console.log(`error: ${err}`)
- 
-        return res.send(doc)
+      { desiredStock: desiredStock, shoppingList: shoppingList},
+      (err, doc) => {
+        if (err) console.log(`error: ${err}`);
+        return res.send(doc);
       }
     );
-  
-   
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+}
+
+async function addToSL(req, res) {
+  const { user, list } = req.body;
+  if (!user || !list) {
+    return res.status(400).json({
+      text: "invalid request",
+    });
+  }
+  try {
+    await User.findOneAndUpdate(
+      { email: user },
+      { shoppingList: list },
+      (err, doc) => {
+        if (err) console.log(`error: ${err}`);
+        return res.send(doc);
+      }
+    );
   } catch (error) {
     return res.status(500).json({ error });
   }
@@ -238,6 +275,7 @@ async function getUsers(req, res) {
 
 exports.getUsers = getUsers;
 exports.addToDS = addToDS;
+exports.addToSL = addToSL;
 // exports.addProducts = addProducts;
 // exports.moveProducts = moveProducts;
 // exports.rmProducerEntry = rmProducerEntry;

@@ -12,6 +12,9 @@ const User = mongoose.Schema({
   desiredStock: [
     { Amount: Number, Image: String, Producer: String, name: String },
   ],
+  shoppingList: [
+    { Amount: Number, Image: String, Producer: String, name: String },
+  ],
   actualStock: [String],
   shoppingCart: [String],
   expirationWarning: [String],

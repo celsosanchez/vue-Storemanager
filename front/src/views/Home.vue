@@ -27,7 +27,8 @@ export default {
   methods: {
     calldata() {
       console.log(this.$refs)
-      this.$refs.productData.getData();
+      // this.$refs.productData.getData();
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
   },
 };

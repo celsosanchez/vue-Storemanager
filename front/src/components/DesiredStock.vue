@@ -74,16 +74,17 @@ export default {
       {
         text: "Name",
         align: "start",
-        sortable: false,
+        sortable: true,
         value: "name",
       },
+      { text: "Amount (Units)", value: "Amount" },
       { text: "Image", value: "Image", sortable: false },
       { text: "Producer", value: "Producer" },
-      { text: "Amount (Units)", value: "Amount" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     items: [],
   }),
+  
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";

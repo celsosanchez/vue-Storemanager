@@ -73,12 +73,12 @@ export default {
       {
         text: "Name",
         align: "start",
-        sortable: false,
+        sortable: true,
         value: "name",
       },
+      { text: "Amount (Units)", value: "Amount" },
       { text: "Image", value: "Image", sortable: false },
       { text: "Producer", value: "Producer" },
-      { text: "Amount (Units)", value: "Amount" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     items: [],
@@ -112,7 +112,7 @@ export default {
           var data = res.data.found;
           this.items = data.find(
             (element) => element.email == this.activeUser
-          ).desiredStock;
+          ).shoppingList;
         });
       }
     },

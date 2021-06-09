@@ -14,6 +14,7 @@ module.exports = function (app) {
     app.put('/producer', product.addProducts);
     app.get('/users', user.getUsers);
     app.put('/users', user.addToDS);
+    app.put('/usersShoppingList', user.addToSL);
     // app.get('/products', protectRoute, product.getProducts);
     app.post('/products',  product.getProducts);
     app.patch('/producer', product.moveProducts);
