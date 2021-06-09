@@ -16,7 +16,7 @@
           v-on="on"
         >
           <v-icon large>
-          mdi-notebook-edit-outline
+            mdi-notebook-edit-outline
           </v-icon>
         </v-btn>
       </template>
@@ -28,7 +28,9 @@
             </v-btn>
             <v-toolbar-title
               >Shopping List
-              <v-icon class="ml-3" color="white">mdi-notebook-edit</v-icon></v-toolbar-title
+              <v-icon class="ml-3" color="white"
+                >mdi-notebook-edit</v-icon
+              ></v-toolbar-title
             >
             <v-spacer></v-spacer>
             <v-toolbar-items>
@@ -130,8 +132,7 @@
 </template>
 <script>
 import axios from "axios";
-import ShoppingList from './ShoppingList.vue';
-// import ProductData from "@/components/ProductData.vue";
+import ShoppingList from "./ShoppingList.vue";
 export default {
   components: {
     ShoppingList,
@@ -159,7 +160,7 @@ export default {
     },
     save() {
       axios
-        .put("http://192.168.31.175:3000/users", {
+        .put("http://192.168.31.175:3000/usersShoppingList", {
           user: this.activeUser,
           list: this.$refs.shoppingList.items,
         })
@@ -189,12 +190,22 @@ export default {
     addToList() {
       const numberRegex = new RegExp("^[0-9]+$");
       if (numberRegex.test(this.amount) && this.chosenProduct !== null) {
-        this.$refs.shoppingList.items.push({
-          name: this.description.name,
-          Image: this.description.image_url,
-          Producer: this.description.producer,
-          Amount: parseInt(this.amount),
-        });
+        const exists = this.$refs.shoppingList.items.filter(
+          (x) => x.name == this.description.name
+        );
+        if (exists.length == 0) {
+          this.$refs.shoppingList.items.push({
+            name: this.description.name,
+            Image: this.description.image_url,
+            Producer: this.description.producer,
+            Amount: parseInt(this.amount),
+          });
+        } else {
+          console.log(exists[0]);
+          this.$refs.shoppingList.items[
+            this.$refs.shoppingList.items.indexOf(exists[0])
+          ].Amount += parseInt(this.amount);
+        }
 
         this.clearNewProduct();
       } else {
