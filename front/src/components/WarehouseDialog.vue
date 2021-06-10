@@ -138,11 +138,11 @@ export default {
   components: {
     DesiredStock,
   },
-  props: ["activeUser"],
+  props: ["activeUser", "currentItems"],
   data: () => ({
     dialog: false,
     chosenProduct: null,
-    currentList: [],
+    // currentList: [],
     amount: "",
     overlay: false,
     receivedElements: [],
@@ -164,6 +164,7 @@ export default {
         .put("http://192.168.31.175:3000/users", {
           user: this.activeUser,
           list: this.$refs.DesiredStock.items,
+          fridge: this.currentItems,
         })
         .then(() => {
           this.dialog = false;

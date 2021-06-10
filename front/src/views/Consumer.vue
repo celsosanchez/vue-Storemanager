@@ -22,7 +22,7 @@
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <v-card
             :elevation="hover ? 12 : 2"
-            min-width="400"
+            min-width="300"
             min-height="150"
             class="mb-8"
           >
@@ -30,7 +30,10 @@
               Desired stock
             </v-card-title>
             <v-card-actions>
-              <warehouse-dialog :activeUser="currentUser" />
+              <warehouse-dialog
+                :activeUser="currentUser"
+                :currentItems="currentItems"
+              />
             </v-card-actions>
           </v-card>
         </v-hover>
@@ -39,7 +42,7 @@
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <v-card
             :elevation="hover ? 12 : 2"
-            min-width="400"
+            min-width="300"
             min-height="150"
             class="mb-8"
           >
@@ -48,6 +51,23 @@
             </v-card-title>
             <v-card-actions>
               <list-dialog :activeUser="currentUser" />
+            </v-card-actions>
+          </v-card>
+        </v-hover>
+      </v-col>
+      <v-col class="d-flex justify-center">
+        <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
+          <v-card
+            :elevation="hover ? 12 : 2"
+            min-width="300"
+            min-height="150"
+            class="mb-8"
+          >
+            <v-card-title>
+              Expiration Warning!
+            </v-card-title>
+            <v-card-actions>
+              <expiration-warning :warningList="expiredWarning" />
             </v-card-actions>
           </v-card>
         </v-hover>
@@ -71,19 +91,20 @@ import axios from "axios";
 import ProductData from "@/components/ProductData.vue";
 import ListDialog from "@/components/ListDialog.vue";
 import WarehouseDialog from "@/components/WarehouseDialog.vue";
-
-
+import ExpirationWarning from '../components/ExpirationWarning.vue';
 
 export default {
+  name: "Consumer",
   components: {
     ProductData,
     ListDialog,
     WarehouseDialog,
+    ExpirationWarning,
   },
   data: () => ({
-
-    fridgeStock: ['2s'],
-
+    // fridgeStock: ['2s'],
+    expiredWarning: [],
+    productDatafinishedLoad: false,
     chosenUser: null,
     autocomplete: null,
     elevation: 2,
@@ -95,6 +116,7 @@ export default {
     snackbar: false,
     currentUser: null,
     snackbarText: "",
+    currentItems: [],
     // activeUser: false,
   }),
   methods: {},
@@ -113,12 +135,25 @@ export default {
   mounted() {},
   computed: {},
   watch: {
-    loading: {
-     handler(val){
-       console.log(val)
-     },
-     deep: true
-  },
+    productDatafinishedLoad() {
+      this.currentItems = this.$refs.productData.items;
+
+      this.expiredWarning = [];
+      this.currentItems.forEach((element) => {
+        var expiration = new Date(element.expiration_datetime);
+        element.expirationIn = Math.round((expiration - Date.now()) / 86400000);
+        if (element.expirationIn < 3) {
+          const soonExpires = {
+            name: element.product_name,
+            producer: element.brands,
+            expirationOn: element.expirationIn,
+            image_url: element.image_url,
+          };
+          this.expiredWarning.push(soonExpires);
+        }
+      });
+      console.log(this.expiredWarning);
+    },
     autocomplete(value) {
       // this.activeUser = true
       this.currentUser = value;

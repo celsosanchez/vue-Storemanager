@@ -257,7 +257,12 @@ export default {
       else return true;
     },
   },
-  watch: {},
+  watch: {
+    items(){
+      this.$parent.productDatafinishedLoad = !this.$parent.productDatafinishedLoad;
+    }
+
+  },
 };
 </script>
 <style></style>

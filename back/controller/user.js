@@ -6,9 +6,8 @@ const axios = require("axios").default;
 
 // add to Desired Stock
 async function addToDS(req, res) {
-  console.log(`addtods`)
-  const { user, list } = req.body;
-  if (!user || !list) {
+  const { user, list, fridge } = req.body;
+  if (!user || !list || !fridge) {
     return res.status(400).json({
       text: "invalid request",
     });
@@ -18,22 +17,41 @@ async function addToDS(req, res) {
     const found = await User.find({ email: user });
     const shoppingList = found[0].shoppingList;
     let add = true;
-    desiredStock.forEach(desired => {
+    let fridgeCount = 0;
+    // toAdd = [];
+    desiredStock.forEach((desired) => {
+      // toAdd = [];
+      fridgeCount = 0;
+      let newAdd = { ...desired };
       add = true;
-      shoppingList.forEach(inList => {
-        if(desired.name == inList.name){
+      fridge.forEach((fridgeElement) => {
+        if (desired.name == fridgeElement.product_name) {
+          if (fridgeElement.expirationIn > 0) fridgeCount += 1;
+        }
+      });
+      if (desired.Amount > fridgeCount) {
+        newAdd.Amount = desired.Amount - fridgeCount;
+        // toAdd.push(newAdd);
+      }
+      if (desired.Amount == fridgeCount) {
+        add = false;
+        // toAdd.push(newAdd);
+      }
+
+      shoppingList.forEach((inList) => {
+        if (newAdd.name == inList.name) {
           add = false;
-          if(desired.Amount > inList.Amount){
-            inList.Amount += desired.Amount - inList.Amount; 
+          if (newAdd.Amount > inList.Amount) {
+            inList.Amount += newAdd.Amount - inList.Amount;
           }
         }
-       })
-       if (add) shoppingList.push(desired)
+      });
+      if (add) shoppingList.push(newAdd);
     });
 
     await User.findOneAndUpdate(
       { email: user },
-      { desiredStock: desiredStock, shoppingList: shoppingList},
+      { desiredStock: desiredStock, shoppingList: shoppingList },
       (err, doc) => {
         if (err) console.log(`error: ${err}`);
         return res.send(doc);
@@ -43,7 +61,7 @@ async function addToDS(req, res) {
     return res.status(500).json({ error });
   }
 }
-
+// add to Shopping List
 async function addToSL(req, res) {
   const { user, list } = req.body;
   if (!user || !list) {
