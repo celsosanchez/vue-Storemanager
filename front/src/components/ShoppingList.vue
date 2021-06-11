@@ -105,6 +105,13 @@ export default {
       this.searchCounter = pagination.itemsLength;
     },
     getData() {
+
+
+
+
+
+
+
         this.items = [];
       if (this.activeUser) {
         this.loading = true;
