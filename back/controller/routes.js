@@ -15,9 +15,11 @@ module.exports = function (app) {
     app.get('/users', user.getUsers);
     app.put('/users', user.addToDS);
     app.put('/usersShoppingList', user.addToSL);
+    app.put('/UpdateSLfromDS', user.UpdateSLfromDS);
     // app.get('/products', protectRoute, product.getProducts);
     app.post('/products',  product.getProducts);
-    app.patch('/producer', product.moveProducts);
+    // app.patch('/producer', product.moveProducts);
+    app.patch('/producer', product.consumerBuyFromProducer);
     app.delete('/producer', product.rmProducerEntry);
 
     //-----auth---

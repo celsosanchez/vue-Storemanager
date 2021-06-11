@@ -1,4 +1,5 @@
 const User = require("../schema/user");
+const Product = require("../schema/product");
 const ProducerStockEntry = require("../schema/producer_stock");
 const axios = require("axios").default;
 // const User = require("../schema/user");
@@ -18,9 +19,9 @@ async function addToDS(req, res) {
     const shoppingList = found[0].shoppingList;
     let add = true;
     let fridgeCount = 0;
-    // toAdd = [];
+ 
     desiredStock.forEach((desired) => {
-      // toAdd = [];
+   
       fridgeCount = 0;
       let newAdd = { ...desired };
       add = true;
@@ -31,13 +32,11 @@ async function addToDS(req, res) {
       });
       if (desired.Amount > fridgeCount) {
         newAdd.Amount = desired.Amount - fridgeCount;
-        // toAdd.push(newAdd);
       }
-      if (desired.Amount == fridgeCount) {
+      if (desired.Amount <= fridgeCount) {
         add = false;
-        // toAdd.push(newAdd);
       }
-
+      
       shoppingList.forEach((inList) => {
         if (newAdd.name == inList.name) {
           add = false;
@@ -48,7 +47,6 @@ async function addToDS(req, res) {
       });
       if (add) shoppingList.push(newAdd);
     });
-
     await User.findOneAndUpdate(
       { email: user },
       { desiredStock: desiredStock, shoppingList: shoppingList },
@@ -73,6 +71,61 @@ async function addToSL(req, res) {
     await User.findOneAndUpdate(
       { email: user },
       { shoppingList: list },
+      (err, doc) => {
+        if (err) console.log(`error: ${err}`);
+        return res.send(doc);
+      }
+    );
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+}
+
+async function UpdateSLfromDS(req, res) {
+  const { user } = req.body;
+  try {
+    const found = await User.find({ email: user });
+    const fridge = await Product.find({ location: user });
+    var desiredStock = found[0].desiredStock;
+    var shoppingList = found[0].shoppingList;
+    let add = true;
+    let fridgeCount = 0;
+    desiredStock.forEach((desired) => {
+      fridgeCount = 0;
+      let newAdd = desired;
+      add = true;
+      fridge.forEach((fridgeElement) => {
+        var receivedExp = new Date(fridgeElement.expiration_datetime);
+        fridgeElement.expirationIn =
+          Math.round((receivedExp - Date.now()) / 86400000) - 1;
+        if (desired.name == fridgeElement.product_name) {
+          if (fridgeElement.expirationIn > 0) {
+            fridgeCount += 1;
+          }
+        }
+      });
+      if (desired.Amount > fridgeCount) {
+        newAdd.Amount = desired.Amount - fridgeCount;
+      }
+      if (desired.Amount <= fridgeCount) {
+        add = false;
+      }
+      shoppingList.forEach((inList) => {
+        if (newAdd.name == inList.name) {
+          add = false;
+          if (newAdd.Amount > inList.Amount) {
+            inList.Amount += newAdd.Amount - inList.Amount;
+          }
+        }
+      });
+      if (add) {
+        console.log(newAdd);
+        shoppingList.push(newAdd);
+      }
+    });
+    await User.findOneAndUpdate(
+      { email: user },
+      { desiredStock: desiredStock, shoppingList: shoppingList },
       (err, doc) => {
         if (err) console.log(`error: ${err}`);
         return res.send(doc);
@@ -294,6 +347,8 @@ async function getUsers(req, res) {
 exports.getUsers = getUsers;
 exports.addToDS = addToDS;
 exports.addToSL = addToSL;
+exports.UpdateSLfromDS = UpdateSLfromDS;
+
 // exports.addProducts = addProducts;
 // exports.moveProducts = moveProducts;
 // exports.rmProducerEntry = rmProducerEntry;

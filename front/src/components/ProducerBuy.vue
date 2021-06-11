@@ -15,7 +15,7 @@
         </div>
         <v-card :elevation="hover ? 12 : 2" v-if="!loading">
           <v-card-title>
-            <slot name="tableTitle"><h3>Products</h3></slot>
+            <slot name="tableTitle"><h3>Products for sell</h3></slot>
             <v-spacer></v-spacer>
             <div style="color: gray">{{ searchCounter }} items</div>
             <v-spacer></v-spacer>
@@ -24,21 +24,22 @@
                 <v-btn
                   icon
                   x-large
-                  color="red"
-                  :disabled="!deleteButton"
+                  large
+                  color="green"
+                  :disabled="!buyButton"
                   class="mr-5"
                   v-bind="attrs"
                   v-on="on"
-                  ><v-icon>mdi-delete</v-icon></v-btn
+                  ><v-icon x-large large>mdi-cash-register</v-icon></v-btn
                 >
               </template>
 
               <v-card>
-                <v-card-title class="headline red lighten-2">
-                  Confirm Deletion
+                <v-card-title class="headline green lighten-2">
+                  Confirm Cart
                 </v-card-title>
                 <v-card-text class=" mt-3">
-                  Confirm that you want to delete the following items:
+                  Confirm that you want to buy the following items:
                 </v-card-text>
                 <v-simple-table>
                   <template v-slot:default>
@@ -48,7 +49,7 @@
                           Product Name
                         </th>
                         <th class="text-left">
-                          Location
+                          Brand
                         </th>
                         <th class="text-left">
                           Expiration date
@@ -58,7 +59,7 @@
                     <tbody>
                       <tr v-for="item in selected" :key="item.key">
                         <td>{{ item.product_name }}</td>
-                        <td>{{ item.location }}</td>
+                        <td>{{ item.brands }}</td>
                         <td>{{ item.expiration_datetime }}</td>
                       </tr>
                     </tbody>
@@ -67,8 +68,8 @@
                 <v-divider></v-divider>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="primary" text @click="confirmedDeletion">
-                    Yes, I do want to Delete them.
+                  <v-btn color="primary" text @click="confirmedBuy">
+                    Yes, I do.
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -157,7 +158,7 @@
 import axios from "axios";
 export default {
   components: {},
-  props: ["url", "location"],
+  props: ["url", "location","activeUser"],
   data: () => ({
     showingItem: null,
     dataDetail: false,
@@ -194,6 +195,8 @@ export default {
           this.items = res.data.found;
           if (this.items) this.loading = false;
           this.items.forEach((element) => {
+             element.exp = element.expiration_datetime;
+             element.prod = element.production_datetime;
             var receivedExp = new Date(element.expiration_datetime);
             var receivedprod = new Date(element.production_datetime);
             element.expiration_datetime = `${receivedExp.getFullYear()}/${receivedExp.getMonth() +
@@ -203,19 +206,24 @@ export default {
             element.expirationIn = Math.round(
               (receivedExp - Date.now()) / 86400000
             );
+            
           });
           this.loading = false;
         });
       }
     },
-    confirmedDeletion() {
+    confirmedBuy() {
+      // console.log(this.activeUser)
       this.selected.forEach(async (element, index, array) => {
         await axios
-          .delete("http://192.168.31.175:3000/producer", {
+          .patch("http://192.168.31.175:3000/producer", {
             data: {
-              productName: element.product_name,
-              amount: 1,
-              location: element.location,
+              product_name: element.product_name,
+              // expiration_datetime: element.expiration_datetime,
+              // production_datetime: element.production_datetime,
+              expiration_datetime: element.exp,
+              production_datetime: element.prod,
+              buyer: this.activeUser,
             },
           })
           .then(() => {
@@ -250,18 +258,18 @@ export default {
       this.elevation = 6;
     }, "2000");
   },
-  renderTriggered() { this.getData();},
+  mounted() {},
   computed: {
-    deleteButton() {
+    buyButton() {
       if (this.selected.length == 0) return false;
       else return true;
     },
   },
   watch: {
-    items(){
-      this.$parent.productDatafinishedLoad = !this.$parent.productDatafinishedLoad;
-    }
-
+    items() {
+      this.$parent.productDatafinishedLoad = !this.$parent
+        .productDatafinishedLoad;
+    },
   },
 };
 </script>

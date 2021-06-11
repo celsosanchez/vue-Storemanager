@@ -145,6 +145,46 @@ async function rmProducerEntry(req, res) {
   }
 }
 
+ 
+async function consumerBuyFromProducer(req, res) {
+  const {product_name,expiration_datetime, production_datetime,buyer} = req.body.data
+  try {
+    
+  let caca = await Product.findOneAndUpdate(
+      { product_name:product_name, expiration_datetime: expiration_datetime ,production_datetime: production_datetime,location:"Producer" },
+      { location: buyer },
+      (err, doc) => {
+        if (err) console.log(`error: ${err}`);
+        return res.send(doc);
+      }
+    );
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+}
+
+
+
+// async function moveProducts(req,res) {
+//   try {
+//     var found = args[0]
+//       ? await Product.find({ product_name: productName, location: args[0] })
+//       : await Product.find({ product_name: productName });
+//     if (found.length < Math.abs(amount))
+//       throw `no enough products on location: ${args[0]} to complete the request`;
+//     found.sort((a, b) => {
+//       return a.production_datetime - b.production_datetime;
+//     });
+//     for (let index = 0; index < Math.abs(amount); index++) {
+//       found[index].location = location;
+//       const Data = new Product(found[index]);
+//       await Data.save();
+//     }
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
 async function moveProducts(productName, amount, location, ...args) {
   try {
     var found = args[0]
@@ -222,5 +262,6 @@ async function moveProducts(productName, amount, location, ...args) {
 
 exports.addProducts = addProducts;
 exports.moveProducts = moveProducts;
+exports.consumerBuyFromProducer = consumerBuyFromProducer;
 exports.rmProducerEntry = rmProducerEntry;
 exports.getProducts = getProducts;

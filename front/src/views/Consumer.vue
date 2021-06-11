@@ -4,7 +4,7 @@
       <v-col class="d-flex justify-center">
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <v-card :elevation="hover ? 12 : 2" min-width="400" class="mb-8">
-            <v-card-title>
+            <v-card-title >
               Select User
             </v-card-title>
             <v-card-actions>
@@ -22,7 +22,7 @@
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <v-card
             :elevation="hover ? 12 : 2"
-            min-width="300"
+            min-width="200"
             min-height="150"
             class="mb-8"
           >
@@ -31,6 +31,7 @@
             </v-card-title>
             <v-card-actions>
               <warehouse-dialog
+                ref="warehouse"
                 :activeUser="currentUser"
                 :currentItems="currentItems"
               />
@@ -42,11 +43,11 @@
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <v-card
             :elevation="hover ? 12 : 2"
-            min-width="300"
+            min-width="200"
             min-height="150"
             class="mb-8"
           >
-            <v-card-title>
+            <v-card-title >
               Shopping List
             </v-card-title>
             <v-card-actions>
@@ -59,15 +60,32 @@
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <v-card
             :elevation="hover ? 12 : 2"
-            min-width="300"
+            min-width="200"
             min-height="150"
             class="mb-8"
           >
             <v-card-title>
-              Expiration Warning!
+              Warning!
             </v-card-title>
             <v-card-actions>
-              <expiration-warning :warningList="expiredWarning" />
+              <expiration-warning :activeUser="currentUser"  :warningList="expiredWarning" />
+            </v-card-actions>
+          </v-card>
+        </v-hover>
+      </v-col>
+      <v-col class="d-flex justify-center">
+        <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
+          <v-card
+            :elevation="hover ? 12 : 2"
+            min-width="200"
+            min-height="150"
+            class="mb-8"
+          >
+            <v-card-title>
+              Buy from Producer
+            </v-card-title>
+            <v-card-actions>
+              <buy-from-producer :activeUser="currentUser"  />
             </v-card-actions>
           </v-card>
         </v-hover>
@@ -92,6 +110,7 @@ import ProductData from "@/components/ProductData.vue";
 import ListDialog from "@/components/ListDialog.vue";
 import WarehouseDialog from "@/components/WarehouseDialog.vue";
 import ExpirationWarning from '../components/ExpirationWarning.vue';
+import BuyFromProducer from '../components/buyFromProducer.vue';
 
 export default {
   name: "Consumer",
@@ -100,6 +119,7 @@ export default {
     ListDialog,
     WarehouseDialog,
     ExpirationWarning,
+    BuyFromProducer,
   },
   data: () => ({
     // fridgeStock: ['2s'],
@@ -119,7 +139,11 @@ export default {
     currentItems: [],
     // activeUser: false,
   }),
-  methods: {},
+  methods: {
+    reload(){
+            this.$refs.productData.getData()
+    }
+  },
   created() {
     axios.get(`http://192.168.31.175:3000/users`).then((res) => {
       // this.receivedNames = [];
@@ -132,7 +156,7 @@ export default {
       this.elevation = 6;
     }, "2000");
   },
-  mounted() {},
+  
   computed: {},
   watch: {
     productDatafinishedLoad() {
@@ -152,15 +176,21 @@ export default {
           this.expiredWarning.push(soonExpires);
         }
       });
-      console.log(this.expiredWarning);
     },
     autocomplete(value) {
       // this.activeUser = true
       this.currentUser = value;
       setTimeout(() => {
         this.$refs.productData.getData();
+        axios.put(`http://192.168.31.175:3000/UpdateSLfromDS`,{
+          user: this.currentUser
+        });
+
+
+        
       }, "1");
     },
+    // $active(value){console.log(value)}
   },
 };
 </script>
