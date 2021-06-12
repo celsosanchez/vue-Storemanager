@@ -1,7 +1,8 @@
 const product = require("./product");
 const user = require("./user");
 const passport = require("passport");
-// const User = require('../schema/user');
+const User = require('../schema/user');
+const { session } = require("passport");
 
 const protectRoute = (req, res, next) => {
     if (req.user) return next();
@@ -27,8 +28,12 @@ module.exports = function (app) {
         scope: ["profile", "email"]
     }));
     app.get("/auth/google/redirect", passport.authenticate('google'), async (req, res) => {
+        // console.log(req.user)
         const user = await User.findById(req.user);
-        res.send(`Hi there ${user.name}`)
+        console.log(session.name)
+        console.log(req.session)
+
+        res.redirect('http://192.168.31.175:8080');
     });
 }
 

@@ -6,7 +6,7 @@
       hide-overlay
       transition="dialog-bottom-transition"
     >
-      <template v-slot:activator="{ on, attrs }">
+      <template v-slot:[`activator`]="{ on, attrs }">
         <v-btn
           color="primary"
           icon
@@ -45,16 +45,16 @@
               :items-per-page="15"
               class="elevation-1"
             >
-              <template v-slot:item.expirationOn="{ item }">
+              <template v-slot:[`item.expirationOn`]="{ item }">
                 <v-icon :color="status(item.expirationOn).color">
                   {{ status(item.expirationOn).icon }}
                 </v-icon>
                 <template v-if="item.expirationOn >= 0">
                   {{ item.expirationOn }} days left</template
                 >
-                <template v-else=""> Expired! </template>
+                <template v-else> Expired! </template>
               </template>
-              <template v-slot:item.image_url="{ item }">
+              <template v-slot:[`item.image_url`]="{ item }">
                 <v-btn icon @click="showImage(item)"
                   ><v-icon>mdi-eye</v-icon></v-btn
                 >

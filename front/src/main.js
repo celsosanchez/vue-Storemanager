@@ -3,6 +3,8 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import router from './router'
 import VueBarcodeScanner from 'vue-barcode-scanner'
+import VueSession from 'vue-session'
+Vue.use(VueSession)
 
 Vue.config.productionTip = false
 

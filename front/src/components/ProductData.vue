@@ -20,7 +20,7 @@
             <div style="color: gray">{{ searchCounter }} items</div>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialog" width="500">
-              <template v-slot:activator="{ on, attrs }">
+              <template v-slot:[`activator`]="{ on, attrs }">
                 <v-btn
                   icon
                   x-large
@@ -41,7 +41,7 @@
                   Confirm that you want to delete the following items:
                 </v-card-text>
                 <v-simple-table>
-                  <template v-slot:default>
+                  <template v-slot:[`default`]>
                     <thead>
                       <tr>
                         <th class="text-left">
@@ -94,16 +94,16 @@
             :items-per-page="15"
             class="elevation-4"
           >
-            <template v-slot:item.expirationIn="{ item }">
+            <template v-slot:[`item.expirationIn`]="{ item }">
               <v-icon :color="status(item.expirationIn).color">
                 {{ status(item.expirationIn).icon }}
               </v-icon>
               <template v-if="item.expirationIn >= 0">
                 {{ item.expirationIn }} days left</template
               >
-              <template v-else=""> Expired! </template>
+              <template v-else > Expired! </template>
             </template>
-            <template v-slot:item.detail="{ item }">
+            <template v-slot:[`item.detail`]="{ item }">
               <v-btn icon @click="showDetails(item)"
                 ><v-icon>mdi-eye</v-icon></v-btn
               >
@@ -127,7 +127,7 @@
           </v-btn>
         </v-card-title>
         <v-simple-table>
-          <template v-slot:default>
+          <template v-slot:[`default`]>
             <thead>
               <tr>
                 <th class="text-center font-weight-black ">

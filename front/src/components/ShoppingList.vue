@@ -36,14 +36,14 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.Image="{ item }">
+    <template v-slot:[`item.Image`]="{ item }">
       <v-btn icon @click="showImage(item)">
         <v-icon color="grey">
           mdi-image
         </v-icon>
       </v-btn>
     </template>
-    <template v-slot:item.actions="{ item }">
+    <template v-slot:[`item.actions`]="{ item }">
       <v-icon medium class="mr-2" @click="item.Amount += 1">
         mdi-plus
       </v-icon>
