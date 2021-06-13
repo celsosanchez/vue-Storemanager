@@ -30,7 +30,7 @@ module.exports = function (app) {
     app.get("/auth/google/redirect", passport.authenticate('google'), async (req, res) => {
         // console.log(req.user)
         const user = await User.findById(req.user);
-        console.log(session.name)
+        
         console.log(req.session)
 
         res.redirect('http://192.168.31.175:8080');

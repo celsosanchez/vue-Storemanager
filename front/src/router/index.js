@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import NotFound from '@/views/NotFound'
 import Producer from '@/views/Producer'
 import Consumer from '@/views/Consumer'
+import Store from '@/views/Store'
 Vue.use(VueRouter)
 
 const routes = [
@@ -16,6 +17,11 @@ const routes = [
     path: '/producer',
     name: 'Producer',
     component: Producer
+  },
+  {
+    path: '/store',
+    name: 'Store',
+    component: Store
   },
   {
     path: '/consumer',

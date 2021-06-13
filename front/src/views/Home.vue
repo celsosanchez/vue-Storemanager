@@ -38,7 +38,8 @@ export default {
       // axios.get("http://localhost:3000/auth/google")
     },
     showSession(){
-      console.log(this.$session.passport)
+      
+      console.log(this.$session.getAll())
     },
   },
 };
