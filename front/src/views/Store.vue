@@ -1,39 +1,77 @@
 <template>
-  <v-app>
-    <v-main>
+  <!-- <v-row> -->
+  <v-container fluid>
+    <v-card min-height="80vh">
+      <v-toolbar flat color="teal lighten-3" class="text-h3">
+        <template>
+          <v-tabs grow align-with-title v-model="pos">
+            <v-tab @click="refreshData(`Lidl`)"
+              ><v-img
+                class="mr-3"
+                :max-width="icoWidth"
+                src="https://upload.wikimedia.org/wikipedia/commons/9/91/Lidl-Logo.svg"
+              />Lidl
+            </v-tab>
+            <v-tab @click="refreshData(`Leclerc`)"
+              ><v-img
+                class="mr-3"
+                :max-width="icoWidth"
+                src="https://upload.wikimedia.org/wikipedia/commons/e/ed/Logo_E.Leclerc_Sans_le_texte.svg"
+              />Leclerc</v-tab
+            >
+            <v-tab @click="refreshData(`Carrefour`)"
+              ><v-img
+                class="mr-3"
+                :max-width="icoWidth + 10"
+                src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Carrefour_logo.svg"
+              />Carrefour</v-tab
+            >
+          </v-tabs>
+        </template>
+      </v-toolbar>
       <v-container fluid>
-        <v-btn></v-btn>
+        <store-windows :store="active" ref="storeWindows" />
       </v-container>
-    </v-main>
-  </v-app>
+    </v-card>
+  </v-container>
+  <!-- </v-row> -->
 </template>
 <script>
+import storeWindows from "../components/storeWindows.vue";
 export default {
+  components: { storeWindows },
   data: () => ({
-   
+    stores: ["Lidl", "Leclerc", "Carrefour"],
+    active: "Lidl",
+    pos: 0,
   }),
+  computed: {
+    icoWidth() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 20;
+        case "sm":
+          return 30;
+        case "md":
+          return 40;
+        case "lg":
+          return 50;
+        case "xl":
+          return 50;
+        default:
+          return 50;
+      }
+    },
+  },
+  methods: {
+    refreshData(val) {
+      if (this.$refs.storeWindows.$refs.productData != undefined) {
+        this.active = val;
+        this.$refs.storeWindows.$refs.productData.getData(val);
+      }
+    },
+  },
+  watch: {
+  },
 };
 </script>
-
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>

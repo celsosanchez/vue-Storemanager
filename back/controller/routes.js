@@ -31,7 +31,7 @@ module.exports = function (app) {
         // console.log(req.user)
         const user = await User.findById(req.user);
         
-        console.log(req.session)
+        // console.log(req.session)
 
         res.redirect('http://192.168.31.175:8080');
     });

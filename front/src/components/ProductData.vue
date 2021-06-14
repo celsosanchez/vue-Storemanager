@@ -187,10 +187,10 @@ export default {
     counter(pagination) {
       this.searchCounter = pagination.itemsLength;
     },
-    getData() {
-      if (this.location) {
+    getData(location = this.location) {
+      if (location) {
         this.loading = true;
-        axios.post(this.url, { location: this.location }).then((res) => {
+        axios.post(this.url, { location: location }).then((res) => {
           this.items = res.data.found;
           if (this.items) this.loading = false;
           this.items.forEach((element) => {
@@ -245,12 +245,15 @@ export default {
     },
   },
   created() {
-    this.getData();
+     
     setTimeout(() => {
       this.elevation = 6;
     }, "2000");
   },
-  renderTriggered() { this.getData();},
+  mounted(){
+    this.getData();
+  },
+  // renderTriggered() { this.getData();},
   computed: {
     deleteButton() {
       if (this.selected.length == 0) return false;

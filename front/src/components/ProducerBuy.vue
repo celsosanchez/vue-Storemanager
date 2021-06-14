@@ -39,7 +39,7 @@
                   Confirm Cart
                 </v-card-title>
                 <v-card-text class=" mt-3">
-                  Confirm that you want to buy the following items:
+                  Confirm that {{activeUser}} want to buy the following items: 
                 </v-card-text>
                 <v-simple-table>
                   <template v-slot:[`default`]>
@@ -214,21 +214,25 @@ export default {
     },
     confirmedBuy() {
       // console.log(this.activeUser)
+      
       this.selected.forEach(async (element, index, array) => {
+       console.log(element)
         await axios
           .patch("http://192.168.31.175:3000/producer", {
             data: {
-              product_name: element.product_name,
-              // expiration_datetime: element.expiration_datetime,
-              // production_datetime: element.production_datetime,
-              expiration_datetime: element.exp,
-              production_datetime: element.prod,
+              productId: element._id,
+              // product_name: element.product_name,
+              // // expiration_datetime: element.expiration_datetime,
+              // // production_datetime: element.production_datetime,
+              // expiration_datetime: element.exp,
+              // production_datetime: element.prod,
               buyer: this.activeUser,
             },
           })
           .then(() => {
             if (index == array.length - 1) {
               this.selected = [];
+               
               this.getData();
               this.dialog = false;
             }

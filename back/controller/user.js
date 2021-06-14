@@ -21,7 +21,6 @@ async function addToDS(req, res) {
     let fridgeCount = 0;
  
     desiredStock.forEach((desired) => {
-   
       fridgeCount = 0;
       let newAdd = { ...desired };
       add = true;

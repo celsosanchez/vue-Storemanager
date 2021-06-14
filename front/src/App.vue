@@ -20,8 +20,8 @@ export default {
       Home: { name: "Home", value: "/" },
       Producer: { name: "Producer", value: "/producer" },
       Consumer: { name: "Consumer", value: "/consumer" },
-      About: { name: "About", value: "/about" },
       Store: { name: "Store", value: "/store" },
+      About: { name: "About", value: "/about" },
     },
   }),
 };

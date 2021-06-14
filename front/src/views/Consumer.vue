@@ -4,7 +4,7 @@
       <v-col class="d-flex justify-center">
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <v-card :elevation="hover ? 12 : 2" min-width="400" class="mb-8">
-            <v-card-title >
+            <v-card-title>
               Select User
             </v-card-title>
             <v-card-actions>
@@ -22,7 +22,7 @@
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <v-card
             :elevation="hover ? 12 : 2"
-            min-width="200"
+            :min-width="cardWidth"
             min-height="150"
             class="mb-8"
           >
@@ -43,15 +43,19 @@
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <v-card
             :elevation="hover ? 12 : 2"
-            min-width="200"
+            :min-width="cardWidth"
             min-height="150"
             class="mb-8"
           >
-            <v-card-title >
+            <v-card-title>
               Shopping List
             </v-card-title>
             <v-card-actions>
-              <list-dialog :activeUser="currentUser" />
+              <list-dialog
+                :activeUser="currentUser"
+                align="center"
+                justify="center"
+              />
             </v-card-actions>
           </v-card>
         </v-hover>
@@ -60,7 +64,7 @@
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <v-card
             :elevation="hover ? 12 : 2"
-            min-width="200"
+            :min-width="cardWidth"
             min-height="150"
             class="mb-8"
           >
@@ -68,7 +72,10 @@
               Warning!
             </v-card-title>
             <v-card-actions>
-              <expiration-warning :activeUser="currentUser"  :warningList="expiredWarning" />
+              <expiration-warning
+                :activeUser="currentUser"
+                :warningList="expiredWarning"
+              />
             </v-card-actions>
           </v-card>
         </v-hover>
@@ -77,7 +84,7 @@
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <v-card
             :elevation="hover ? 12 : 2"
-            min-width="200"
+            :min-width="cardWidth"
             min-height="150"
             class="mb-8"
           >
@@ -85,7 +92,7 @@
               Buy from Producer
             </v-card-title>
             <v-card-actions>
-              <buy-from-producer :activeUser="currentUser"  />
+              <buy-from-producer :activeUser="currentUser" />
             </v-card-actions>
           </v-card>
         </v-hover>
@@ -109,8 +116,8 @@ import axios from "axios";
 import ProductData from "@/components/ProductData.vue";
 import ListDialog from "@/components/ListDialog.vue";
 import WarehouseDialog from "@/components/WarehouseDialog.vue";
-import ExpirationWarning from '../components/ExpirationWarning.vue';
-import BuyFromProducer from '../components/buyFromProducer.vue';
+import ExpirationWarning from "../components/ExpirationWarning.vue";
+import BuyFromProducer from "../components/buyFromProducer.vue";
 
 export default {
   name: "Consumer",
@@ -140,9 +147,9 @@ export default {
     // activeUser: false,
   }),
   methods: {
-    reload(){
-            this.$refs.productData.getData()
-    }
+    reload() {
+      this.$refs.productData.getData();
+    },
   },
   created() {
     axios.get(`http://192.168.31.175:3000/users`).then((res) => {
@@ -156,8 +163,28 @@ export default {
       this.elevation = 6;
     }, "2000");
   },
-  
-  computed: {},
+  computed: {
+    cardWidth() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 150;
+        case "sm":
+          return 200;
+        case "md":
+          return 250;
+        case "lg":
+          return 250;
+        case "xl":
+          return 330;
+        default:
+          return 350;
+      }
+    },
+    reactiveTitles() {
+      if (this.$vuetify.breakpoint.name != `xs`) return true;
+      else return false;
+    },
+  },
   watch: {
     productDatafinishedLoad() {
       this.currentItems = this.$refs.productData.items;
@@ -182,15 +209,11 @@ export default {
       this.currentUser = value;
       setTimeout(() => {
         this.$refs.productData.getData();
-        axios.put(`http://192.168.31.175:3000/UpdateSLfromDS`,{
-          user: this.currentUser
+        axios.put(`http://192.168.31.175:3000/UpdateSLfromDS`, {
+          user: this.currentUser,
         });
-
-
-        
       }, "1");
     },
-    // $active(value){console.log(value)}
   },
 };
 </script>

@@ -147,17 +147,19 @@ async function rmProducerEntry(req, res) {
 
  
 async function consumerBuyFromProducer(req, res) {
-  const {product_name,expiration_datetime, production_datetime,buyer} = req.body.data
+  const {product_name,expiration_datetime, production_datetime,productId,buyer} = req.body.data
   try {
     
-  let caca = await Product.findOneAndUpdate(
-      { product_name:product_name, expiration_datetime: expiration_datetime ,production_datetime: production_datetime,location:"Producer" },
+  await Product.findOneAndUpdate(
+      // { product_name:product_name, expiration_datetime: expiration_datetime ,production_datetime: production_datetime,location:"Producer" },
+{_id: productId},
       { location: buyer },
       (err, doc) => {
         if (err) console.log(`error: ${err}`);
         return res.send(doc);
       }
     );
+
   } catch (error) {
     return res.status(500).json({ error });
   }
