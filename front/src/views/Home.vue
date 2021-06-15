@@ -4,7 +4,7 @@
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
   <ProductData
       ref="productData"
-      :url="`http://192.168.31.175:3000/products`"
+      :url="this.url"
       :location="`Producer`"
     />
      
@@ -20,6 +20,7 @@
 // import HelloWorld from '@/components/HelloWorld.vue'
 // import axios from'axios';
 import ProductData from "@/components/ProductData.vue";
+// import config from '../../config'
 
 export default {
   name: "Home",
@@ -28,7 +29,7 @@ export default {
     ProductData,
   },
   data: () => ({
-
+url: `http://localhost:3000/products`
   }),
   methods: {
     auth() {

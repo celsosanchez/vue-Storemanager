@@ -7,7 +7,7 @@ const axios = require("axios").default;
 async function addProducts(req, res) {
   const { product, duration_in_days, amount } = req.body;
   if (!product || !duration_in_days || !amount) {
-    return res.status(400).json({ 
+    return res.status(400).json({
       text: "invalid request",
     });
   }
@@ -145,27 +145,47 @@ async function rmProducerEntry(req, res) {
   }
 }
 
- 
 async function consumerBuyFromProducer(req, res) {
-  const {product_name,expiration_datetime, production_datetime,productId,buyer} = req.body.data
+  const { productId, buyer, buyerLocation ,productLocation} = req.body.data;
+
   try {
-    
-  await Product.findOneAndUpdate(
+    // await axios.post(
+    //   "http://www.mapquestapi.com/directions/v2/routematrix?key=RGptLi1WllF7egmD9YAzMwR6s37hXoaF](http://www.mapquestapi.com/directions/v2/routematrix?key=RGptLi1WllF7egmD9YAzMwR6s37hXoaF",
+    //   {
+    //     locations: [
+    //       {
+    //         latLng: {
+    //           lat: buyerLocation[0],
+    //           lng:  buyerLocation[1],
+    //         },
+    //       },
+    //       {
+    //         latLng: {
+    //           lat: productLocation[0],
+    //           lng: productLocation[1],
+    //         },
+    //       },
+    //     ],
+    //   }
+    // ).then((res)=>{
+    //   console.log(res)
+    // }).catch(err => {console.log(err)});
+    await Product.findOneAndUpdate(
       // { product_name:product_name, expiration_datetime: expiration_datetime ,production_datetime: production_datetime,location:"Producer" },
-{_id: productId},
-      { location: buyer },
+      { _id: productId },
+      {
+        location: buyer,
+        //  availableToBuyerAt:
+      },
       (err, doc) => {
         if (err) console.log(`error: ${err}`);
         return res.send(doc);
       }
     );
-
   } catch (error) {
     return res.status(500).json({ error });
   }
 }
-
-
 
 // async function moveProducts(req,res) {
 //   try {

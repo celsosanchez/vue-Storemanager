@@ -111,13 +111,14 @@
 
     <ProductData
       ref="productData"
-      :url="`http://192.168.31.175:3000/products`"
+      :url="url"
       :location="`Producer`"
     />
   </div>
 </template>
 <script>
 import axios from "axios";
+import config from '../../config'
 import ProductData from "@/components/ProductData.vue";
 export default {
   components: {
@@ -126,6 +127,7 @@ export default {
   data: () => ({
     chosenProduct: null,
     duration: "",
+    url: `http://${config.server.address}/products`,
     amount: "",
     overlay: false,
     receivedElements: [],
@@ -147,7 +149,7 @@ export default {
         this.chosenProduct !== null
       ) {
         axios
-          .put("http://192.168.31.175:3000/producer", {
+          .put(`http://${config.server.address}/producer`, {
             product: this.chosenProduct,
             duration_in_days: this.duration,
             amount: this.amount,

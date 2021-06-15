@@ -33,9 +33,10 @@
                 <v-avatar color="grey" class="mr-4"></v-avatar>
                 <strong class="text-h6">{{ store }}'s Sheleves</strong>
                 <v-spacer></v-spacer>
-                <v-btn icon>
-                  <v-icon>mdi-account</v-icon>
-                </v-btn>
+                <!-- <v-btn icon> -->
+                <!-- <v-icon>mdi-warning</v-icon> -->
+               
+                <!-- </v-btn> -->
               </v-row>
             </v-card-text>
           </v-card>
@@ -52,6 +53,10 @@
                   <v-icon large class="pl-3" color="blue"
                     >mdi-package-variant-closed</v-icon
                   >
+                   <expiration-warning
+                  :activeUser="store"
+                  :warningList="expiredWarning"
+                />
                 </template></product-data
               >
             </v-card-text>
@@ -63,10 +68,10 @@
               <v-row class="mb-4" align="center">
                 <v-avatar color="grey" class="mr-4"></v-avatar>
                 <strong class="text-h6">{{ store }}'s Orders</strong>
-                <v-spacer></v-spacer>
+                <!-- <v-spacer></v-spacer>
                 <v-btn icon>
                   <v-icon>mdi-account</v-icon>
-                </v-btn>
+                </v-btn> -->
               </v-row>
             </v-card-text>
             <GmapMap
@@ -77,7 +82,7 @@
               :options="{
                 fullscreenControl: false,
                 mapTypeControl: false,
-                disableDefaultUI: true
+                disableDefaultUI: true,
               }"
             >
               <GmapMarker
@@ -97,13 +102,13 @@
               <v-row class="mb-4" align="center">
                 <v-icon large color="blue" class="mr-4">mdi-warehouse</v-icon>
                 <strong class="text-h6">{{ store }}'s Providers</strong>
-                <v-spacer></v-spacer>
+                <!-- <v-spacer></v-spacer>
                 <v-btn icon>
                   <v-icon>mdi-account</v-icon>
-                </v-btn>
+                </v-btn> -->
               </v-row>
               <producer-buy
-                :url="`http://192.168.31.175:3000/products`"
+                :url="url"
                 :location="`Producer`"
                 :activeUser="store"
               />
@@ -116,13 +121,18 @@
 </template>
 
 <script>
+import ExpirationWarning from "./ExpirationWarning.vue";
 import ProducerBuy from "./ProducerBuy.vue";
 import ProductData from "./ProductData.vue";
+import config from "../../config"
 export default {
-  components: { ProducerBuy, ProductData },
+  components: { ProducerBuy, ProductData, ExpirationWarning },
   name: "storeWindows",
   props: ["store"],
   data: () => ({
+    expiredWarning: [],
+    productDatafinishedLoad: false,
+    url: `http://${config.server.address}/products`,
     length: 5,
     icons: [
       ``,
@@ -148,7 +158,26 @@ export default {
       },
     ],
   }),
-  watch: {},
+  watch: {
+    productDatafinishedLoad() {
+      this.currentItems = this.$refs.productData.items;
+
+      this.expiredWarning = [];
+      this.currentItems.forEach((element) => {
+        var expiration = new Date(element.expiration_datetime);
+        element.expirationIn = Math.round((expiration - Date.now()) / 86400000);
+        if (element.expirationIn < 3) {
+          const soonExpires = {
+            name: element.product_name,
+            producer: element.brands,
+            expirationOn: element.expirationIn,
+            image_url: element.image_url,
+          };
+          this.expiredWarning.push(soonExpires);
+        }
+      });
+    },
+  },
   methods: {
     reload(n) {
       if (n == 3) {

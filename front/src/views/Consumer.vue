@@ -102,7 +102,7 @@
     <ProductData
       v-if="currentUser"
       ref="productData"
-      :url="`http://192.168.31.175:3000/products`"
+      :url="url"
       :location="this.currentUser"
       ><template v-slot:tableTitle>
         <h3>My Fridge</h3>
@@ -118,6 +118,7 @@ import ListDialog from "@/components/ListDialog.vue";
 import WarehouseDialog from "@/components/WarehouseDialog.vue";
 import ExpirationWarning from "../components/ExpirationWarning.vue";
 import BuyFromProducer from "../components/buyFromProducer.vue";
+import config from '../../config'
 
 export default {
   name: "Consumer",
@@ -132,6 +133,7 @@ export default {
     // fridgeStock: ['2s'],
     expiredWarning: [],
     productDatafinishedLoad: false,
+    url:`http://${config.server.address}/products`,
     chosenUser: null,
     autocomplete: null,
     elevation: 2,
@@ -152,7 +154,7 @@ export default {
     },
   },
   created() {
-    axios.get(`http://192.168.31.175:3000/users`).then((res) => {
+    axios.get(`http://${config.server.address}/users`).then((res) => {
       // this.receivedNames = [];
       this.possibleUsers = [];
       res.data.found.forEach((el) => {
@@ -209,7 +211,7 @@ export default {
       this.currentUser = value;
       setTimeout(() => {
         this.$refs.productData.getData();
-        axios.put(`http://192.168.31.175:3000/UpdateSLfromDS`, {
+        axios.put(`http://${config.server.address}/UpdateSLfromDS`, {
           user: this.currentUser,
         });
       }, "1");

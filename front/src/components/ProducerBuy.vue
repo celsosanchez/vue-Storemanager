@@ -39,7 +39,8 @@
                   Confirm Cart
                 </v-card-title>
                 <v-card-text class=" mt-3">
-                  Confirm that {{activeUser}} want to buy the following items: 
+                  Confirm that {{ activeUser }} want to buy the following items:
+                  <!-- and that {{activeUser}} resides at lat {{buyerData[0]}} , long {{buyerData[1]}}  -->
                 </v-card-text>
                 <v-simple-table>
                   <template v-slot:[`default`]>
@@ -102,7 +103,7 @@
               <template v-if="item.expirationIn >= 0">
                 {{ item.expirationIn }} days left</template
               >
-              <template v-else > Expired! </template>
+              <template v-else> Expired! </template>
             </template>
             <template v-slot:[`item.detail`]="{ item }">
               <v-btn icon @click="showDetails(item)"
@@ -145,11 +146,17 @@
                 <td v-if="key == 'image_url'" align="center">
                   <v-img contain max-width="300" :src="value"></v-img>
                 </td>
-                <td v-if="key == 'first_packaging_code_geo' && value.length == 0">No Data</td>
-                 <td v-if="key == 'first_packaging_code_geo' && value.length != 0" align="center">
-                  
+                <td
+                  v-if="key == 'first_packaging_code_geo' && value.length == 0"
+                >
+                  No Data
+                </td>
+                <td
+                  v-if="key == 'first_packaging_code_geo' && value.length != 0"
+                  align="center"
+                >
                   <GmapMap
-                    :center="{lat: 48.1300245, lng:-1.6846513}"
+                    :center="{ lat: 48.1300245, lng: -1.6846513 }"
                     :zoom="6"
                     map-type-id="roadmap"
                     style="width: 300px; height: 300px"
@@ -160,21 +167,25 @@
                     }"
                   >
                     <GmapMarker
-                      :position="{lat: value[0], lng: value[1]}"
+                      :position="{ lat: value[0], lng: value[1] }"
                       :clickable="false"
                       :draggable="false"
-                      @click="center = {lat: value[0], lng: value[1]}"
+                      @click="center = { lat: value[0], lng: value[1] }"
                     />
                     <GmapMarker
-                      :position="{lat: 48.1300245, lng:-1.6846513}"
+                      :position="{ lat: 48.1300245, lng: -1.6846513 }"
                       :clickable="false"
                       :draggable="false"
-                      @click="center = {lat: value[0], lng: value[1]}"
+                      @click="center = { lat: value[0], lng: value[1] }"
                     />
                   </GmapMap>
                 </td>
-                 
-                 <td v-if="key != 'first_packaging_code_geo' && key != 'image_url'">{{ value }}</td>
+
+                <td
+                  v-if="key != 'first_packaging_code_geo' && key != 'image_url'"
+                >
+                  {{ value }}
+                </td>
               </tr>
             </tbody>
           </template>
@@ -185,10 +196,17 @@
 </template>
 <script>
 import axios from "axios";
+import config from "../../config";
 export default {
   components: {},
-  props: ["url", "location","activeUser"],
+  props: ["url", "location", "activeUser"],
   data: () => ({
+    users: {
+      Lidl: [48.1300245, -1.6846513],
+      Leclerc: [48.13895658009878, -1.6841002289588716],
+      Carrefour: [48.08314411074984, -1.6808428178615393],
+      finalUser: [48.10900237897419, -1.671035955175149],
+    },
     showingItem: null,
     dataDetail: false,
     elevation: 2,
@@ -220,16 +238,16 @@ export default {
     getData() {
       if (this.location) {
         this.loading = true;
-        
+
         axios.post(this.url, { location: this.location }).then((res) => {
           this.items = res.data.found;
           if (this.items) this.loading = false;
           this.items.forEach((element) => {
-             element.exp = element.expiration_datetime;
-             element.prod = element.production_datetime;
+            element.exp = element.expiration_datetime;
+            element.prod = element.production_datetime;
             var receivedExp = new Date(element.expiration_datetime);
             var receivedprod = new Date(element.production_datetime);
-            console.log(receivedprod)
+            // console.log(receivedprod);
             element.expiration_datetime = `${receivedExp.getFullYear()}/${receivedExp.getMonth() +
               1}/${receivedExp.getDate()}`;
             element.production_datetime = `${receivedprod.getFullYear()}/${receivedprod.getMonth() +
@@ -237,7 +255,6 @@ export default {
             element.expirationIn = Math.round(
               (receivedExp - Date.now()) / 86400000
             );
-            
           });
           this.loading = false;
         });
@@ -245,13 +262,15 @@ export default {
     },
     confirmedBuy() {
       // console.log(this.activeUser)
-      
+
       this.selected.forEach(async (element, index, array) => {
-       console.log(element)
+        // console.log(element);
         await axios
-          .patch("http://192.168.31.175:3000/producer", {
+          .patch(`http://${config.server.address}/producer`, {
             data: {
               productId: element._id,
+              productLocation: element.first_packaging_code_geo,
+              buyerLocation: this.buyerData,
               // product_name: element.product_name,
               // // expiration_datetime: element.expiration_datetime,
               // // production_datetime: element.production_datetime,
@@ -263,7 +282,7 @@ export default {
           .then(() => {
             if (index == array.length - 1) {
               this.selected = [];
-               
+
               this.getData();
               this.dialog = false;
             }
@@ -289,6 +308,7 @@ export default {
   },
   created() {
     this.getData();
+    // console.log(config)
     setTimeout(() => {
       this.elevation = 6;
     }, "2000");
@@ -298,6 +318,18 @@ export default {
     buyButton() {
       if (this.selected.length == 0) return false;
       else return true;
+    },
+    buyerData() {
+      switch (this.activeUser) {
+        case "Lidl":
+          return this.users.Lidl;
+        case "Leclerc":
+          return this.users.Leclerc;
+        case "Carrefour":
+          return this.users.Carrefour;
+        default:
+          return this.users.finalUser;
+      }
     },
   },
   watch: {

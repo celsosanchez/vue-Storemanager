@@ -144,12 +144,17 @@
                 <td v-if="key == 'image_url'" align="center">
                   <v-img contain max-width="300" :src="value"></v-img>
                 </td>
-                <td v-if="key == 'first_packaging_code_geo' && value.length == 0">No Data</td>
-                 <td v-if="key == 'first_packaging_code_geo' && value.length != 0" align="center">
-                
-                  
+                <td
+                  v-if="key == 'first_packaging_code_geo' && value.length == 0"
+                >
+                  No Data
+                </td>
+                <td
+                  v-if="key == 'first_packaging_code_geo' && value.length != 0"
+                  align="center"
+                >
                   <GmapMap
-                    :center="{lat: value[0], lng: value[1]}"
+                    :center="{ lat: value[0], lng: value[1] }"
                     :zoom="6"
                     map-type-id="roadmap"
                     style="width: 300px; height: 300px"
@@ -160,14 +165,18 @@
                     }"
                   >
                     <GmapMarker
-                      :position="{lat: value[0], lng: value[1]}"
+                      :position="{ lat: value[0], lng: value[1] }"
                       :clickable="false"
                       :draggable="false"
-                      @click="center = {lat: value[0], lng: value[1]}"
+                      @click="center = { lat: value[0], lng: value[1] }"
                     />
                   </GmapMap>
                 </td>
-                <td v-if="key != 'first_packaging_code_geo' && key != 'image_url'">{{ value }}</td>
+                <td
+                  v-if="key != 'first_packaging_code_geo' && key != 'image_url'"
+                >
+                  {{ value }}
+                </td>
               </tr>
             </tbody>
           </template>
@@ -267,7 +276,7 @@ export default {
       else return { color: "red", icon: "mdi-alert-circle" };
     },
   },
- 
+
   created() {
     setTimeout(() => {
       this.elevation = 6;
@@ -285,6 +294,10 @@ export default {
   },
   watch: {
     items() {
+      if (this.$parent.$parent.$parent.$parent) {
+        this.$parent.$parent.$parent.$parent.productDatafinishedLoad = !this
+          .$parent.$parent.$parent.$parent.productDatafinishedLoad;
+      }
       this.$parent.productDatafinishedLoad = !this.$parent
         .productDatafinishedLoad;
     },
