@@ -8,8 +8,10 @@
             :color="active ? `blue` : `grey`"
             icon
             large
-            @click="toggle(); reload(n)"
-            
+            @click="
+              toggle();
+              reload(n);
+            "
           >
             <v-icon>{{ icons[n] }}</v-icon>
           </v-btn>
@@ -21,9 +23,7 @@
       <v-window v-model="window" class="elevation-1" vertical>
         <v-window-item>
           <v-card flat min-height="70vh">
-            <v-card-text>
-              
-            </v-card-text>
+            <v-card-text> </v-card-text>
           </v-card>
         </v-window-item>
         <v-window-item>
@@ -43,14 +43,15 @@
         <v-window-item>
           <v-card flat min-height="70vh">
             <v-card-text>
-              
               <product-data
                 :url="`http://192.168.31.175:3000/products`"
                 :location="store"
                 ref="productData"
                 ><template v-slot:tableTitle>
-                  <h3>{{store}} Storage</h3>
-                  <v-icon large class="pl-3" color="blue">mdi-package-variant-closed</v-icon>
+                  <h3>{{ store }} Storage</h3>
+                  <v-icon large class="pl-3" color="blue"
+                    >mdi-package-variant-closed</v-icon
+                  >
                 </template></product-data
               >
             </v-card-text>
@@ -68,6 +69,26 @@
                 </v-btn>
               </v-row>
             </v-card-text>
+            <GmapMap
+              :center="{ lat: 46.083333, lng: 6.416667 }"
+              :zoom="6"
+              map-type-id="roadmap"
+              style="width: 300px; height: 300px"
+              :options="{
+                fullscreenControl: false,
+                mapTypeControl: false,
+                disableDefaultUI: true
+              }"
+            >
+              <GmapMarker
+                :key="index"
+                v-for="(m, index) in markers"
+                :position="{ lat: 46.083333, lng: 6.416667 }"
+                :clickable="false"
+                :draggable="false"
+                @click="center = m.position"
+              />
+            </GmapMap>
           </v-card>
         </v-window-item>
         <v-window-item>
@@ -112,16 +133,28 @@ export default {
       `mdi-warehouse`,
     ],
     window: 0,
+    markers: [
+      {
+        position: {
+          lat: 10.0,
+          lng: 10.0,
+        },
+      },
+      {
+        position: {
+          lat: 11.0,
+          lng: 11.0,
+        },
+      },
+    ],
   }),
-  watch: {
-  },
-  methods:{
-      reload(n){
-          if(n == 3){
-              if(this.$refs.productData)
-          this.$refs.productData.getData();
-          }
+  watch: {},
+  methods: {
+    reload(n) {
+      if (n == 3) {
+        if (this.$refs.productData) this.$refs.productData.getData();
       }
+    },
   },
 };
 </script>

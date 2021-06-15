@@ -101,7 +101,7 @@
               <template v-if="item.expirationIn >= 0">
                 {{ item.expirationIn }} days left</template
               >
-              <template v-else > Expired! </template>
+              <template v-else> Expired! </template>
             </template>
             <template v-slot:[`item.detail`]="{ item }">
               <v-btn icon @click="showDetails(item)"
@@ -144,7 +144,30 @@
                 <td v-if="key == 'image_url'" align="center">
                   <v-img contain max-width="300" :src="value"></v-img>
                 </td>
-                <td v-else>{{ value }}</td>
+                <td v-if="key == 'first_packaging_code_geo' && value.length == 0">No Data</td>
+                 <td v-if="key == 'first_packaging_code_geo' && value.length != 0" align="center">
+                
+                  
+                  <GmapMap
+                    :center="{lat: value[0], lng: value[1]}"
+                    :zoom="6"
+                    map-type-id="roadmap"
+                    style="width: 300px; height: 300px"
+                    :options="{
+                      fullscreenControl: false,
+                      mapTypeControl: false,
+                      disableDefaultUI: true,
+                    }"
+                  >
+                    <GmapMarker
+                      :position="{lat: value[0], lng: value[1]}"
+                      :clickable="false"
+                      :draggable="false"
+                      @click="center = {lat: value[0], lng: value[1]}"
+                    />
+                  </GmapMap>
+                </td>
+                <td v-if="key != 'first_packaging_code_geo' && key != 'image_url'">{{ value }}</td>
               </tr>
             </tbody>
           </template>
@@ -244,13 +267,13 @@ export default {
       else return { color: "red", icon: "mdi-alert-circle" };
     },
   },
+ 
   created() {
-     
     setTimeout(() => {
       this.elevation = 6;
     }, "2000");
   },
-  mounted(){
+  mounted() {
     this.getData();
   },
   // renderTriggered() { this.getData();},
@@ -261,10 +284,10 @@ export default {
     },
   },
   watch: {
-    items(){
-      this.$parent.productDatafinishedLoad = !this.$parent.productDatafinishedLoad;
-    }
-
+    items() {
+      this.$parent.productDatafinishedLoad = !this.$parent
+        .productDatafinishedLoad;
+    },
   },
 };
 </script>

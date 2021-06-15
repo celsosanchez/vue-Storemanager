@@ -19,7 +19,8 @@ Vue.use(VueGoogleMaps, {
   },
 })
 Vue.config.productionTip = false
-
+ 
+Vue.use( VueGoogleMaps.Marker);
 let options = {
   sound: true, // default is false
   soundSrc: '/static/sound.wav', // default is blank

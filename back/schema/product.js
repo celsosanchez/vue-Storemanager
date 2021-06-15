@@ -38,6 +38,7 @@ const product = mongoose.Schema({
   production_datetime: Date,
   expiration_datetime: Date,
   location: String,
+  availableToBuyerAt: Date,
   duration_in_days: Number,
   expirationIn: {
     type: Number,

@@ -61,7 +61,7 @@ async function addProducts(req, res) {
           image_url: res.data.records[0].fields.image_url,
           quantity: res.data.records[0].fields.quantity,
           production_datetime: Date.now(),
-
+          availableToBuyerAt: Date.now(),
           expiration_datetime: new Date(
             Date.now() + duration_in_days * 86400000
           ),

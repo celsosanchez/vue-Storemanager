@@ -145,7 +145,36 @@
                 <td v-if="key == 'image_url'" align="center">
                   <v-img contain max-width="300" :src="value"></v-img>
                 </td>
-                <td v-else>{{ value }}</td>
+                <td v-if="key == 'first_packaging_code_geo' && value.length == 0">No Data</td>
+                 <td v-if="key == 'first_packaging_code_geo' && value.length != 0" align="center">
+                  
+                  <GmapMap
+                    :center="{lat: 48.1300245, lng:-1.6846513}"
+                    :zoom="6"
+                    map-type-id="roadmap"
+                    style="width: 300px; height: 300px"
+                    :options="{
+                      fullscreenControl: false,
+                      mapTypeControl: false,
+                      disableDefaultUI: true,
+                    }"
+                  >
+                    <GmapMarker
+                      :position="{lat: value[0], lng: value[1]}"
+                      :clickable="false"
+                      :draggable="false"
+                      @click="center = {lat: value[0], lng: value[1]}"
+                    />
+                    <GmapMarker
+                      :position="{lat: 48.1300245, lng:-1.6846513}"
+                      :clickable="false"
+                      :draggable="false"
+                      @click="center = {lat: value[0], lng: value[1]}"
+                    />
+                  </GmapMap>
+                </td>
+                 
+                 <td v-if="key != 'first_packaging_code_geo' && key != 'image_url'">{{ value }}</td>
               </tr>
             </tbody>
           </template>
@@ -191,6 +220,7 @@ export default {
     getData() {
       if (this.location) {
         this.loading = true;
+        
         axios.post(this.url, { location: this.location }).then((res) => {
           this.items = res.data.found;
           if (this.items) this.loading = false;
@@ -199,6 +229,7 @@ export default {
              element.prod = element.production_datetime;
             var receivedExp = new Date(element.expiration_datetime);
             var receivedprod = new Date(element.production_datetime);
+            console.log(receivedprod)
             element.expiration_datetime = `${receivedExp.getFullYear()}/${receivedExp.getMonth() +
               1}/${receivedExp.getDate()}`;
             element.production_datetime = `${receivedprod.getFullYear()}/${receivedprod.getMonth() +
