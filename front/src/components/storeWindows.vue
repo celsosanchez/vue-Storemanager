@@ -65,16 +65,16 @@
         <v-window-item>
           <v-card flat min-height="70vh">
             <v-card-text>
-              <v-row class="mb-4" align="center">
-                <v-avatar color="grey" class="mr-4"></v-avatar>
-                <strong class="text-h6">{{ store }}'s Orders</strong>
+              <v-row class="mt-4" align="center">
+                <v-icon class="ml-4 " color="teal">mdi-cube-send</v-icon>
+                <strong class="text-h6 ml-3">{{ store }}'s Active Orders</strong>
                 <!-- <v-spacer></v-spacer>
                 <v-btn icon>
                   <v-icon>mdi-account</v-icon>
                 </v-btn> -->
               </v-row>
             </v-card-text>
-            <GmapMap
+            <!-- <GmapMap
               :center="{ lat: 46.083333, lng: 6.416667 }"
               :zoom="6"
               map-type-id="roadmap"
@@ -93,7 +93,8 @@
                 :draggable="false"
                 @click="center = m.position"
               />
-            </GmapMap>
+            </GmapMap> -->
+            <active-orders ref="activeOrders" :location="store" :url="url"/>
           </v-card>
         </v-window-item>
         <v-window-item>
@@ -125,8 +126,9 @@ import ExpirationWarning from "./ExpirationWarning.vue";
 import ProducerBuy from "./ProducerBuy.vue";
 import ProductData from "./ProductData.vue";
 import config from "../../config"
+import ActiveOrders from './ActiveOrders.vue';
 export default {
-  components: { ProducerBuy, ProductData, ExpirationWarning },
+  components: { ProducerBuy, ProductData, ExpirationWarning, ActiveOrders },
   name: "storeWindows",
   props: ["store"],
   data: () => ({
@@ -143,20 +145,7 @@ export default {
       `mdi-warehouse`,
     ],
     window: 0,
-    markers: [
-      {
-        position: {
-          lat: 10.0,
-          lng: 10.0,
-        },
-      },
-      {
-        position: {
-          lat: 11.0,
-          lng: 11.0,
-        },
-      },
-    ],
+    
   }),
   watch: {
     productDatafinishedLoad() {
@@ -180,9 +169,24 @@ export default {
   },
   methods: {
     reload(n) {
-      if (n == 3) {
-        if (this.$refs.productData) this.$refs.productData.getData();
-      }
+     switch (n) {
+       case 3:
+          if (this.$refs.productData) this.$refs.productData.getData();
+         break;
+       case 4:
+          if (this.$refs.activeOrders) this.$refs.activeOrders.getData();
+         break;
+     
+       default:
+         break;
+     } 
+      
+      
+      
+      // if (n == 3) {
+      //   if (this.$refs.productData) this.$refs.productData.getData();
+      // }
+      
     },
   },
 };

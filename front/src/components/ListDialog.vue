@@ -15,7 +15,7 @@
           v-bind="attrs"
           v-on="on"
         >
-          <v-icon large>
+          <v-icon large color="teal darken-2">
             mdi-notebook-edit-outline
           </v-icon>
         </v-btn>

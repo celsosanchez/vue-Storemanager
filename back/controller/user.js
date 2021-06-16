@@ -96,7 +96,7 @@ async function UpdateSLfromDS(req, res) {
       fridge.forEach((fridgeElement) => {
         var receivedExp = new Date(fridgeElement.expiration_datetime);
         fridgeElement.expirationIn =
-          Math.round((receivedExp - Date.now()) / 86400000) - 1;
+          Math.round((receivedExp -  Date.now()) / 86400000) - 1;
         if (desired.name == fridgeElement.product_name) {
           if (fridgeElement.expirationIn > 0) {
             fridgeCount += 1;

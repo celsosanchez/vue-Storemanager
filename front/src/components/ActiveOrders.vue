@@ -85,7 +85,7 @@
           <v-data-table
             @pagination="counter"
             :headers="headers"
-            :items="items"
+            :items="orders"
             v-model="selected"
             :search="search"
             :single-select="singleSelect"
@@ -107,6 +107,18 @@
               <v-btn icon @click="showDetails(item)"
                 ><v-icon>mdi-eye</v-icon></v-btn
               >
+            </template>
+            <template v-slot:[`item.deliveryIn`]="{ item }">
+              <v-row>
+                <v-col>
+                  <v-progress-linear
+                    color="teal"
+                    buffer-value="0"
+                    :value="deliverytime(item)"
+                    stream
+                  ></v-progress-linear>
+                </v-col>
+              </v-row>
             </template>
           </v-data-table>
         </v-card>
@@ -187,6 +199,7 @@
 </template>
 <script>
 import axios from "axios";
+import config from "../../config";
 export default {
   components: {},
   props: ["url", "location"],
@@ -194,6 +207,7 @@ export default {
     showingItem: null,
     dataDetail: false,
     elevation: 2,
+    orders: [],
     search: "",
     loading: false,
     dialog: false,
@@ -207,6 +221,8 @@ export default {
         sortable: false,
         value: "product_name",
       },
+      { text: "Delivery Status", value: "deliveryIn" },
+      { text: "Available at: ", value: "availableToBuyerAt" },
       { text: "Expiration Status", value: "expirationIn" },
       { text: "Details", value: "detail" },
       { text: "Brands", value: "brands" },
@@ -216,6 +232,17 @@ export default {
     items: [],
   }),
   methods: {
+    deliverytime(item) {
+      // console.log(new Date(Date.now()))
+      if (Date.now() > item.availableToBuyerAt) {
+        this.getData();
+      }
+      return parseInt(
+        ((Date.now() - item.timeOfBuy) /
+          (item.availableToBuyerAt - item.timeOfBuy)) *
+          100
+      );
+    },
     counter(pagination) {
       this.searchCounter = pagination.itemsLength;
     },
@@ -224,23 +251,11 @@ export default {
         this.loading = true;
         axios.post(this.url, { location: location }).then((res) => {
           this.items = res.data.found;
+          this.orders = [];
+          if (this.items) this.loading = false;
           this.items.forEach((element) => {
-            var availableToBuyerAt = new Date(element.availableToBuyerAt);
-            // console.log(availableToBuyerAt.getTime());
-            // console.log(Date.now());
-            if (availableToBuyerAt.getTime() > Date.now()) {
-              if (availableToBuyerAt.getTime() > Date.now())
-                this.items.pop(element);
-              this.items.pop(element);
-            }
-          });
-
-          this.items.forEach((element) => {
-            // console.log(element._id);
             var receivedExp = new Date(element.expiration_datetime);
-            // console.log(receivedExp);
             var receivedprod = new Date(element.production_datetime);
-
             element.expiration_datetime = `${receivedExp.getFullYear()}/${receivedExp.getMonth() +
               1}/${receivedExp.getDate()}`;
             element.production_datetime = `${receivedprod.getFullYear()}/${receivedprod.getMonth() +
@@ -249,16 +264,15 @@ export default {
               (receivedExp - Date.now()) / 86400000
             );
 
-            var availableToBuyerAt = new Date(element.availableToBuyerAt);
-            // console.log(availableToBuyerAt.getTime());
-            // console.log(Date.now());
-            if (availableToBuyerAt.getTime() > Date.now()) {
-              if (availableToBuyerAt.getTime() > Date.now())
-                this.items.pop(element);
-              this.items.pop(element);
+            let now = Date.now();
+            element.availableToBuyerAt = new Date(element.availableToBuyerAt);
+            element.timeOfBuy = new Date(element.timeOfBuy);
+            element.deliveryIn = (element.availableToBuyerAt - now) / 1000;
+
+            if (element.deliveryIn > 0) {
+              this.orders.push(element);
             }
           });
-
           this.loading = false;
         });
       }
@@ -266,7 +280,7 @@ export default {
     confirmedDeletion() {
       this.selected.forEach(async (element, index, array) => {
         await axios
-          .delete("http://192.168.31.175:3000/producer", {
+          .delete(`http://${config.server.address}/producer`, {
             data: {
               productName: element.product_name,
               amount: 1,
@@ -317,7 +331,7 @@ export default {
   },
   watch: {
     items() {
-      if (this.$parent.$parent.$parent.$parent) {
+      if (this.$parent.$parent.$parent.$parent.productDatafinishedLoad) {
         this.$parent.$parent.$parent.$parent.productDatafinishedLoad = !this
           .$parent.$parent.$parent.$parent.productDatafinishedLoad;
       }

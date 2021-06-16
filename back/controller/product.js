@@ -61,7 +61,7 @@ async function addProducts(req, res) {
           image_url: res.data.records[0].fields.image_url,
           quantity: res.data.records[0].fields.quantity,
           production_datetime: Date.now(),
-          availableToBuyerAt: Date.now(),
+          availableToBuyerAt:  Date.now(),
           expiration_datetime: new Date(
             Date.now() + duration_in_days * 86400000
           ),
@@ -147,35 +147,51 @@ async function rmProducerEntry(req, res) {
 
 async function consumerBuyFromProducer(req, res) {
   const { productId, buyer, buyerLocation ,productLocation} = req.body.data;
-
+  let time, geoLocation;
+  if (productLocation.length == 0){
+    geoLocation = [48.1147,-1.6794];
+  }else{
+    console.log(productLocation)
+    geoLocation = productLocation; 
+  }
+  console.log(` geolocationm product location ${geoLocation}`)
   try {
-    // await axios.post(
-    //   "http://www.mapquestapi.com/directions/v2/routematrix?key=RGptLi1WllF7egmD9YAzMwR6s37hXoaF](http://www.mapquestapi.com/directions/v2/routematrix?key=RGptLi1WllF7egmD9YAzMwR6s37hXoaF",
-    //   {
-    //     locations: [
-    //       {
-    //         latLng: {
-    //           lat: buyerLocation[0],
-    //           lng:  buyerLocation[1],
-    //         },
-    //       },
-    //       {
-    //         latLng: {
-    //           lat: productLocation[0],
-    //           lng: productLocation[1],
-    //         },
-    //       },
-    //     ],
-    //   }
-    // ).then((res)=>{
-    //   console.log(res)
-    // }).catch(err => {console.log(err)});
+    await axios.post(
+      "http://www.mapquestapi.com/directions/v2/routematrix?key=RGptLi1WllF7egmD9YAzMwR6s37hXoaF",
+      {
+        locations: [
+          {
+            latLng: {
+              lat: buyerLocation[0],
+              lng:  buyerLocation[1],
+            },
+          },
+          {
+            latLng: {
+              lat: geoLocation[0],
+              lng: geoLocation[1],
+            },
+          },
+        ],
+      }
+    ).then((res)=>{
+      time = res.data.time[1]
+
+      console.log(`time received from external api`)
+      // console.log(res.data.time)
+    }).catch(err => {console.log(err)});
+    let timeOfBuy =  Date.now();
+    console.log( Date.now())
+    // console.log(Date.now()+7200000)
+    let available = timeOfBuy + time*1000 
+     console.log(`time assigned to available var`)
     await Product.findOneAndUpdate(
-      // { product_name:product_name, expiration_datetime: expiration_datetime ,production_datetime: production_datetime,location:"Producer" },
+      
       { _id: productId },
       {
         location: buyer,
-        //  availableToBuyerAt:
+        availableToBuyerAt: available,
+        timeOfBuy: timeOfBuy
       },
       (err, doc) => {
         if (err) console.log(`error: ${err}`);

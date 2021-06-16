@@ -97,6 +97,23 @@
           </v-card>
         </v-hover>
       </v-col>
+      <v-col class="d-flex justify-center">
+        <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
+          <v-card
+            :elevation="hover ? 12 : 2"
+            :min-width="cardWidth"
+            min-height="150"
+            class="mb-8"
+          >
+            <v-card-title>
+              Delivery
+            </v-card-title>
+            <v-card-actions>
+              <delivery :activeUser="currentUser" />
+            </v-card-actions>
+          </v-card>
+        </v-hover>
+      </v-col>
     </v-row>
 
     <ProductData
@@ -118,7 +135,8 @@ import ListDialog from "@/components/ListDialog.vue";
 import WarehouseDialog from "@/components/WarehouseDialog.vue";
 import ExpirationWarning from "../components/ExpirationWarning.vue";
 import BuyFromProducer from "../components/buyFromProducer.vue";
-import config from '../../config'
+import config from "../../config";
+import Delivery from "../components/Delivery.vue";
 
 export default {
   name: "Consumer",
@@ -128,12 +146,13 @@ export default {
     WarehouseDialog,
     ExpirationWarning,
     BuyFromProducer,
+    Delivery,
   },
   data: () => ({
     // fridgeStock: ['2s'],
     expiredWarning: [],
     productDatafinishedLoad: false,
-    url:`http://${config.server.address}/products`,
+    url: `http://${config.server.address}/products`,
     chosenUser: null,
     autocomplete: null,
     elevation: 2,
@@ -171,13 +190,13 @@ export default {
         case "xs":
           return 150;
         case "sm":
-          return 200;
+          return 300;
         case "md":
           return 250;
         case "lg":
-          return 250;
+          return 450;
         case "xl":
-          return 330;
+          return 230;
         default:
           return 350;
       }

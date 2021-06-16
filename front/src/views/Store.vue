@@ -69,6 +69,10 @@ export default {
         this.active = val;
         this.$refs.storeWindows.$refs.productData.getData(val);
       }
+      if (this.$refs.storeWindows.$refs.activeOrders != undefined) {
+        this.active = val;
+        this.$refs.storeWindows.$refs.activeOrders.getData(val);
+      }
     },
   },
   watch: {

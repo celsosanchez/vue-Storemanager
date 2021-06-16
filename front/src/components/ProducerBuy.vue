@@ -172,12 +172,6 @@
                       :draggable="false"
                       @click="center = { lat: value[0], lng: value[1] }"
                     />
-                    <GmapMarker
-                      :position="{ lat: 48.1300245, lng: -1.6846513 }"
-                      :clickable="false"
-                      :draggable="false"
-                      @click="center = { lat: value[0], lng: value[1] }"
-                    />
                   </GmapMap>
                 </td>
 
@@ -264,13 +258,14 @@ export default {
       // console.log(this.activeUser)
 
       this.selected.forEach(async (element, index, array) => {
-        // console.log(element);
+        // console.log(element.first_packaging_code_geo);
         await axios
           .patch(`http://${config.server.address}/producer`, {
             data: {
               productId: element._id,
               productLocation: element.first_packaging_code_geo,
               buyerLocation: this.buyerData,
+              now: Date.now(),
               // product_name: element.product_name,
               // // expiration_datetime: element.expiration_datetime,
               // // production_datetime: element.production_datetime,
