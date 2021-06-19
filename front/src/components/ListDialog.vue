@@ -133,6 +133,7 @@
 <script>
 import axios from "axios";
 import ShoppingList from "./ShoppingList.vue";
+import config from "../../config"
 export default {
   components: {
     ShoppingList,
@@ -160,7 +161,7 @@ export default {
     },
     save() {
       axios
-        .put("http://192.168.31.175:3000/usersShoppingList", {
+        .put(`http://${config.server.address}/usersShoppingList`, {
           user: this.activeUser,
           list: this.$refs.shoppingList.items,
         })
@@ -172,7 +173,7 @@ export default {
       const numberRegex = new RegExp("^[0-9]+$");
       if (numberRegex.test(this.amount) && this.chosenProduct !== null) {
         axios
-          .put("http://192.168.31.175:3000/producer", {
+          .put(`http://${config.server.address}/producer`, {
             product: this.chosenProduct,
             duration_in_days: this.duration,
             amount: this.amount,

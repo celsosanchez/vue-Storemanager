@@ -45,7 +45,7 @@
           <v-card flat min-height="70vh">
             <v-card-text>
               <product-data
-                :url="`http://192.168.31.175:3000/products`"
+                :url="url"
                 :location="store"
                 ref="productData"
                 ><template v-slot:tableTitle>

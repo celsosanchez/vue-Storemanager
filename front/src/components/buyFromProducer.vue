@@ -33,13 +33,18 @@
             >
             <v-spacer></v-spacer>
           </v-toolbar>
+          <v-row class="ma-1">
+          <v-col >
+            <shopping-list max-width="30vw" ref="shoppingList" :activeUser="activeUser" />
+          </v-col>
           <v-col>
             <producer-buy
-              :url="`http://192.168.31.175:3000/products`"
+              :url="`http://${url}/products`"
               :location="`Producer`"
               :activeUser="activeUser"
             />
           </v-col>
+          </v-row>
         </v-card>
       </div>
     </v-dialog>
@@ -54,12 +59,15 @@
 </template>
 <script>
 import ProducerBuy from "./ProducerBuy.vue";
+import ShoppingList from "./ShoppingList.vue"
+import config from "../../config"
 export default {
-  components: { ProducerBuy },
+  components: { ProducerBuy,ShoppingList },
   props: ["warningList", "activeUser"],
   data: () => ({
     switchColor: false,
     dialog: false,
+    url: `http://${config.server.address}`,
     showingImage: false,
     showingImageName: "",
     showingImageUrl: "",

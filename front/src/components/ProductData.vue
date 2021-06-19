@@ -187,6 +187,7 @@
 </template>
 <script>
 import axios from "axios";
+import config from "../../config"
 export default {
   components: {},
   props: ["url", "location"],
@@ -266,7 +267,7 @@ export default {
     confirmedDeletion() {
       this.selected.forEach(async (element, index, array) => {
         await axios
-          .delete("http://192.168.31.175:3000/producer", {
+          .delete(`http://${config.server.address}/producer`, {
             data: {
               productName: element.product_name,
               amount: 1,

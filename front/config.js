@@ -1,7 +1,7 @@
 var config = {};
 config.server = {};
-//  config.server.address = "localhost:3000"
- config.server.address = "192.168.31.175:3000"
+ config.server.address = "localhost:3000"
+//  config.server.address = "192.168.31.175:3000"
 
 // config.default_stuff =  ['red','green','blue','apple','yellow','orange','politics'];
 // config.twitter.user_name = process.env.TWITTER_USER || 'username';
