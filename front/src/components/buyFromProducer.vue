@@ -67,7 +67,7 @@ export default {
   data: () => ({
     switchColor: false,
     dialog: false,
-    url: `http://${config.server.address}`,
+    url: `${config.server.address}`,
     showingImage: false,
     showingImageName: "",
     showingImageUrl: "",
