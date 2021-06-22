@@ -23,6 +23,7 @@ const product = mongoose.Schema({
   product_name: String,
   image_ingredients_small_url: String,
   categories_fr: String,
+  categories_tags: String,
   ingredients_that_may_be_from_palm_oil_n: Number,
   packaging: String,
   additives_fr: String,

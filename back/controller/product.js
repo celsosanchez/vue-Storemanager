@@ -12,15 +12,17 @@ async function addProducts(req, res) {
     });
   }
 
-  var openData = "no data received";
+  // var openData = "no data received";
   var productData;
   try {
     await axios
       .get(
-        `https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-food-facts-products%40public&q=&refine.product_name=${product}`
+        `https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-food-facts-products%40public&q=product_name%3A${product}&rows=10000&facet=creator&facet=created_datetime&facet=packaging_tags&facet=brands_tags&facet=categories_tags&facet=categories_fr&facet=origins_tags&facet=manufacturing_places_tags&facet=labels_tags&facet=labels_fr&facet=cities_tags&facet=countries_tags&facet=allergens&facet=traces_tags&facet=additives_n&facet=additives_tags&facet=ingredients_from_palm_oil_n&facet=ingredients_that_may_be_from_palm_oil_n&facet=nutrition_grade_fr&facet=pnns_groups_1&facet=pnns_groups_2&facet=main_category&facet=energy_100g&facet=fat_100g&facet=sugars_100g&refine.origins_tags=france`
+        // `https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-food-facts-products%40public&q=&refine.product_name=${product}`
       )
       .then((res) => {
-        openData = res.data.records.fields;
+        // openData = res.data.records[0].fields;
+        
         productData = {
           labels_fr: res.data.records[0].fields.labels_fr,
           carbohydrates_100g: res.data.records[0].fields.carbohydrates_100g,
@@ -48,6 +50,7 @@ async function addProducts(req, res) {
           image_ingredients_small_url:
             res.data.records[0].fields.image_ingredients_small_url,
           categories_fr: res.data.records[0].fields.categories_fr,
+          categories_tags: res.data.records[0].fields.categories_tags,
           ingredients_that_may_be_from_palm_oil_n:
             res.data.records[0].fields.ingredients_that_may_be_from_palm_oil_n,
           packaging: res.data.records[0].fields.packaging,
@@ -61,7 +64,7 @@ async function addProducts(req, res) {
           image_url: res.data.records[0].fields.image_url,
           quantity: res.data.records[0].fields.quantity,
           production_datetime: Date.now(),
-          availableToBuyerAt:  Date.now(),
+          availableToBuyerAt: Date.now(),
           expiration_datetime: new Date(
             Date.now() + duration_in_days * 86400000
           ),
@@ -146,52 +149,56 @@ async function rmProducerEntry(req, res) {
 }
 
 async function consumerBuyFromProducer(req, res) {
-  const { productId, buyer, buyerLocation ,productLocation} = req.body.data;
+  const { productId, buyer, buyerLocation, productLocation } = req.body.data;
   let time, geoLocation;
-  if (productLocation.length == 0){
-    geoLocation = [48.1147,-1.6794];
-  }else{
-    console.log(productLocation)
-    geoLocation = productLocation; 
+  if (productLocation.length == 0) {
+    geoLocation = [48.1147, -1.6794];
+  } else {
+    // console.log(productLocation);
+    geoLocation = productLocation;
   }
-  console.log(` geolocationm product location ${geoLocation}`)
+  // console.log(` geolocationm product location ${geoLocation}`);
   try {
-    await axios.post(
-      "http://www.mapquestapi.com/directions/v2/routematrix?key=RGptLi1WllF7egmD9YAzMwR6s37hXoaF",
-      {
-        locations: [
-          {
-            latLng: {
-              lat: buyerLocation[0],
-              lng:  buyerLocation[1],
+    await axios
+      .post(
+        "http://www.mapquestapi.com/directions/v2/routematrix?key=RGptLi1WllF7egmD9YAzMwR6s37hXoaF",
+        {
+          locations: [
+            {
+              latLng: {
+                lat: buyerLocation[0],
+                lng: buyerLocation[1],
+              },
             },
-          },
-          {
-            latLng: {
-              lat: geoLocation[0],
-              lng: geoLocation[1],
+            {
+              latLng: {
+                lat: geoLocation[0],
+                lng: geoLocation[1],
+              },
             },
-          },
-        ],
-      }
-    ).then((res)=>{
-      time = res.data.time[1]
+          ],
+        }
+      )
+      .then((res) => {
+        time = res.data.time[1];
 
-      console.log(`time received from external api`)
-      // console.log(res.data.time)
-    }).catch(err => {console.log(err)});
-    let timeOfBuy =  Date.now();
-    console.log( Date.now())
+        // console.log(`time received from external api`);
+        // console.log(res.data.time)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    let timeOfBuy = Date.now();
+    // console.log(Date.now());
     // console.log(Date.now()+7200000)
-    let available = timeOfBuy + time*1000 
-     console.log(`time assigned to available var`)
+    let available = timeOfBuy + time * 1000;
+    // console.log(`time assigned to available var`);
     await Product.findOneAndUpdate(
-      
       { _id: productId },
       {
         location: buyer,
         availableToBuyerAt: available,
-        timeOfBuy: timeOfBuy
+        timeOfBuy: timeOfBuy,
       },
       (err, doc) => {
         if (err) console.log(`error: ${err}`);

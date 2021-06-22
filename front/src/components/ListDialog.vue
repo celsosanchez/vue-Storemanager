@@ -169,25 +169,6 @@ export default {
           this.dialog = false;
         });
     },
-    addToDS() {
-      const numberRegex = new RegExp("^[0-9]+$");
-      if (numberRegex.test(this.amount) && this.chosenProduct !== null) {
-        axios
-          .put(`http://${config.server.address}/producer`, {
-            product: this.chosenProduct,
-            duration_in_days: this.duration,
-            amount: this.amount,
-          })
-          .then(() => {
-            this.snackbarText = `${this.amount} units of ${this.chosenProduct} have been added successfully!`;
-            this.snackbar = true;
-            this.clearNewProduct();
-            this.$refs.productData.getData();
-          });
-      } else {
-        this.overlay = true;
-      }
-    },
     addToList() {
       const numberRegex = new RegExp("^[0-9]+$");
       if (numberRegex.test(this.amount) && this.chosenProduct !== null) {
@@ -199,10 +180,10 @@ export default {
             name: this.description.name,
             Image: this.description.image_url,
             Producer: this.description.producer,
+            Categories: this.description.categories_tags,
             Amount: parseInt(this.amount),
           });
         } else {
-          console.log(exists[0]);
           this.$refs.shoppingList.items[
             this.$refs.shoppingList.items.indexOf(exists[0])
           ].Amount += parseInt(this.amount);
@@ -235,9 +216,6 @@ export default {
     },
   },
   watch: {
-    // activeUser(value) {
-    //   console.log(value);
-    // },
     chosenProduct(value) {
       this.LoadingAutocomplete = true;
       try {
@@ -255,6 +233,7 @@ export default {
               nameProd.name = el.fields.product_name;
               nameProd.producer = el.fields.brands;
               nameProd.image_small_url = el.fields.image_small_url;
+              nameProd.categories_tags = el.fields.categories_tags;
               nameProd.image_url = el.fields.image_url;
               this.receivedNames.push(nameProd);
               this.possibleProducts.push(nameProd.name);

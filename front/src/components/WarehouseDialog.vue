@@ -72,7 +72,7 @@
                       icon
                       large
                       x-large
-                      @click="addToList"
+                      @click="addToDS"
                       color="blue"
                       class="ml-10"
                     >
@@ -160,6 +160,7 @@ export default {
       }
     },
     save() {
+      // console.log(this.$refs.DesiredStock.items);
       axios
         .put("http://192.168.31.175:3000/users", {
           user: this.activeUser,
@@ -170,40 +171,43 @@ export default {
           this.dialog = false;
         });
     },
+    // addToDS() {
+    //   const numberRegex = new RegExp("^[0-9]+$");
+    //   if (numberRegex.test(this.amount) && this.chosenProduct !== null) {
+    //     axios
+    //       .put("http://192.168.31.175:3000/producer", {
+    //         product: this.chosenProduct,
+    //         duration_in_days: this.duration,
+    //         amount: this.amount,
+    //       })
+    //       .then(() => {
+    //         this.snackbarText = `${this.amount} units of ${this.chosenProduct} have been added successfully!`;
+    //         this.snackbar = true;
+    //         this.clearNewProduct();
+    //         this.$refs.productData.getData();
+    //       });
+    //   } else {
+    //     this.overlay = true;
+    //   }
+    // },
     addToDS() {
-      const numberRegex = new RegExp("^[0-9]+$");
-      if (numberRegex.test(this.amount) && this.chosenProduct !== null) {
-        axios
-          .put("http://192.168.31.175:3000/producer", {
-            product: this.chosenProduct,
-            duration_in_days: this.duration,
-            amount: this.amount,
-          })
-          .then(() => {
-            this.snackbarText = `${this.amount} units of ${this.chosenProduct} have been added successfully!`;
-            this.snackbar = true;
-            this.clearNewProduct();
-            this.$refs.productData.getData();
-          });
-      } else {
-        this.overlay = true;
-      }
-    },
-    addToList() {
       const numberRegex = new RegExp("^[0-9]+$");
       if (numberRegex.test(this.amount) && this.chosenProduct !== null) {
         const exists = this.$refs.DesiredStock.items.filter(
           (x) => x.name == this.description.name
         );
         if (exists.length == 0) {
+          // console.log(`doesnt exists`)
+          // console.log(this.description)
           this.$refs.DesiredStock.items.push({
             name: this.description.name,
             Image: this.description.image_url,
             Producer: this.description.producer,
+            Categories: this.description.categories_tags,
             Amount: parseInt(this.amount),
           });
         } else {
-          console.log(exists[0]);
+          // console.log(exists[0]);
           this.$refs.DesiredStock.items[
             this.$refs.DesiredStock.items.indexOf(exists[0])
           ].Amount += parseInt(this.amount);
@@ -255,6 +259,7 @@ export default {
               nameProd.name = el.fields.product_name;
               nameProd.producer = el.fields.brands;
               nameProd.image_small_url = el.fields.image_small_url;
+              nameProd.categories_tags= el.fields.categories_tags;
               nameProd.image_url = el.fields.image_url;
               this.receivedNames.push(nameProd);
               this.possibleProducts.push(nameProd.name);

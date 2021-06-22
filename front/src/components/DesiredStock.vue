@@ -22,7 +22,7 @@
               <v-btn color="blue darken-1" text @click="closeDelete"
                 >Cancel</v-btn
               >
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+              <v-btn color="blue darken-1" text @click="deleteItemConfirm" 
                 >OK</v-btn
               >
               <v-spacer></v-spacer>
@@ -97,6 +97,9 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete();
     },
+    items(val){
+      console.log(val)
+    }
   },
   mounted() {
     this.getData();

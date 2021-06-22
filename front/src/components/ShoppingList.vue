@@ -8,7 +8,7 @@
   >
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>My List</v-toolbar-title> 
+        <v-toolbar-title>My List</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialogDelete" max-width="500px">
@@ -21,7 +21,11 @@
               <v-btn color="blue darken-1" text @click="closeDelete"
                 >Cancel</v-btn
               >
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+              <v-btn
+                color="blue darken-1"
+                text
+                @click="deleteItemConfirm"
+                @keypress.space="deleteItemConfirm"
                 >OK</v-btn
               >
               <v-spacer></v-spacer>
@@ -31,7 +35,7 @@
         <v-dialog v-model="showingImage" max-width="500px">
           <v-card>
             <v-card-title>{{ showingImageName }}</v-card-title>
-            <v-img  contain  max-height="70vh" :src="showingImageUrl" />
+            <v-img contain max-height="70vh" :src="showingImageUrl" />
           </v-card>
         </v-dialog>
       </v-toolbar>
@@ -59,7 +63,7 @@
 </template>
 <script>
 import axios from "axios";
-
+import config from "../../config";
 export default {
   props: ["activeUser"],
   data: () => ({
@@ -69,6 +73,7 @@ export default {
     showingImage: false,
     showingImageUrl: null,
     showingImageName: null,
+    finishedLoading: false,
     headers: [
       {
         text: "Name",
@@ -89,6 +94,11 @@ export default {
     },
   },
   watch: {
+    finishedLoading(val) {
+      if (val && this.$parent.$parent.$parent) {
+        this.$parent.$parent.$parent.$parent.getRecommendations();
+      }
+    },
     dialog(val) {
       val || this.close();
     },
@@ -105,25 +115,23 @@ export default {
       this.searchCounter = pagination.itemsLength;
     },
     getData() {
-
-
-
-
-
-
-
-        this.items = [];
+      this.finishedLoading = false;
+      this.items = [];
       if (this.activeUser) {
         this.loading = true;
-        axios.get(`http://192.168.31.175:3000/users`).then((res) => {
+        axios.get(`http://${config.server.address}/users`).then((res) => {
           var data = res.data.found;
           this.items = data.find(
             (element) => element.email == this.activeUser
           ).shoppingList;
+          if (this.$parent.$parent.$parent) {
+            this.$parent.$parent.$parent.$parent.getRecommendations();
+            this.finishedLoading = true;
+          }
         });
       }
     },
-     deleteItem(item) {
+    deleteItem(item) {
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
