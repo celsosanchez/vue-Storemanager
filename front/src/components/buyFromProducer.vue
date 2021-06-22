@@ -67,7 +67,7 @@
                     </template>
                     <template v-if="loading_Recommendation">
                       <v-progress-circular
-                      class=" ma-5"
+                        class=" ma-5"
                         indeterminate
                         color="purple"
                       ></v-progress-circular>
@@ -126,15 +126,16 @@ export default {
     ],
   }),
   methods: {
-    loadData(){
-      if(this.$refs.shoppingList){this.$refs.shoppingList.getData()
-      console.log(`calling getData`)}
+    loadData() {
+      if (this.$refs.shoppingList) {
+        this.$refs.shoppingList.getData();
+        console.log(`calling getData`);
+      }
     },
     getRecommendations() {
       this.loading_Recommendation = true;
-        this.recommendations = [];
-        setTimeout(() => {
-      
+      this.recommendations = [];
+      setTimeout(() => {
         let lh = this.$refs.shoppingList.items;
         let lh_products = [];
         lh.forEach((lh) => {
@@ -156,10 +157,17 @@ export default {
             .post(`http://recommend:5000/api/associations`, productsData)
             .then((res) => {
               if (res.data.data[0] != "" && res.data.data[0] != undefined) {
-                if (
-                  !this.recommendations.find((item) => item == res.data.data[0])
-                ) {
-                  this.recommendations.push(res.data.data[0]);
+                if (!this.recommendations.find((item) => item == res.data.data[0])) 
+                {
+                  let words = res.data.data[0];
+                  if (words.includes(",")) {
+                    words = words.split(",");
+                    words.forEach((word) => {
+                      if (!this.recommendations.find((item) => item == word)) this.recommendations.push(word);
+                    });
+                  } else {
+                    this.recommendations.push(words);
+                  }
                 }
               }
             });
