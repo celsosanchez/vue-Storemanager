@@ -62,7 +62,10 @@
                         v-for="item in recommendations"
                         :key="item"
                         outlined
-                        >{{ item }}</v-chip
+                        
+                        >
+                        <v-icon>mdi-fruit-cherries</v-icon>
+                        {{ item }}</v-chip
                       >
                     </template>
                     <template v-if="loading_Recommendation">
@@ -129,7 +132,7 @@ export default {
     loadData() {
       if (this.$refs.shoppingList) {
         this.$refs.shoppingList.getData();
-        console.log(`calling getData`);
+        // console.log(`calling getData`);
       }
     },
     getRecommendations() {
@@ -172,7 +175,7 @@ export default {
               }
             });
         });
-        console.log(` recommendations : ${this.recommendations}`);
+        // console.log(` recommendations : ${this.recommendations}`);
         this.loading_Recommendation = false;
       }, "500");
     },
