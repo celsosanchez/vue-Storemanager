@@ -1,4 +1,5 @@
 const product = require("./product");
+const store = require("./store");
 const user = require("./user");
 const passport = require("passport");
 const User = require('../schema/user');
@@ -13,15 +14,22 @@ const protectRoute = (req, res, next) => {
 module.exports = function (app) {
 
     app.put('/producer', product.addProducts);
-    app.get('/users', user.getUsers);
-    app.put('/users', user.addToDS);
-    app.put('/usersShoppingList', user.addToSL);
-    app.put('/UpdateSLfromDS', user.UpdateSLfromDS);
-    // app.get('/products', protectRoute, product.getProducts);
     app.post('/products',  product.getProducts);
-    // app.patch('/producer', product.moveProducts);
     app.patch('/producer', product.consumerBuyFromProducer);
     app.delete('/producer', product.rmProducerEntry);
+
+    app.put('/ProductToShelf', product.sendToSHelf);
+
+    app.put('/UpdateSLfromDS', user.UpdateSLfromDS);
+    app.put('/usersShoppingList', user.addToSL);
+    app.get('/users', user.getUsers);
+    app.put('/users', user.addToDS);
+    
+
+    app.get('/store', store.getStore);
+    app.post('/store', store.addToShelves);
+    app.put('/store', store.createStore);
+    
 
     //-----auth---
     app.get("/auth/google", passport.authenticate("google", {

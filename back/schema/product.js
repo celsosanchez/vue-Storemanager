@@ -42,6 +42,7 @@ const product = mongoose.Schema({
   timeOfBuy: Date,
   availableToBuyerAt: Date,
   duration_in_days: Number,
+  inShelves: Boolean,
   expirationIn: {
     type: Number,
     default: function () {

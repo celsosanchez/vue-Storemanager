@@ -94,6 +94,13 @@
             :items-per-page="15"
             class="elevation-4"
           >
+             <template v-slot:[`item.inShelves`]="{ item }">
+           <!-- <slot name="shelves"> -->
+             <!-- {{item}} -->
+             <v-icon v-if="item.inShelves" color="green" >mdi-square</v-icon>
+             <v-icon v-if="!item.inShelves" color="gray" >mdi-square</v-icon>
+           <!-- </slot> -->
+            </template>
             <template v-slot:[`item.expirationIn`]="{ item }">
               <v-icon :color="status(item.expirationIn).color">
                 {{ status(item.expirationIn).icon }}
@@ -190,7 +197,7 @@ import axios from "axios";
 import config from "../../config"
 export default {
   components: {},
-  props: ["url", "location"],
+  props: ["url", "location","customHeaders"],
   data: () => ({
     showingItem: null,
     dataDetail: false,
@@ -208,6 +215,7 @@ export default {
         sortable: false,
         value: "product_name",
       },
+      // { text: "In Shelves", value: "inShelves" },
       { text: "Expiration Status", value: "expirationIn" },
       { text: "Details", value: "detail" },
       { text: "Brands", value: "brands" },
@@ -217,6 +225,9 @@ export default {
     items: [],
   }),
   methods: {
+    // testing(){
+    //   console.log(`testing`)
+    // },
     counter(pagination) {
       this.searchCounter = pagination.itemsLength;
     },
@@ -227,8 +238,6 @@ export default {
           this.items = res.data.found;
           this.items.forEach((element) => {
             var availableToBuyerAt = new Date(element.availableToBuyerAt);
-            // console.log(availableToBuyerAt.getTime());
-            // console.log(Date.now());
             if (availableToBuyerAt.getTime() > Date.now()) {
               if (availableToBuyerAt.getTime() > Date.now())
                 this.items.pop(element);
@@ -302,11 +311,15 @@ export default {
   },
 
   created() {
+    if(this.customHeaders){
+      this.headers = this.customHeaders
+    }
     setTimeout(() => {
       this.elevation = 6;
     }, "2000");
   },
   mounted() {
+
     this.getData();
   },
   // renderTriggered() { this.getData();},

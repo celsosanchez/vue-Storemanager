@@ -92,7 +92,7 @@
               Buy from Producer
             </v-card-title>
             <v-card-actions>
-              <buy-from-producer :activeUser="currentUser" />
+              <buy-from-producer :activeUser="currentUser" @childCallsReload="reload" />
             </v-card-actions>
           </v-card>
         </v-hover>

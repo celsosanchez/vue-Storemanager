@@ -328,10 +328,12 @@ export default {
     },
   },
   watch: {
-    items() {
-      this.$parent.productDatafinishedLoad = !this.$parent
-        .productDatafinishedLoad;
-    },
+    // items() {
+    //   console.log(`calling`)
+    //   console.log(this.$parent.productDatafinishedLoad)
+    //   this.$parent.productDatafinishedLoad = !this.$parent
+    //     .productDatafinishedLoad;
+    // },
   },
 };
 </script>

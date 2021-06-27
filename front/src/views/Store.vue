@@ -65,6 +65,10 @@ export default {
   },
   methods: {
     refreshData(val) {
+      if (this.$refs.storeWindows.$refs.shelves != undefined) {
+        this.active = val;
+        this.$refs.storeWindows.$refs.shelves.getData(val);
+      }
       if (this.$refs.storeWindows.$refs.productData != undefined) {
         this.active = val;
         this.$refs.storeWindows.$refs.productData.getData(val);

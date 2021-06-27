@@ -35,7 +35,9 @@
         <v-dialog v-model="showingImage" max-width="500px">
           <v-card>
             <v-card-title>{{ showingImageName }}</v-card-title>
-            <v-img contain max-height="70vh" :src="showingImageUrl" />
+            <v-card-text>
+              <v-img contain max-height="70vh" :src="showingImageUrl" />
+            </v-card-text>
           </v-card>
         </v-dialog>
       </v-toolbar>
@@ -65,7 +67,7 @@
 import axios from "axios";
 import config from "../../config";
 export default {
-  props: ["activeUser"],
+  props: ["activeUser","recommendation"],
   data: () => ({
     dialog: false,
     searchCounter: 0,
@@ -73,7 +75,7 @@ export default {
     showingImage: false,
     showingImageUrl: null,
     showingImageName: null,
-    finishedLoading: false,
+    // finishedLoading: false,
     headers: [
       {
         text: "Name",
@@ -94,11 +96,11 @@ export default {
     },
   },
   watch: {
-    finishedLoading(val) {
-      if (val && this.$parent.$parent.$parent) {
-        this.$parent.$parent.$parent.$parent.getRecommendations();
-      }
-    },
+    // finishedLoading(val) {
+    //   if (val && this.$parent.$parent.$parent) {
+    //     // this.$parent.$parent.$parent.$parent.getRecommendations();
+    //   }
+    // },
     dialog(val) {
       val || this.close();
     },
@@ -115,7 +117,7 @@ export default {
       this.searchCounter = pagination.itemsLength;
     },
     getData() {
-      this.finishedLoading = false;
+      // this.finishedLoading = false;
       this.items = [];
       if (this.activeUser) {
         this.loading = true;
@@ -124,9 +126,9 @@ export default {
           this.items = data.find(
             (element) => element.email == this.activeUser
           ).shoppingList;
-          if (this.$parent.$parent.$parent) {
-            this.$parent.$parent.$parent.$parent.getRecommendations();
-            this.finishedLoading = true;
+          if (this.recommendation) {
+            this.$emit('childCallsRec')
+            // this.finishedLoading = true;
           }
         });
       }

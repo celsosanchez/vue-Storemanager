@@ -32,7 +32,9 @@
         <v-dialog v-model="showingImage" max-width="500px">
           <v-card>
             <v-card-title>{{ showingImageName }}</v-card-title>
+            <v-card-text>
             <v-img  contain  max-height="70vh" :src="showingImageUrl" />
+            </v-card-text>
           </v-card>
         </v-dialog>
       </v-toolbar>

@@ -39,6 +39,8 @@
               <v-row>
                 <v-col>
                   <shopping-list
+                  @childCallsRec="getRecommendations"
+                  :recommendation="true"
                     max-width="30vw"
                     ref="shoppingList"
                     :activeUser="activeUser"
@@ -180,7 +182,7 @@ export default {
       }, "500");
     },
     closeDialog() {
-      this.$parent.$parent.$parent.reload();
+      this.$emit('childCallsReload')
       this.dialog = false;
     },
     status(value) {

@@ -1,6 +1,10 @@
 const Product = require("../schema/product");
 const ProducerStockEntry = require("../schema/producer_stock");
+const store = require("../schema/store");
+
 const axios = require("axios").default;
+const { json } = require("body-parser");
+const e = require("express");
 // const User = require("../schema/user");
 // const log = require("../lib/logger");
 
@@ -22,7 +26,7 @@ async function addProducts(req, res) {
       )
       .then((res) => {
         // openData = res.data.records[0].fields;
-        
+
         productData = {
           labels_fr: res.data.records[0].fields.labels_fr,
           carbohydrates_100g: res.data.records[0].fields.carbohydrates_100g,
@@ -154,10 +158,8 @@ async function consumerBuyFromProducer(req, res) {
   if (productLocation.length == 0) {
     geoLocation = [48.1147, -1.6794];
   } else {
-    // console.log(productLocation);
     geoLocation = productLocation;
   }
-  // console.log(` geolocationm product location ${geoLocation}`);
   try {
     await axios
       .post(
@@ -181,18 +183,12 @@ async function consumerBuyFromProducer(req, res) {
       )
       .then((res) => {
         time = res.data.time[1];
-
-        // console.log(`time received from external api`);
-        // console.log(res.data.time)
       })
       .catch((err) => {
         console.log(err);
       });
     let timeOfBuy = Date.now();
-    // console.log(Date.now());
-    // console.log(Date.now()+7200000)
     let available = timeOfBuy + time * 1000;
-    // console.log(`time assigned to available var`);
     await Product.findOneAndUpdate(
       { _id: productId },
       {
@@ -250,6 +246,91 @@ async function moveProducts(productName, amount, location, ...args) {
   }
 }
 
+async function sendToSHelf(req, res) {
+  const { productIds, storeName } = req.body;
+  console.log(productIds);
+  let shelves = [];
+  let item = {};
+  for (let element of productIds) {
+    console.log(element);
+    await Product.findOneAndUpdate(
+      { _id: element },
+      {
+        inShelves: true,
+      },
+      (err, doc) => {
+        if (err) console.log(`error: ${err}`);
+        console.log(doc._id);
+        item = doc;
+      }
+    ).then(async () => {
+      shelves = await store.find({ storeName: storeName });
+      if(shelves.length == 0){
+        const Data = new store({storeName: storeName, Shelves:[]});
+        await Data.save();
+        shelves = [Data]
+      }
+
+      console.log(shelves)
+
+
+      let index;
+      shelves[0].Shelves.find((element, i) => {
+        if (element.Shelf == "Unclassified") index = i;
+      });
+      console.log(index)
+      if (index != -1 && index != undefined) {
+        let itemExists = false;
+        shelves[0].Shelves[index].Items.forEach((el, index) => {
+          if (el.name == item.product_name) {
+            itemExists = true;
+            console.log(el.ids)
+            console.log(item._id)
+            let idInList = el.ids.find((element) => element == item._id)
+            if(idInList == undefined){
+              console.log(`enters 1`)
+               el.Amount+=1;
+                el.ids.push(item._id)              
+            }else console.log(`not repeating`)
+            
+          }
+        });
+
+        if (!itemExists) {
+          console.log(`enters 2`)
+          shelves[0].Shelves[index].Items.push({
+            name: item.product_name,
+            Amount: 1,
+            Image: item.image_small_url,
+            ids: [item._id],
+          });
+
+          // console.log(shelves[0].Shelves[index].Items);
+          // console.log(JSON.stringify(shelves));
+        }
+      } else {
+        console.log(`enters 3`)
+        shelves[0].Shelves.push({
+          Shelf: "Unclassified",
+          Items: [
+            {
+              name: item.product_name,
+              Amount: 1,
+              Image: item.image_small_url,
+              ids: [item._id],
+            },
+          ],
+        });
+      }
+      axios.post(`http://localhost:3000/store`, {
+        storeName: storeName,
+        list: shelves[0].Shelves,
+      });
+    });
+    // .then(() => {
+  }
+  return res.status(200).json({ shelves: shelves });
+}
 // async function addTale(req, res) {
 //   const { Title, Body, Type } = req.body;
 //   if (!Title || !Body || !Type) {
@@ -310,3 +391,5 @@ exports.moveProducts = moveProducts;
 exports.consumerBuyFromProducer = consumerBuyFromProducer;
 exports.rmProducerEntry = rmProducerEntry;
 exports.getProducts = getProducts;
+
+exports.sendToSHelf = sendToSHelf;
