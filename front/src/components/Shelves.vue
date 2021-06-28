@@ -11,7 +11,7 @@
       sm="6"
       md="4"
       lg="3"
-      xl="3"
+      xl="2"
       class="pl-1 mt-1 pr-1"
       v-for="(element, index) in list"
       :key="element.Shelf"
@@ -46,9 +46,9 @@
               align="center"
             >
               <v-row justfy="center" align="center">
-                <v-card-title>
+                <v-card-title class="text-h7">
                   <v-sheet
-                    class="mr-2"
+                    class="mr-2 "
                     color="indigo lighten-5"
                     elevation="5"
                     height="30"
@@ -139,13 +139,12 @@ export default {
             params: { storeName: store },
           })
           .then((res) => {
-             
-              if (res.data.found[0]) this.list = res.data.found[0].Shelves;
-              else this.list = [];
-              this.dataLoading = false;
-            
-          }).catch(err=> console.log(err));
-      } else console.log(`still loading`);
+            if (res.data.found[0]) this.list = res.data.found[0].Shelves;
+            else this.list = [];
+            this.dataLoading = false;
+          })
+          .catch((err) => console.log(err));
+      }
     },
     addShelf(name) {
       name = name[0].toUpperCase() + name.slice(1, name.length);

@@ -5,21 +5,21 @@
       <v-toolbar flat color="teal lighten-3" class="text-h3">
         <template>
           <v-tabs grow align-with-title v-model="pos">
-            <v-tab @click="refreshData(`Lidl`)"
+            <v-tab :disabled="active == `Lidl`" @click="refreshData(`Lidl`)"
               ><v-img
                 class="mr-3"
                 :max-width="icoWidth"
                 src="https://upload.wikimedia.org/wikipedia/commons/9/91/Lidl-Logo.svg"
               />Lidl
             </v-tab>
-            <v-tab @click="refreshData(`Leclerc`)"
+            <v-tab :disabled="active == `Leclerc`" @click="refreshData(`Leclerc`)"
               ><v-img
                 class="mr-3"
                 :max-width="icoWidth"
                 src="https://upload.wikimedia.org/wikipedia/commons/e/ed/Logo_E.Leclerc_Sans_le_texte.svg"
               />Leclerc</v-tab
             >
-            <v-tab @click="refreshData(`Carrefour`)"
+            <v-tab :disabled="active == `Carrefour`" @click="refreshData(`Carrefour`)"
               ><v-img
                 class="mr-3"
                 :max-width="icoWidth + 10"
@@ -44,6 +44,7 @@ export default {
     stores: ["Lidl", "Leclerc", "Carrefour"],
     active: "Lidl",
     pos: 0,
+    
   }),
   computed: {
     icoWidth() {

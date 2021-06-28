@@ -23,7 +23,7 @@ async function addToShelves(req, res) {
 }
 
 async function getStore(req, res) {
-  console.log(`receiving call getStore`)
+  // console.log(`receiving call getStore`)
   const { storeName} = req.query;
   if (!storeName) {
     return res.status(400).json({

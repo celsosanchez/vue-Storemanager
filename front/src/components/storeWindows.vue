@@ -10,7 +10,7 @@
             large
             @click="
               toggle();
-              reload(n);
+              active?'': reload(n);
             "
           >
             <v-icon>{{ icons[n] }}</v-icon>
@@ -18,7 +18,6 @@
         </div>
       </v-item>
     </v-item-group>
-
     <v-col>
       <v-window v-model="window" class="elevation-1" vertical>
         <v-window-item>
@@ -30,16 +29,13 @@
           <v-card flat min-height="70vh">
             <v-card-text>
               <v-row class="mb-4" align="center">
-                <v-avatar color="grey" class="mr-4"></v-avatar>
                 <strong class="text-h6">{{ store }}'s Sheleves</strong>
                 <v-spacer></v-spacer>
                 <v-btn v-if="add" icon @click="add = !add"
                   ><v-icon>mdi-minus</v-icon></v-btn
                 >
-                <v-btn v-if="!add" icon @click="addDialog"
-                  ><v-icon>mdi-plus</v-icon></v-btn
-                >
-
+                <v-btn v-if="!add" icon @click="addDialog">
+                  <v-icon>mdi-plus</v-icon></v-btn>
                 <v-card-text>
                   <shelves ref="shelves" :store="store" />
                 </v-card-text>
@@ -96,7 +92,6 @@
                 >
               </v-row>
             </v-card-text>
-
             <active-orders ref="activeOrders" :location="store" :url="url" />
           </v-card>
         </v-window-item>
@@ -106,10 +101,6 @@
               <v-row class="mb-4" align="center">
                 <v-icon large color="blue" class="mr-4">mdi-warehouse</v-icon>
                 <strong class="text-h6">{{ store }}'s Providers</strong>
-                <!-- <v-spacer></v-spacer>
-                <v-btn icon>
-                  <v-icon>mdi-account</v-icon>
-                </v-btn> -->
               </v-row>
               <producer-buy
                 :url="url"
