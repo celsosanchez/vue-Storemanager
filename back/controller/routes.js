@@ -19,6 +19,7 @@ module.exports = function (app) {
     app.delete('/producer', product.rmProducerEntry);
 
     app.put('/ProductToShelf', product.sendToSHelf);
+    app.put('/ProductFromShelf', product.takeFromSHelf);
 
     app.put('/UpdateSLfromDS', user.UpdateSLfromDS);
     app.put('/usersShoppingList', user.addToSL);

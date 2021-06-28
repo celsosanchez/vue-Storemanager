@@ -41,7 +41,7 @@
                 >
 
                 <v-card-text>
-                  <shelves ref="shelves" :store="store"/>
+                  <shelves ref="shelves" :store="store" />
                 </v-card-text>
               </v-row>
             </v-card-text>
@@ -65,6 +65,10 @@
                     <v-icon large color="green">mdi-tray-full</v-icon></v-btn
                   >
                   <v-spacer></v-spacer>
+                  <v-btn icon @click="takeFromSelves" :disabled="isSelected()">
+                    <v-icon large color="red">mdi-tray</v-icon></v-btn
+                  >
+                  <v-spacer></v-spacer>
                   <expiration-warning
                     :activeUser="store"
                     :warningList="expiredWarning"
@@ -73,6 +77,14 @@
               </product-data>
             </v-card-text>
           </v-card>
+          <v-snackbar v-model="snackbar" :multi-line="multiLine">
+            {{ snackbarText }}
+            <template v-slot:action="{ attrs }">
+              <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
+                Close
+              </v-btn>
+            </template>
+          </v-snackbar>
         </v-window-item>
         <v-window-item>
           <v-card flat min-height="70vh">
@@ -186,6 +198,9 @@ export default {
       { text: "Expiration", value: "expiration_datetime" },
     ],
     shelfname: "",
+    multiLine: true,
+    snackbar: false,
+    snackbarText: `I'm a multi-line snackbar.`,
     dialog: false,
     overlay: false,
     add: false,
@@ -227,48 +242,86 @@ export default {
   methods: {
     sendToSelves() {
       let ids = [];
+      this.snackbarText = "";
+      let names = "";
       this.$refs.productData.selected.forEach((item) => {
-        ids.push(item._id);
-        item.inShelves = true;
+        if (item.inShelves == false || item.inShelves == undefined) {
+          ids.push(item._id);
+          item.inShelves = true;
+          if (names.length == 0) names = item.product_name;
+          else names += `, ` + item.product_name;
+        }
       });
-      axios.put(`http://${config.server.address}/ProductToShelf`,  {productIds: ids ,storeName: this.store});
+      if (ids.length > 0) {
+        axios.put(`http://${config.server.address}/ProductToShelf`, {
+          productIds: ids,
+          storeName: this.store,
+        });
+        this.snackbarText = `Adding to Shelves: ${names} `;
+      } else this.snackbarText = `No products added to shelves`;
+
+      this.snackbar = true;
+      this.$refs.productData.selected = [];
+    },
+    takeFromSelves() {
+      let ids = [];
+      this.snackbarText = "";
+      let names = "";
+      this.$refs.productData.selected.forEach((item) => {
+        if (item.inShelves == true || item.inShelves == undefined) {
+          ids.push(item._id);
+          item.inShelves = false;
+          if (names.length == 0) names = item.product_name;
+          else names += `, ` + item.product_name;
+        }
+      });
+      if (ids.length > 0) {
+        axios.put(`http://${config.server.address}/ProductFromShelf`, {
+          productIds: ids,
+          storeName: this.store,
+        });
+        this.snackbarText = `Removing from Shelves: ${names} `;
+      } else this.snackbarText = `No products removed from shelves`;
+
+      this.snackbar = true;
+      this.$refs.productData.selected = [];
     },
     isSelected() {
       if (this.$refs.productData) {
         return this.$refs.productData.selected.length > 0 ? false : true;
       } else return true;
     },
-  
-  reload(n) {
-    switch (n) {
-      case 2:
-        if (this.$refs.shelves) this.$refs.shelves.getData(this.store);
-        break;
-      case 3:
-        if (this.$refs.productData) this.$refs.productData.getData();
-        break;
-      case 4:
-        if (this.$refs.activeOrders) this.$refs.activeOrders.getData();
-        break;
 
-      default:
-        break;
-    }
-  },
+    reload(n) {
+      switch (n) {
+        case 2:
+          if (this.$refs.shelves) this.$refs.shelves.getData();
+          break;
+        case 3:
+          if (this.$refs.productData) this.$refs.productData.getData();
+          break;
+        case 4:
+          if (this.$refs.activeOrders) this.$refs.activeOrders.getData();
+          break;
 
-  callAddShelf() {
-    if (this.shelfname.length > 3) {
-      this.dialog = false;
-      this.$refs.shelves.addShelf(this.shelfname);
+        default:
+          break;
+      }
+    },
+
+    callAddShelf() {
+      if (this.shelfname.length > 3) {
+        this.dialog = false;
+        this.$refs.shelves.addShelf(this.shelfname);
+        this.shelfname = "";
+      } else {
+        this.overlay = true;
+      }
+    },
+    addDialog() {
+      this.dialog = !this.dialog;
       this.shelfname = "";
-    } else {
-      this.overlay = true;
-    }
-  },
-  addDialog() {
-    this.dialog = !this.dialog;
-    this.shelfname = "";
-  },
+    },
   },
   computed: {},
 };

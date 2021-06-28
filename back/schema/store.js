@@ -10,7 +10,6 @@ const Store = mongoose.Schema({
           name: String,
           Amount: Number,
           Image: String,
-          ids: [String],
         },
       ],
     },

@@ -66,14 +66,17 @@ export default {
   methods: {
     refreshData(val) {
       if (this.$refs.storeWindows.$refs.shelves != undefined) {
+        // console.log(`recalling shelves`)
         this.active = val;
         this.$refs.storeWindows.$refs.shelves.getData(val);
       }
       if (this.$refs.storeWindows.$refs.productData != undefined) {
+        // console.log(`recalling productData`)
         this.active = val;
         this.$refs.storeWindows.$refs.productData.getData(val);
       }
       if (this.$refs.storeWindows.$refs.activeOrders != undefined) {
+        // console.log(`recalling activeOrders`)
         this.active = val;
         this.$refs.storeWindows.$refs.activeOrders.getData(val);
       }

@@ -1,5 +1,10 @@
 <template>
   <v-row no-gutters>
+    <v-progress-circular
+      v-if="dataLoading"
+      indeterminate
+      color="green"
+    ></v-progress-circular>
     <v-col
       cols="12"
       xs="12"
@@ -21,7 +26,12 @@
         <h3 class="pa-1 mt-1">{{ list[index].Shelf }}</h3>
       </v-card>
 
-      <draggable class="list-group" :list="list[index].Items" group="people" @change="log">
+      <draggable
+        class="list-group"
+        :list="list[index].Items"
+        group="people"
+        @change="log"
+      >
         <div
           class="list-group-item"
           v-for="el in list[index].Items"
@@ -35,49 +45,28 @@
               outlined
               align="center"
             >
-              <v-row class="ma-1">
-                <v-col cols="9"> Name: {{ el.name }} </v-col>
-                <v-col cols="3"> Count: {{ el.Amount }} </v-col>
+              <v-row justfy="center" align="center">
+                <v-card-title>
+                  <v-sheet
+                    class="mr-2"
+                    color="indigo lighten-5"
+                    elevation="5"
+                    height="30"
+                    rounded
+                    width="30"
+                    >{{ el.Amount }}</v-sheet
+                  >{{ el.name }}
+                </v-card-title>
               </v-row>
               <v-row no-gutters justfy="center">
-                <v-col cols="10">
+                <v-col>
                   <v-img
                     contain
-                    class="mb-4"
+                    class="ma-3"
                     max-width="200"
                     max-height="150"
                     :src="el.Image"
                   ></v-img>
-                </v-col>
-                <v-col cols="2">
-                  <v-row>
-                    <v-btn icon class="ma-1" @click="el.Amount += 1">
-                      <v-icon>mdi-plus</v-icon>
-                    </v-btn>
-                  </v-row>
-                  <v-row>
-                    <v-btn
-                      v-show="el.Amount > 1"
-                      icon
-                      class="ma-1"
-                      @click="el.Amount -= 1"
-                    >
-                      <v-icon>mdi-minus</v-icon>
-                    </v-btn>
-                    <v-btn
-                      v-show="el.Amount < 2"
-                      icon
-                      class="ma-1"
-                      @click="removeItem(index, el)"
-                    >
-                      <v-icon color="red">mdi-cancel</v-icon>
-                    </v-btn>
-                  </v-row>
-                  <v-row>
-                    <v-btn icon class="ma-1">
-                      <v-icon>mdi-information-outline</v-icon>
-                    </v-btn>
-                  </v-row>
                 </v-col>
               </v-row>
             </v-card>
@@ -93,12 +82,7 @@
           outlined
           align="center"
         >
-          <v-row>
-            <v-col cols="6">
-              <v-btn icon @click="showList">
-                <v-icon color="green">mdi-plus</v-icon>
-              </v-btn>
-            </v-col>
+          <v-row justify="center">
             <v-col cols="6">
               <v-btn icon @click="removeShelf(index)">
                 <v-icon color="red">mdi-cancel</v-icon>
@@ -118,9 +102,6 @@
       </v-snackbar>
     </v-col>
   </v-row>
-
-  <!-- <rawDisplayer class="col-3" :value="list1" title="List 1" />
-    <rawDisplayer class="col-3" :value="list2" title="List 2" /> -->
 </template>
 <script>
 import draggable from "vuedraggable";
@@ -136,157 +117,35 @@ export default {
   },
   data() {
     return {
+      dataLoading: false,
       snackbar: false,
       snackbarText: `All the items in the shelf must be removed before deleting it.`,
-      list: [
-        {
-          Shelf: "Deals",
-          Items: [
-            {
-              name: "asf",
-              Amount: 11,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/362/582/7667/front_fr.4.200.jpg",
-              ids: ["123"],
-            },
-            {
-              name: "gey",
-              Amount: 2,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/323/026/9531/front_fr.5.200.jpg",
-              ids: ["123"],
-            },
-            {
-              name: "qtw",
-              Amount: 3,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/362/582/7667/front_fr.4.200.jpg",
-              ids: ["123"],
-            },
-            {
-              name: "vxc",
-              Amount: 4,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/444/000/8989/front_fr.7.200.jpg",
-              ids: ["123"],
-            },
-          ],
-        },
-        {
-          Shelf: "Beverages",
-          Items: [
-            {
-              name: "asf",
-              Amount: 1,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/362/582/7667/front_fr.4.200.jpg",
-              ids: ["123"],
-            },
-            {
-              name: "gey",
-              Amount: 2,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/323/026/9531/front_fr.5.200.jpg",
-              ids: ["123"],
-            },
-            {
-              name: "qtw",
-              Amount: 3,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/362/582/7667/front_fr.4.200.jpg",
-              ids: ["123"],
-            },
-            {
-              name: "vxc",
-              Amount: 4,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/444/000/8989/front_fr.7.200.jpg",
-              ids: ["123"],
-            },
-          ],
-        },
-        {
-          Shelf: "Meats",
-          Items: [
-            {
-              name: "asf",
-              Amount: 1,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/362/582/7667/front_fr.4.200.jpg",
-              ids: ["123"],
-            },
-            {
-              name: "gey",
-              Amount: 2,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/323/026/9531/front_fr.5.200.jpg",
-              ids: ["123"],
-            },
-            {
-              name: "qtw",
-              Amount: 3,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/362/582/7667/front_fr.4.200.jpg",
-              ids: ["123"],
-            },
-            {
-              name: "vxc",
-              Amount: 4,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/444/000/8989/front_fr.7.200.jpg",
-              ids: ["123"],
-            },
-          ],
-        },
-        {
-          Shelf: "Unclassified",
-          Items: [
-            {
-              name: "asf",
-              Amount: 1,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/362/582/7667/front_fr.4.200.jpg",
-              ids: ["123"],
-            },
-            {
-              name: "gey",
-              Amount: 2,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/323/026/9531/front_fr.5.200.jpg",
-              ids: ["123"],
-            },
-            {
-              name: "qtw",
-              Amount: 3,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/362/582/7667/front_fr.4.200.jpg",
-              ids: ["123"],
-            },
-            {
-              name: "vxc",
-              Amount: 4,
-              Image:
-                "https://static.openfoodfacts.org/images/products/327/444/000/8989/front_fr.7.200.jpg",
-              ids: ["123"],
-            },
-          ],
-        },
-      ],
+      list: [],
     };
   },
   methods: {
-      log() {
-      axios.post(`http://${config.server.address}/store`,{storeName:this.store,list:this.list});
+    log() {
+      axios.post(`http://${config.server.address}/store`, {
+        storeName: this.store,
+        list: this.list,
+      });
     },
     getData(store = this.store) {
-      axios
-        .get(`http://${config.server.address}/store`, {
-          params: { storeName: store },
-        })
-        .then((res) => {
-          // console.log(res.data.found[0].Shelves);
-          this.list = res.data.found[0].Shelves;
-        });
+      if (!this.dataLoading) {
+        this.dataLoading = true;
+        this.list = [];
+        axios
+          .get(`http://${config.server.address}/store`, {
+            params: { storeName: store },
+          })
+          .then((res) => {
+             
+              if (res.data.found[0]) this.list = res.data.found[0].Shelves;
+              else this.list = [];
+              this.dataLoading = false;
+            
+          }).catch(err=> console.log(err));
+      } else console.log(`still loading`);
     },
     addShelf(name) {
       name = name[0].toUpperCase() + name.slice(1, name.length);
@@ -309,13 +168,15 @@ export default {
   },
   watch: {
     list() {
-       axios.post(`http://${config.server.address}/store`,{storeName:this.store,list:this.list});
+      axios.post(`http://${config.server.address}/store`, {
+        storeName: this.store,
+        list: this.list,
+      });
     },
   },
   mounted() {
     this.getData();
   },
-  
 };
 </script>
 <style></style>
