@@ -10,7 +10,7 @@
             large
             @click="
               toggle();
-              active?'': reload(n);
+              active ? '' : reload(n);
             "
           >
             <v-icon>{{ icons[n] }}</v-icon>
@@ -22,7 +22,13 @@
       <v-window v-model="window" class="elevation-1" vertical>
         <v-window-item>
           <v-card flat min-height="70vh">
-            <v-card-text> </v-card-text>
+            <!-- <v-card-text> asd</v-card-text> -->
+            <v-row class="ma-3">
+              <v-col xs="2" md="2" xl="2">
+                <v-btn @click="showRec">caca</v-btn>
+                <user-selector ref="UserSelector" />
+              </v-col>
+            </v-row>
           </v-card>
         </v-window-item>
         <v-window-item>
@@ -35,7 +41,8 @@
                   ><v-icon>mdi-minus</v-icon></v-btn
                 >
                 <v-btn v-if="!add" icon @click="addDialog">
-                  <v-icon>mdi-plus</v-icon></v-btn>
+                  <v-icon>mdi-plus</v-icon></v-btn
+                >
                 <v-card-text>
                   <shelves ref="shelves" :store="store" />
                 </v-card-text>
@@ -163,6 +170,7 @@ import ProductData from "./ProductData.vue";
 import config from "../../config";
 import ActiveOrders from "./ActiveOrders.vue";
 import Shelves from "./Shelves.vue";
+import UserSelector from "./UserSelector.vue";
 export default {
   components: {
     ProducerBuy,
@@ -170,6 +178,7 @@ export default {
     ExpirationWarning,
     ActiveOrders,
     Shelves,
+    UserSelector,
   },
   name: "storeWindows",
   props: ["store"],
@@ -299,7 +308,9 @@ export default {
           break;
       }
     },
-
+    showRec() {
+      console.log(this.$refs.UserSelector.recommendations)
+    },
     callAddShelf() {
       if (this.shelfname.length > 3) {
         this.dialog = false;

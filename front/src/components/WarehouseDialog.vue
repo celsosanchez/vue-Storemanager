@@ -133,6 +133,7 @@
 <script>
 import axios from "axios";
 import DesiredStock from "@/components/DesiredStock.vue";
+import config from '../../config'
 // import ProductData from "@/components/ProductData.vue";
 export default {
   components: {
@@ -162,7 +163,7 @@ export default {
     save() {
       // console.log(this.$refs.DesiredStock.items);
       axios
-        .put("http://192.168.31.175:3000/users", {
+        .put(`http://${config.server.address}/users`, {
           user: this.activeUser,
           list: this.$refs.DesiredStock.items,
           fridge: this.currentItems,

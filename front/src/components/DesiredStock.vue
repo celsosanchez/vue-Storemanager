@@ -62,7 +62,7 @@
 </template>
 <script>
 import axios from "axios";
-
+import config from '../../config'
 export default {
   props: ["activeUser"],
   data: () => ({
@@ -115,7 +115,7 @@ export default {
         this.items = [];
       if (this.activeUser) {
         this.loading = true;
-        axios.get(`http://192.168.31.175:3000/users`).then((res) => {
+        axios.get(`http://${config.server.address}/users`).then((res) => {
           var data = res.data.found;
           this.items = data.find(
             (element) => element.email == this.activeUser

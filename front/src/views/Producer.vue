@@ -4,6 +4,7 @@
       <v-col cols="12" md="6" sm="12">
         <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
           <v-card :elevation="hover ? 12 : 2" class="mt-6">
+         
             <v-card-title>
               Add New Product
             </v-card-title>
@@ -38,6 +39,14 @@
                 ><v-icon>mdi-barcode-scan</v-icon></v-btn
               >
             </v-card-actions>
+            <v-overlay :absolute="true" :value="loading">
+                 <v-progress-circular
+            
+              :size="50"
+              color="primary"
+              indeterminate
+            ></v-progress-circular>
+            </v-overlay>
             <v-overlay :absolute="true" :value="overlay">
               <v-btn color="orange lighten-2" @click="overlay = false">
                 type a valid input
@@ -109,16 +118,12 @@
       </v-card>
     </v-dialog>
 
-    <ProductData
-      ref="productData"
-      :url="url"
-      :location="`Producer`"
-    />
+    <ProductData ref="productData" :url="url" :location="`Producer`" />
   </div>
 </template>
 <script>
 import axios from "axios";
-import config from '../../config'
+import config from "../../config";
 import ProductData from "@/components/ProductData.vue";
 export default {
   components: {
@@ -142,6 +147,7 @@ export default {
   }),
   methods: {
     sendData() {
+      this.loading = true;
       const numberRegex = new RegExp("^[0-9]+$");
       if (
         numberRegex.test(this.amount) &&
@@ -159,6 +165,7 @@ export default {
             this.snackbar = true;
             this.clearNewProduct();
             this.$refs.productData.getData();
+            this.loading = false;
           });
       } else {
         this.overlay = true;

@@ -1,6 +1,6 @@
 var config = {};
 config.server = {};
- config.server.address = "localhost:3000"
+ config.server.address = "192.168.1.15:3000"
 //  config.server.address = "192.168.31.175:3000"
 
 // config.default_stuff =  ['red','green','blue','apple','yellow','orange','politics'];

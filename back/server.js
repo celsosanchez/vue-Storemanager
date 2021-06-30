@@ -18,6 +18,11 @@ const helmet = require("helmet");
 //Create express object
 const app = express();
 app.use(cors());
+
+
+
+
+
 // if (cluster.isMaster) {
 //   log.info(`Master ${process.pid} is running`)
 //   for (let i = 0; i < numCPUs; i++) {
@@ -45,9 +50,6 @@ connect(process.env.MONGO_DB, {
     console.log(e);
   });
 //Port definition
-const port = process.env.PORT || 3000;
-// app.listen(port, () => log.info(`Listening on port ${port}`));
-app.listen(port, () => console.log(`Listening on port ${port}`));
 // }
 //allow from any origin
 
@@ -61,16 +63,29 @@ app.use(
     cookie: { maxAge: 60000 },
     store: MongoStore.create({ mongoUrl: process.env.MONGO_DB }),
   })
-);
-//Body Parser
-app.use(auth.initialize);
-app.use(auth.session);
-app.use(helmet());
-const urlencodedParser = urlencoded({
-  extended: true,
-});
-app.use(urlencodedParser);
-app.use(cookieParser());
-app.use(json());
-//Routing
-routes(app);
+  );
+  //Body Parser
+  app.use(auth.initialize);
+  app.use(auth.session);
+  app.use(helmet());
+  const urlencodedParser = urlencoded({
+    extended: true,
+  });
+  app.use(urlencodedParser);
+  app.use(cookieParser());
+  app.use(json());
+  // app.use(function (req, res, next) {
+    //   if (!req.session.views) {
+      //     req.session.views = {}
+      //   }
+      
+      
+      
+      //   next()
+      // })
+      //Routing
+      routes(app);
+      
+      const port = process.env.PORT || 3000;
+      // app.listen(port, () => log.info(`Listening on port ${port}`));
+      app.listen(port, () => console.log(`Listening on port ${port}`));

@@ -39,10 +39,12 @@ module.exports = function (app) {
     app.get("/auth/google/redirect", passport.authenticate('google'), async (req, res) => {
         // console.log(req.user)
         const user = await User.findById(req.user);
+        // console.log(user)
+        req.user = user;
         
-        // console.log(req.session)
+        // console.log(req.user)
 
-        res.redirect('http://192.168.31.175:8080');
+        res.redirect('http://localhost:8080');
     });
 }
 
