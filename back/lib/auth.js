@@ -30,11 +30,16 @@ passport.use(
 );
  
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  console.log(`serialize`)
+  // console.log(user)
+  done(null, user._id);
 });
  
-passport.deserializeUser((id, done) => {
-  User.findById(id).then(user => {
+passport.deserializeUser((_id, done) => {
+  console.log(_id)
+  User.findById(_id).then(user => {
+    console.log(`deserialize`)
+    console.log(user)
     done(null, user);
   });
 });
@@ -43,6 +48,9 @@ module.exports = {
     initialize: passport.initialize(),
     session: passport.session(),
     setUser: (req, res, next) => {
+     
+      console.log(`export`)
+      console.log(req.user)
       res.locals.user = req.user;
       return next();
   }

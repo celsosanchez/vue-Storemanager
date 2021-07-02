@@ -15,25 +15,19 @@
         </div>
         <v-card :elevation="hover ? 12 : 2" v-if="!loading">
           <v-card-title>
-            <slot name="tableTitle"><h3>Products for sell</h3></slot>
+            <slot name="tableTitle"><h3>Products in your cart</h3></slot>
             <v-spacer></v-spacer>
             <div style="color: gray">{{ searchCounter }} items</div>
             <v-spacer></v-spacer>
+            <v-btn
+              class="ma-3"
+              icon
+              color="red"
+              :disabled="!delButton"
+              @click="takeFromCart"
+              ><v-icon>mdi-delete</v-icon></v-btn
+            >
             <v-dialog v-model="dialog" width="500">
-              <template v-slot:[`activator`]="{ on, attrs }">
-                <v-btn
-                  icon
-                  x-large
-                  large
-                  color="green"
-                  :disabled="!buyButton"
-                  class="mr-5"
-                  v-bind="attrs"
-                  v-on="on"
-                  ><v-icon x-large large>mdi-cash-register</v-icon></v-btn
-                >
-              </template>
-
               <v-card>
                 <v-card-title class="headline green lighten-2">
                   Confirm Cart
@@ -55,19 +49,29 @@
                         <th class="text-left">
                           Expiration date
                         </th>
+                        <th class="text-left">
+                          Product Price
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="item in selected" :key="item.key">
+                      <tr v-for="item in cart" :key="item.key">
                         <td>{{ item.product_name }}</td>
                         <td>{{ item.brands }}</td>
                         <td>{{ item.expiration_datetime }}</td>
+                        <td>
+                          <div>
+                            {{ item.price
+                            }}<v-icon small>mdi-currency-eur</v-icon>
+                          </div>
+                        </td>
                       </tr>
                     </tbody>
                   </template>
                 </v-simple-table>
                 <v-divider></v-divider>
                 <v-card-actions>
+                  Total: {{ check }}<v-icon small>mdi-currency-eur</v-icon>
                   <v-spacer></v-spacer>
                   <v-btn color="primary" text @click="confirmedBuy">
                     Yes, I do.
@@ -87,7 +91,7 @@
           <v-data-table
             @pagination="counter"
             :headers="headers"
-            :items="items"
+            :items="cart"
             v-model="selected"
             :search="search"
             :single-select="singleSelect"
@@ -110,8 +114,40 @@
                 ><v-icon>mdi-eye</v-icon></v-btn
               >
             </template>
+            <template v-slot:[`item.price`]="{ item }">
+              {{ item.price }}
+              <v-icon small>mdi-currency-eur</v-icon>
+            </template>
           </v-data-table>
         </v-card>
+        <v-row>
+          <v-col>
+            <v-card class="ma-4">
+              <v-btn
+                icon
+                x-large
+                large
+                color="blue"
+                class="mr-5"
+                @click="addToCart()"
+                ><v-icon x-large large>mdi-cellphone-nfc</v-icon></v-btn
+              ></v-card
+            >
+          </v-col>
+          <v-col>
+            <v-card class="ma-4">
+              <v-btn
+                icon
+                x-large
+                large
+                color="green"
+                class="mr-5"
+                @click="dialog = !dialog"
+                ><v-icon x-large large>mdi-cash-register</v-icon></v-btn
+              ></v-card
+            >
+          </v-col>
+        </v-row>
       </div>
     </v-hover>
     <v-dialog v-model="dataDetail" scrollable persistent>
@@ -208,6 +244,7 @@ export default {
     loading: false,
     dialog: false,
     selected: [],
+    cart: [],
     singleSelect: false,
     searchCounter: 0,
     headers: [
@@ -222,10 +259,34 @@ export default {
       { text: "Brands", value: "brands" },
       { text: "Production", value: "production_datetime" },
       { text: "Expiration", value: "expiration_datetime" },
+      { text: "Price", value: "price" },
     ],
     items: [],
   }),
   methods: {
+    addToCart() {
+      if (this.items.length > 0) {
+        console.log(this.items);
+        const pos = Math.floor(Math.random() * this.items.length);
+        this.cart.push(this.items[pos]);
+        this.items.splice(pos, 1);
+      } else {
+        console.log(`there's no products left`);
+      }
+    },
+    takeFromCart() {
+      this.cart.forEach((el, ind) => {
+        this.selected.forEach((item, index) => {
+          if (item._id == el._id) {
+            this.items.push(this.cart[ind]);
+            this.cart.splice(ind, 1);
+            this.selected.splice(index, 1);
+          }
+        });
+      });
+      this.selected = [];
+    },
+
     counter(pagination) {
       this.searchCounter = pagination.itemsLength;
     },
@@ -233,51 +294,50 @@ export default {
       if (location) {
         this.loading = true;
 
-        axios.post(this.url, { location: location }).then((res) => {
-          this.items = res.data.found;
-          if (this.items) this.loading = false;
-          this.items.forEach((element) => {
-            element.exp = element.expiration_datetime;
-            element.prod = element.production_datetime;
-            var receivedExp = new Date(element.expiration_datetime);
-            var receivedprod = new Date(element.production_datetime);
-            // console.log(receivedprod);
-            element.expiration_datetime = `${receivedExp.getFullYear()}/${receivedExp.getMonth() +
-              1}/${receivedExp.getDate()}`;
-            element.production_datetime = `${receivedprod.getFullYear()}/${receivedprod.getMonth() +
-              1}/${receivedprod.getDate()}`;
-            element.expirationIn = Math.round(
-              (receivedExp - Date.now()) / 86400000
-            );
+        axios
+          .post(this.url, { location: location, inShelves: "true" })
+          .then((res) => {
+            this.items = res.data.found;
+            if (this.items) this.loading = false;
+            this.items.forEach((element) => {
+              element.exp = element.expiration_datetime;
+              element.prod = element.production_datetime;
+              var receivedExp = new Date(element.expiration_datetime);
+              var receivedprod = new Date(element.production_datetime);
+              // console.log(receivedprod);
+              element.expiration_datetime = `${receivedExp.getFullYear()}/${receivedExp.getMonth() +
+                1}/${receivedExp.getDate()}`;
+              element.production_datetime = `${receivedprod.getFullYear()}/${receivedprod.getMonth() +
+                1}/${receivedprod.getDate()}`;
+              element.expirationIn = Math.round(
+                (receivedExp - Date.now()) / 86400000
+              );
+              // element.price = Math.floor(Math.random() * 21);
+              element.price = (Math.random() * 21).toFixed(2);
+            });
+            this.loading = false;
           });
-          this.loading = false;
-        });
       }
     },
-    confirmedBuy() {
-      // console.log(this.activeUser)
+    // check(){
 
-      this.selected.forEach(async (element, index, array) => {
-        // console.log(element.first_packaging_code_geo);
+    // },
+    confirmedBuy() {
+      this.cart.forEach(async (element, index, array) => {
+        console.log(`confirmed buy this.location`)
+        console.log(this.location)
         await axios
-          .patch(`http://${config.server.address}/producer`, {
+          .patch(`http://${config.server.address}/storeBuy`, {
             data: {
               productId: element._id,
-              productLocation: element.first_packaging_code_geo,
-              buyerLocation: this.buyerData,
-              now: Date.now(),
-              // product_name: element.product_name,
-              // // expiration_datetime: element.expiration_datetime,
-              // // production_datetime: element.production_datetime,
-              // expiration_datetime: element.exp,
-              // production_datetime: element.prod,
               buyer: this.activeUser,
+              location: this.location
             },
           })
           .then(() => {
             if (index == array.length - 1) {
               this.selected = [];
-
+              this.cart = [];
               this.getData();
               this.dialog = false;
             }
@@ -310,7 +370,14 @@ export default {
   },
   mounted() {},
   computed: {
-    buyButton() {
+    check() {
+      let total = 0;
+      this.cart.forEach((el) => {
+        total += parseFloat(el.price);
+      });
+      return total.toFixed(2);
+    },
+    delButton() {
       if (this.selected.length == 0) return false;
       else return true;
     },

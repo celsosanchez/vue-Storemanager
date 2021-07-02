@@ -17,6 +17,7 @@ module.exports = function (app) {
     app.post('/products',  product.getProducts);
     app.patch('/producer', product.consumerBuyFromProducer);
     app.delete('/producer', product.rmProducerEntry);
+    app.patch('/storeBuy', product.consumerBuyFromStore);
 
     app.put('/ProductToShelf', product.sendToSHelf);
     app.put('/ProductFromShelf', product.takeFromSHelf);
@@ -32,6 +33,12 @@ module.exports = function (app) {
     app.put('/store', store.createStore);
     
 
+
+
+
+
+
+    
     //-----auth---
     app.get("/auth/google", passport.authenticate("google", {
         scope: ["profile", "email"]

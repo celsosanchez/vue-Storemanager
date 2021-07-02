@@ -1,6 +1,6 @@
 const User = require("../schema/user");
 const Product = require("../schema/product");
-const ProducerStockEntry = require("../schema/producer_stock");
+// const ProducerStockEntry = require("../schema/producer_stock");
 const axios = require("axios").default;
 // const User = require("../schema/user");
 // const log = require("../lib/logger");

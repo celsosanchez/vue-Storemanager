@@ -1,10 +1,10 @@
 const Product = require("../schema/product");
-const ProducerStockEntry = require("../schema/producer_stock");
+// const ProducerStockEntry = require("../schema/producer_stock");
 const store = require("../schema/store");
 
 const axios = require("axios").default;
-const { json } = require("body-parser");
-const e = require("express");
+// const { json } = require("body-parser");
+// const e = require("express");
 // const User = require("../schema/user");
 // const log = require("../lib/logger");
 
@@ -86,8 +86,8 @@ async function addProducts(req, res) {
             where: "Produced",
             time_stamp: productData.production_datetime,
           };
-          const stock = new ProducerStockEntry(prod_stock);
-          stock.save();
+          // const stock = new ProducerStockEntry(prod_stock);
+          // stock.save();
           //adding to Product
           for (let index = 0; index < amount; index++) {
             const Data = new Product(productData);
@@ -112,7 +112,7 @@ async function addProducts(req, res) {
 
 async function getProducts(req, res) {
   try {
-    console.log(req.user)
+    // console.log(req.user);
     const found = await Product.find(req.body);
     return res.status(200).json({
       count: found.length,
@@ -127,7 +127,7 @@ async function rmProducerEntry(req, res) {
   const { productName, amount, location } = req.body;
   if (!productName || !amount || !location) {
     return res.status(400).json({
-      text: "invalid request, specify product name, amount to remove, reason and new location",
+      text: "invalid request ",
     });
   }
   var count = 0;
@@ -207,6 +207,56 @@ async function consumerBuyFromProducer(req, res) {
   }
 }
 
+async function consumerBuyFromStore(req, res) {
+  const { productId, buyer, location } = req.body.data;
+  let rdoc;
+  try {
+    let timeOfBuy = Date.now();
+    await Product.findOneAndUpdate(
+      { _id: productId },
+      {
+        location: buyer,
+        timeOfBuy: timeOfBuy,
+      },
+      (err, doc) => {
+        if (err) console.log(`error: ${err}`);
+        rdoc = doc;
+      }
+    );
+    var list = [];
+    axios
+      .get(`http://localhost:3000/store`, {
+        params: { storeName: location },
+      })
+      .then((res) => {
+        if (res.data.found[0]) list = res.data.found[0].Shelves;
+        else this.list = [];
+
+        list.forEach((x, index) => {
+          list[index].Items.forEach((el, i) => {
+            if (el.name == rdoc.product_name) {
+              if (el.Amount > 1) {
+                el.Amount -= 1;
+              } else {
+                list[index].Items.splice(i, 1);
+              }
+            }
+          });
+        });
+        axios
+          .post(`http://localhost:3000/store`, {
+            storeName: location,
+            list: list,
+          })
+      })
+      .catch((err) => console.log(err));
+
+      return res.status(200).json({text:"done"})
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+}
+
 // async function moveProducts(req,res) {
 //   try {
 //     var found = args[0]
@@ -227,25 +277,25 @@ async function consumerBuyFromProducer(req, res) {
 //   }
 // }
 
-async function moveProducts(productName, amount, location, ...args) {
-  try {
-    var found = args[0]
-      ? await Product.find({ product_name: productName, location: args[0] })
-      : await Product.find({ product_name: productName });
-    if (found.length < Math.abs(amount))
-      throw `no enough products on location: ${args[0]} to complete the request`;
-    found.sort((a, b) => {
-      return a.production_datetime - b.production_datetime;
-    });
-    for (let index = 0; index < Math.abs(amount); index++) {
-      found[index].location = location;
-      const Data = new Product(found[index]);
-      await Data.save();
-    }
-  } catch (error) {
-    throw error;
-  }
-}
+// async function moveProducts(productName, amount, location, ...args) {
+//   try {
+//     var found = args[0]
+//       ? await Product.find({ product_name: productName, location: args[0] })
+//       : await Product.find({ product_name: productName });
+//     if (found.length < Math.abs(amount))
+//       throw `no enough products on location: ${args[0]} to complete the request`;
+//     found.sort((a, b) => {
+//       return a.production_datetime - b.production_datetime;
+//     });
+//     for (let index = 0; index < Math.abs(amount); index++) {
+//       found[index].location = location;
+//       const Data = new Product(found[index]);
+//       await Data.save();
+//     }
+//   } catch (error) {
+//     throw error;
+//   }
+// }
 
 async function sendToShelf(req, res) {
   const { productIds, storeName } = req.body;
@@ -420,10 +470,10 @@ async function takeFromShelf(req, res) {
 // }
 
 exports.addProducts = addProducts;
-exports.moveProducts = moveProducts;
+exports.consumerBuyFromStore = consumerBuyFromStore;
 exports.consumerBuyFromProducer = consumerBuyFromProducer;
 exports.rmProducerEntry = rmProducerEntry;
 exports.getProducts = getProducts;
-
+// exports.consumerBuyFromStore = consumerBuyFromStore
 exports.sendToSHelf = sendToShelf;
 exports.takeFromSHelf = takeFromShelf;

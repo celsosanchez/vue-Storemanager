@@ -89,10 +89,27 @@
             class="mb-8"
           >
             <v-card-title>
-              Buy from Producer
+              Buy from source
             </v-card-title>
             <v-card-actions>
               <buy-from-producer :activeUser="currentUser" @childCallsReload="reload" />
+            </v-card-actions>
+          </v-card>
+        </v-hover>
+      </v-col>
+      <v-col class="d-flex justify-center">
+        <v-hover close-delay="189" open-delay="191" v-slot="{ hover }">
+          <v-card
+            :elevation="hover ? 12 : 2"
+            :min-width="cardWidth"
+            min-height="150"
+            class="mb-8"
+          >
+            <v-card-title>
+              Go Shopping
+            </v-card-title>
+            <v-card-actions>
+              <go-shopping :activeUser="currentUser" @childCallsReload="reload" />
             </v-card-actions>
           </v-card>
         </v-hover>
@@ -137,6 +154,7 @@ import ExpirationWarning from "../components/ExpirationWarning.vue";
 import BuyFromProducer from "../components/buyFromProducer.vue";
 import config from "../../config";
 import Delivery from "../components/Delivery.vue";
+import GoShopping from '../components/GoShopping.vue';
 
 export default {
   name: "Consumer",
@@ -147,6 +165,7 @@ export default {
     ExpirationWarning,
     BuyFromProducer,
     Delivery,
+    GoShopping,
   },
   data: () => ({
     // fridgeStock: ['2s'],
@@ -194,9 +213,9 @@ export default {
         case "md":
           return 250;
         case "lg":
-          return 450;
+          return 150;
         case "xl":
-          return 230;
+          return 150;
         default:
           return 350;
       }
