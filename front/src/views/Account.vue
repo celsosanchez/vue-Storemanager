@@ -14,11 +14,8 @@
           indeterminate
         ></v-progress-linear>
       </template>
-
       <v-img height="250" src="https://picsum.photos/800/1600"></v-img>
-
       <v-card-title>Hi {{ activeUser.name }}!</v-card-title>
-
       <v-card-text>
         <v-row align="center" class="mx-0">
           <v-rating
@@ -152,7 +149,6 @@ export default {
   methods: {
     showActiveUser(){},
     logout(){
-      // console.log(this.$cookies.keys())
       this.$cookies.remove("sessid")
        window.location.href = "https://www.google.com";
     },

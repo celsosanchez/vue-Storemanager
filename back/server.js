@@ -2,7 +2,7 @@ require("dotenv").config();
 import express from "express";
 import { connect } from "mongoose";
 import session from "express-session";
-import cookieSession from "cookie-session";
+// import cookieSession from "cookie-session";
 import { urlencoded, json } from "body-parser";
 import cors from "cors";
 import routes from "./controller/routes";
@@ -49,7 +49,6 @@ connect(process.env.MONGO_DB, {
 //Port definition
 // }
 //allow from any origin
-
 // session store definiton onto mongo
 app.use(
   session({
@@ -63,7 +62,6 @@ app.use(
 );
 
 //Body Parser
-
 // app.use(auth.setUser);
 app.use(helmet());
 const urlencodedParser = urlencoded({
