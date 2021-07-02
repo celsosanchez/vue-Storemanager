@@ -26,7 +26,7 @@
             min-height="150"
             class="mb-8"
           >
-            <v-card-title>
+            <v-card-title :class="smallText">
               Desired stock
             </v-card-title>
             <v-card-actions>
@@ -47,7 +47,7 @@
             min-height="150"
             class="mb-8"
           >
-            <v-card-title>
+            <v-card-title :class="smallText">
               Shopping List
             </v-card-title>
             <v-card-actions>
@@ -68,7 +68,7 @@
             min-height="150"
             class="mb-8"
           >
-            <v-card-title>
+            <v-card-title :class="smallText">
               Warning!
             </v-card-title>
             <v-card-actions>
@@ -88,7 +88,7 @@
             min-height="150"
             class="mb-8"
           >
-            <v-card-title>
+            <v-card-title :class="smallText">
               Buy from source
             </v-card-title>
             <v-card-actions>
@@ -105,7 +105,7 @@
             min-height="150"
             class="mb-8"
           >
-            <v-card-title>
+            <v-card-title :class="smallText">
               Go Shopping
             </v-card-title>
             <v-card-actions>
@@ -122,7 +122,7 @@
             min-height="150"
             class="mb-8"
           >
-            <v-card-title>
+            <v-card-title :class="smallText">
               Delivery
             </v-card-title>
             <v-card-actions>
@@ -220,9 +220,9 @@ export default {
           return 350;
       }
     },
-    reactiveTitles() {
-      if (this.$vuetify.breakpoint.name != `xs`) return true;
-      else return false;
+    smallText() {
+      if (this.$vuetify.breakpoint.name == `xs`) return "text-body-1";
+      else return ""
     },
   },
   watch: {

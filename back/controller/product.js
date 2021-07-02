@@ -15,18 +15,13 @@ async function addProducts(req, res) {
       text: "invalid request",
     });
   }
-
-  // var openData = "no data received";
   var productData;
   try {
     await axios
       .get(
         `https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-food-facts-products%40public&q=product_name%3A${product}&rows=10000&facet=creator&facet=created_datetime&facet=packaging_tags&facet=brands_tags&facet=categories_tags&facet=categories_fr&facet=origins_tags&facet=manufacturing_places_tags&facet=labels_tags&facet=labels_fr&facet=cities_tags&facet=countries_tags&facet=allergens&facet=traces_tags&facet=additives_n&facet=additives_tags&facet=ingredients_from_palm_oil_n&facet=ingredients_that_may_be_from_palm_oil_n&facet=nutrition_grade_fr&facet=pnns_groups_1&facet=pnns_groups_2&facet=main_category&facet=energy_100g&facet=fat_100g&facet=sugars_100g&refine.origins_tags=france`
-        // `https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-food-facts-products%40public&q=&refine.product_name=${product}`
       )
       .then((res) => {
-        // openData = res.data.records[0].fields;
-
         productData = {
           labels_fr: res.data.records[0].fields.labels_fr,
           carbohydrates_100g: res.data.records[0].fields.carbohydrates_100g,
@@ -369,7 +364,6 @@ async function sendToShelf(req, res) {
         list: shelves[0].Shelves,
       });
     });
-    // .then(() => {
   }
   return res.status(200).json({ shelves: shelves });
 }
@@ -474,6 +468,5 @@ exports.consumerBuyFromStore = consumerBuyFromStore;
 exports.consumerBuyFromProducer = consumerBuyFromProducer;
 exports.rmProducerEntry = rmProducerEntry;
 exports.getProducts = getProducts;
-// exports.consumerBuyFromStore = consumerBuyFromStore
 exports.sendToSHelf = sendToShelf;
 exports.takeFromSHelf = takeFromShelf;

@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+   <v-container fluid> 
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <!-- <ProductData
@@ -17,19 +18,18 @@
       contain
       src="https://images.unsplash.com/photo-1607349913338-fca6f7fc42d0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=967&q=80"
     >
-      <v-row align="center" justify="center" >
-        <v-col class="text-center" >
-          <v-card class="mr-15 ml-15" >
-          <h1 class="text-h4 font-weight-thin mb-4">
-            Grocery-Shop
-          </h1>
-          <h4 class="subheading">
-           The all-in-one store manager
-          </h4>
+      <v-row align="center" justify="center" no-gutters>
+        <v-col class="text-center"  xs="10" sm="10" md="4">
+          <v-card class="mr-15 ml-15" max-width="500">
+            <v-img  contain max-height="300"  src="@/assets/logo.png"></v-img>
+            <h4 class="subheading">
+              The all-in-one store manager
+            </h4>
           </v-card>
         </v-col>
       </v-row>
     </v-parallax>
+   </v-container>
   </div>
 </template>
 
