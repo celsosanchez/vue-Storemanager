@@ -15,6 +15,7 @@ module.exports = function (app) {
 
     app.put('/producer', product.addProducts);
     app.post('/products',  product.getProducts);
+    // app.get('/products',  product.getProducts);
     app.patch('/producer', product.consumerBuyFromProducer);
     app.delete('/producer', product.rmProducerEntry);
     app.patch('/storeBuy', product.consumerBuyFromStore);
@@ -25,6 +26,7 @@ module.exports = function (app) {
     app.put('/UpdateSLfromDS', user.UpdateSLfromDS);
     app.put('/usersShoppingList', user.addToSL);
     app.get('/users', user.getUsers);
+    app.post('/users', user.userAccept);
     app.put('/users', user.addToDS);
     
 
@@ -34,24 +36,21 @@ module.exports = function (app) {
     
 
 
-
+// app.get(`/failed`,(req,res) => res.send(`you failed to log in`))
 
 
 
     
     //-----auth---
     app.get("/auth/google", passport.authenticate("google", {
-        scope: ["profile", "email"]
+        scope: ["profile", "email"], session: true
     }));
-    app.get("/auth/google/redirect", passport.authenticate('google'), async (req, res) => {
-        // console.log(req.user)
-        const user = await User.findById(req.user);
-        // console.log(user)
-        req.user = user;
-        
-        // console.log(req.user)
+    app.get("/auth/google/redirect", passport.authenticate('google',{failureRedirect: '/failed'}), async (req, res) => {
+        // // console.log(req.user)
+        // const user = await User.findById(req.user);
+        res.cookie('sessid',req.user._id)
 
-        res.redirect('http://localhost:8080');
+        res.redirect('http://localhost:8080/account');
     });
 }
 

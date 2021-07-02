@@ -36,9 +36,9 @@
 <script>
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'
-// import axios from'axios';
+import axios from'axios';
 // import ProductData from "@/components/ProductData.vue";
-// import config from '../../config'
+import config from '../../config'
 
 export default {
   name: "Home",
@@ -52,13 +52,19 @@ export default {
   methods: {
     auth() {
       // console.log(this.$refs)
-      this.$refs.productData.getData();
+      // this.$refs.productData.getData();
       // this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
-      // axios.get("http://localhost:3000/auth/google")
+      axios.get("http://localhost:3000/products")
     },
     showSession() {
-      console.log(this.$session.getAll());
+      // console.log(this.$session.getAll());
     },
   },
+  created(){
+    console.log(this.$cookies.get('sessid'))
+    if(this.$cookies.get('sessid') == null){
+      window.location.href = `http://${config.server.address}/auth/google`;
+    }
+  }
 };
 </script>

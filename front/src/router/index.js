@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import NotFound from '@/views/NotFound'
 import Producer from '@/views/Producer'
 import Consumer from '@/views/Consumer'
+import Account from '@/views/Account'
 import Store from '@/views/Store'
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/consumer',
     name: 'Consumer',
     component: Consumer
+  },
+  {
+    path: '/account',
+    name: 'Account',
+    component: Account
   },
   {
     path: '/about',

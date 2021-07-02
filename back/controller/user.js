@@ -118,7 +118,7 @@ async function UpdateSLfromDS(req, res) {
         }
       });
       if (add) {
-        console.log(newAdd);
+        // console.log(newAdd);
         shoppingList.push(newAdd);
       }
     });
@@ -237,6 +237,23 @@ async function getUsers(req, res) {
     return res.status(500).json({ error });
   }
 }
+async function userAccept(req, res) {
+  const {userMail} = req.body
+  console.log(userMail)
+  try {
+    await User.findOneAndUpdate(
+      { email: userMail },
+      { acceptConditions: true },
+      (err, doc) => {
+        if (err) console.log(`error: ${err}`);
+        console.log(doc)
+        return res.send(doc);
+      }
+    );
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+}
 
 // async function rmProducerEntry(req, res) {
 //   const { productName, amount, location } = req.body;
@@ -344,6 +361,7 @@ async function getUsers(req, res) {
 // }
 
 exports.getUsers = getUsers;
+exports.userAccept = userAccept;
 exports.addToDS = addToDS;
 exports.addToSL = addToSL;
 exports.UpdateSLfromDS = UpdateSLfromDS;

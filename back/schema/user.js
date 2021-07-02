@@ -10,6 +10,7 @@ const User = mongoose.Schema({
   shoppingList: [
     { Amount: Number, Image: String, Producer: String, Categories: String, name: String },
   ],
-  paypalAccount:[String]
+  paypalAccount:[String],
+  acceptConditions : Boolean,
 });
 module.exports = mongoose.model("User", User);

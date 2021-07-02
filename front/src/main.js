@@ -4,7 +4,9 @@ import vuetify from './plugins/vuetify';
 import router from './router'
 import VueBarcodeScanner from 'vue-barcode-scanner'
 import VueSession from 'vue-session'
+import VueCookies from 'vue-cookies'
 import * as VueGoogleMaps from 'vue2-google-maps'
+Vue.use(VueCookies)
 Vue.use(VueSession)
 Vue.use(VueGoogleMaps, {
   load: {

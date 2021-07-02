@@ -107,6 +107,7 @@ async function addProducts(req, res) {
 
 async function getProducts(req, res) {
   try {
+    // console.log(req.session);
     // console.log(req.user);
     const found = await Product.find(req.body);
     return res.status(200).json({
