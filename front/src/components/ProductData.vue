@@ -179,8 +179,11 @@
                     />
                   </GmapMap>
                 </td>
+                 <td v-if="key == 'deliveryDistance'" align="center">
+                  {{(value*1609.34).toFixed(2)}} m - {{(value*1609.34*0.9).toFixed(2)}} g CO2 
+                </td>
                 <td
-                  v-if="key != 'first_packaging_code_geo' && key != 'image_url'"
+                  v-else
                 >
                   {{ value }}
                 </td>

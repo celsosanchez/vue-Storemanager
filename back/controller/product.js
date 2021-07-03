@@ -151,7 +151,7 @@ async function rmProducerEntry(req, res) {
 
 async function consumerBuyFromProducer(req, res) {
   const { productId, buyer, buyerLocation, productLocation } = req.body.data;
-  let time, geoLocation;
+  let time, geoLocation,distance;
   if (productLocation.length == 0) {
     geoLocation = [48.1147, -1.6794];
   } else {
@@ -180,6 +180,7 @@ async function consumerBuyFromProducer(req, res) {
       )
       .then((res) => {
         time = res.data.time[1];
+        distance =res.data.distance[1];
       })
       .catch((err) => {
         console.log(err);
@@ -192,6 +193,7 @@ async function consumerBuyFromProducer(req, res) {
         location: buyer,
         availableToBuyerAt: available,
         timeOfBuy: timeOfBuy,
+        deliveryDistance: distance
       },
       (err, doc) => {
         if (err) console.log(`error: ${err}`);

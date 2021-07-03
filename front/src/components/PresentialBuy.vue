@@ -70,7 +70,12 @@
                   </template>
                 </v-simple-table>
                 <v-divider></v-divider>
-                <v-card-actions>
+                <v-card-actions class="text-caption" align="center" justify="center">
+                  <v-icon color="green darken-2">mdi-nature-people</v-icon><div class="mt-2 ml-2">Aproximate carbon footprint: {{ (check*0.584).toFixed(2) }} kg CO2eq.</div>
+                  <v-spacer></v-spacer>
+                   
+                </v-card-actions>
+                <v-card-actions style="background-color: #B9F6CA;">
                   Total: {{ check }}<v-icon small>mdi-currency-eur</v-icon>
                   <v-spacer></v-spacer>
                   <v-btn color="primary" text @click="confirmedBuy">
