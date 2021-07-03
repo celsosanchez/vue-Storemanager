@@ -1,19 +1,17 @@
 <template>
- <searcher/>
+  <line-zoomable-chart />
 </template>
 <script>
+// import Searcher from '../components/Searcher.vue';
+import LineZoomableChart from "@/components/Charts/LineZoomableChart.vue";
 
-import Searcher from '../components/Searcher.vue';
- export default {
-   components:{
-      
-      Searcher
-   },
-  methods: {
-    
+export default {
+  components: {
+    LineZoomableChart,
+
+    // Searcher
   },
-  mounted() {
-    
-  },
+  methods: {},
+  mounted() {},
 };
 </script>

@@ -24,11 +24,34 @@
           <v-card flat min-height="70vh">
             <!-- <v-card-text> asd</v-card-text> -->
             <v-row class="ma-3">
-              <v-col xs="2" md="2" xl="2">
-                <v-btn @click="showRec">caca</v-btn>
-                <user-selector ref="UserSelector" />
+              <v-col xs="12" md="4" xl="4">
+                <v-card class="pt-3 px-3">
+                  <v-card-title> {{ store }}'s Client Flow</v-card-title>
+                  <line-zoomable-chart ref="lineChart"  :key="componentKey"/>
+                </v-card>
+              </v-col>
+              <v-col xs="12" md="4" xl="4">
+                <v-card class="pr-2">
+                  <v-card-title class="mb-10">
+                    Incomes by Product Types</v-card-title
+                  >
+                  <div class="py-6 msr-2">
+                    <pie-image ref="pieChart"/>
+                  </div>
+                </v-card>
+              </v-col>
+              <v-col xs="12" md="4" xl="4">
+                <v-card>
+                  <v-card-title class=""> Incomes by competitors</v-card-title>
+                  <div class="py-1">
+                    <area-chart ref="areaChart" />
+                  </div>
+                </v-card>
               </v-col>
             </v-row>
+            <v-row
+              ><v-col><data-table-logs ref="logs" /></v-col
+            ></v-row>
           </v-card>
         </v-window-item>
         <v-window-item>
@@ -170,7 +193,11 @@ import ProductData from "./ProductData.vue";
 import config from "../../config";
 import ActiveOrders from "./ActiveOrders.vue";
 import Shelves from "./Shelves.vue";
-import UserSelector from "./UserSelector.vue";
+import LineZoomableChart from "./Charts/LineZoomableChart.vue";
+import PieImage from "./Charts/PieImage.vue";
+import AreaChart from "./Charts/AreaChart.vue";
+import DataTableLogs from "./Charts/DataTableLogs.vue";
+
 export default {
   components: {
     ProducerBuy,
@@ -178,11 +205,16 @@ export default {
     ExpirationWarning,
     ActiveOrders,
     Shelves,
-    UserSelector,
+    LineZoomableChart,
+    PieImage,
+    AreaChart,
+    DataTableLogs,
+    // UserSelector,
   },
   name: "storeWindows",
   props: ["store"],
   data: () => ({
+    componentKey: 0,
     customHeaders: [
       {
         text: "Product",
@@ -309,7 +341,7 @@ export default {
       }
     },
     showRec() {
-      console.log(this.$refs.UserSelector.recommendations)
+      console.log(this.$refs.UserSelector.recommendations);
     },
     callAddShelf() {
       if (this.shelfname.length > 3) {

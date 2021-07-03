@@ -9,9 +9,9 @@
       :location="`Producer`"
     /> -->
     <!-- <v-img contain max-height="80vh" src="https://images.unsplash.com/photo-1568835679605-ba674a4d12e1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=675&q=80"></v-img> -->
-    <v-btn href="localhost:3000/auth/google">googleauth</v-btn>
+    <!-- <v-btn href="localhost:3000/auth/google">googleauth</v-btn>
     <v-btn @click="auth">auth</v-btn>
-    <v-btn @click="showSession">session</v-btn>
+    <v-btn @click="showSession">session</v-btn> -->
 
     <v-parallax
       dark
@@ -61,7 +61,7 @@ export default {
     },
   },
   created(){
-    console.log(this.$cookies.get('sessid'))
+    // console.log(this.$cookies.get('sessid'))
     if(this.$cookies.get('sessid') == null){
       window.location.href = `http://${config.server.address}/auth/google`;
     }

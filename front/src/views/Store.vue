@@ -12,14 +12,18 @@
                 src="https://upload.wikimedia.org/wikipedia/commons/9/91/Lidl-Logo.svg"
               />Lidl
             </v-tab>
-            <v-tab :disabled="active == `Leclerc`" @click="refreshData(`Leclerc`)"
+            <v-tab
+              :disabled="active == `Leclerc`"
+              @click="refreshData(`Leclerc`)"
               ><v-img
                 class="mr-3"
                 :max-width="icoWidth"
                 src="https://upload.wikimedia.org/wikipedia/commons/e/ed/Logo_E.Leclerc_Sans_le_texte.svg"
               />Leclerc</v-tab
             >
-            <v-tab :disabled="active == `Carrefour`" @click="refreshData(`Carrefour`)"
+            <v-tab
+              :disabled="active == `Carrefour`"
+              @click="refreshData(`Carrefour`)"
               ><v-img
                 class="mr-3"
                 :max-width="icoWidth + 10"
@@ -44,7 +48,6 @@ export default {
     stores: ["Lidl", "Leclerc", "Carrefour"],
     active: "Lidl",
     pos: 0,
-    
   }),
   computed: {
     icoWidth() {
@@ -66,6 +69,15 @@ export default {
   },
   methods: {
     refreshData(val) {
+      if (this.$refs.storeWindows.$refs.lineChart != undefined) {
+        // console.log(`recalling shelves`)
+        this.active = val;
+        // this.$refs.storeWindows.$refs.lineChart.getData();
+        this.$refs.storeWindows.componentKey+=1;
+        this.$refs.storeWindows.$refs.pieChart.getData();
+        // this.$refs.storeWindows.$refs.areaChart.getData();
+        this.$refs.storeWindows.$refs.logs.getData();
+      }
       if (this.$refs.storeWindows.$refs.shelves != undefined) {
         // console.log(`recalling shelves`)
         this.active = val;
@@ -83,7 +95,6 @@ export default {
       }
     },
   },
-  watch: {
-  },
+  watch: {},
 };
 </script>
