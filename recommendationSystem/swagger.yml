@@ -1,0 +1,33 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Swagger ReST for products association rules
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: /api
+# Paths supported by the server application
+paths:
+  /associations:
+    post:
+      operationId: products.getAssociations
+      tags:
+        - Products
+      summary: Get associations given a set of products
+      description: receives one or more products and uses the results of the apriori rules ordered by lift  
+      parameters:
+        - in: "body"
+          name: "products"
+          description: "products to match"
+          required: true
+          schema:
+            type: "array"
+            items:
+              type: "string"
+            example: ["milk","cheese"]
+      responses:
+        200:
+          description: returning found associations
+ 

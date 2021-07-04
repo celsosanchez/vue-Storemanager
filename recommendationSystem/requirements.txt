@@ -1,0 +1,4 @@
+pandas
+connexion[swagger-ui]
+flask-cors
+flask

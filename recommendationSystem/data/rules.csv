@@ -1,0 +1,122 @@
+,lh,rh,lift
+0,"frozenset({'citrus fruit', 'whole milk', 'other vegetables'})","frozenset({'root vegetables', 'tropical fruit'})",11.506831219806765
+1,frozenset({'Instant food products'}),frozenset({'hamburger meat'}),11.42143769597027
+6,"frozenset({'citrus fruit', 'root vegetables', 'whole milk'})","frozenset({'other vegetables', 'tropical fruit'})",9.59663204280768
+9,"frozenset({'root vegetables', 'whole milk', 'tropical fruit'})","frozenset({'citrus fruit', 'other vegetables'})",9.097785867748867
+12,frozenset({'flour'}),frozenset({'sugar'}),8.46311223504206
+13,"frozenset({'root vegetables', 'other vegetables', 'tropical fruit'})","frozenset({'citrus fruit', 'whole milk'})",8.399035812672176
+18,"frozenset({'whole milk', 'other vegetables', 'tropical fruit'})","frozenset({'yogurt', 'root vegetables'})",8.066765091863516
+21,"frozenset({'citrus fruit', 'root vegetables', 'tropical fruit'})","frozenset({'whole milk', 'other vegetables'})",7.397248641304349
+22,"frozenset({'root vegetables', 'tropical fruit'})","frozenset({'citrus fruit', 'other vegetables'})",7.361026059740083
+23,"frozenset({'citrus fruit', 'whole milk', 'tropical fruit'})","frozenset({'root vegetables', 'other vegetables'})",7.351232097217534
+28,"frozenset({'citrus fruit', 'root vegetables', 'other vegetables'})","frozenset({'whole milk', 'tropical fruit'})",7.185261123680243
+31,"frozenset({'citrus fruit', 'other vegetables', 'tropical fruit'})","frozenset({'root vegetables', 'whole milk'})",7.121983695017404
+32,"frozenset({'butter', 'tropical fruit'})","frozenset({'yogurt', 'other vegetables'})",7.050853128136501
+33,"frozenset({'citrus fruit', 'root vegetables'})","frozenset({'other vegetables', 'tropical fruit'})",7.045358340659697
+40,"frozenset({'curd', 'tropical fruit'})","frozenset({'yogurt', 'whole milk'})",6.8923289788143975
+41,"frozenset({'root vegetables', 'whole milk', 'tropical fruit'})","frozenset({'yogurt', 'other vegetables'})",6.8317588218949705
+42,"frozenset({'yogurt', 'root vegetables', 'whole milk'})","frozenset({'other vegetables', 'tropical fruit'})",6.819172329087343
+49,"frozenset({'yogurt', 'root vegetables', 'other vegetables'})","frozenset({'whole milk', 'tropical fruit'})",6.515464112658994
+53,"frozenset({'butter', 'tropical fruit'})","frozenset({'yogurt', 'whole milk'})",6.010500388903292
+54,"frozenset({'pip fruit', 'root vegetables'})","frozenset({'other vegetables', 'tropical fruit'})",6.009276231739155
+56,frozenset({'processed cheese'}),frozenset({'white bread'}),5.975445303932901
+59,"frozenset({'whipped/sour cream', 'tropical fruit'})","frozenset({'yogurt', 'other vegetables'})",5.927555448408871
+60,"frozenset({'yogurt', 'other vegetables', 'tropical fruit'})","frozenset({'root vegetables', 'whole milk'})",5.914417278053642
+62,"frozenset({'yogurt', 'root vegetables', 'tropical fruit'})","frozenset({'whole milk', 'other vegetables'})",5.846212635869565
+64,"frozenset({'yogurt', 'butter'})","frozenset({'other vegetables', 'tropical fruit'})",5.8044145420207744
+65,"frozenset({'citrus fruit', 'whole milk', 'other vegetables', 'tropical fruit'})",frozenset({'root vegetables'}),5.804237739872069
+74,"frozenset({'onions', 'whole milk'})","frozenset({'root vegetables', 'other vegetables'})",5.675334511486998
+76,"frozenset({'whipped/sour cream', 'tropical fruit'})","frozenset({'yogurt', 'whole milk'})",5.6435491619515314
+80,"frozenset({'root vegetables', 'tropical fruit'})","frozenset({'yogurt', 'other vegetables'})",5.452205591193474
+81,"frozenset({'whole milk', 'root vegetables', 'other vegetables', 'tropical fruit'})",frozenset({'citrus fruit'}),5.428284015240538
+82,"frozenset({'curd', 'yogurt'})","frozenset({'whole milk', 'tropical fruit'})",5.423713235294119
+83,"frozenset({'yogurt', 'butter'})","frozenset({'whole milk', 'tropical fruit'})",5.417918669871795
+91,"frozenset({'whipped/sour cream', 'pip fruit'})","frozenset({'other vegetables', 'whole milk'})",5.286371237458194
+96,frozenset({'liquor'}),frozenset({'bottled beer'}),5.240594013529793
+99,frozenset({'herbs'}),"frozenset({'root vegetables', 'whole milk'})",5.23954002079002
+101,"frozenset({'yogurt', 'root vegetables'})","frozenset({'whole milk', 'tropical fruit'})",5.212371290127195
+102,"frozenset({'whipped/sour cream', 'butter'})","frozenset({'other vegetables', 'whole milk'})",5.21148097826087
+103,"frozenset({'citrus fruit', 'whole milk', 'root vegetables', 'other vegetables'})",frozenset({'tropical fruit'}),5.183003535971713
+104,"frozenset({'root vegetables', 'other vegetables', 'tropical fruit'})","frozenset({'yogurt', 'whole milk'})",5.163039402438841
+108,"frozenset({'whipped/sour cream', 'tropical fruit'})","frozenset({'root vegetables', 'other vegetables'})",5.121102625599596
+113,"frozenset({'berries', 'whole milk'})",frozenset({'whipped/sour cream'}),5.050990462215702
+118,frozenset({'herbs'}),"frozenset({'root vegetables', 'other vegetables'})",5.012473175965666
+121,"frozenset({'whipped/sour cream', 'yogurt'})","frozenset({'whole milk', 'tropical fruit'})",4.983326263197587
+123,"frozenset({'yogurt', 'whole milk', 'tropical fruit'})","frozenset({'root vegetables', 'other vegetables'})",4.95758562087738
+126,"frozenset({'herbs', 'whole milk'})",frozenset({'root vegetables'}),4.949369108405341
+128,"frozenset({'yogurt', 'pip fruit'})","frozenset({'whole milk', 'tropical fruit'})",4.94207681442851
+130,"frozenset({'yogurt', 'whole milk', 'tropical fruit'})",frozenset({'curd'}),4.912713253752754
+132,"frozenset({'whipped/sour cream', 'whole milk', 'other vegetables'})",frozenset({'butter'}),4.887423547400612
+135,"frozenset({'cream cheese', 'whole milk'})","frozenset({'yogurt', 'other vegetables'})",4.834041691965189
+136,"frozenset({'root vegetables', 'tropical fruit'})","frozenset({'yogurt', 'whole milk'})",4.828813663343767
+139,"frozenset({'whole milk', 'butter', 'other vegetables'})",frozenset({'whipped/sour cream'}),4.8147241574091515
+143,"frozenset({'pip fruit', 'root vegetables'})","frozenset({'whole milk', 'tropical fruit'})",4.790174082453494
+145,"frozenset({'whipped/sour cream', 'domestic eggs'})","frozenset({'other vegetables', 'whole milk'})",4.77241847826087
+148,"frozenset({'citrus fruit', 'root vegetables'})","frozenset({'whole milk', 'tropical fruit'})",4.7555398983200705
+150,"frozenset({'citrus fruit', 'tropical fruit'})","frozenset({'root vegetables', 'other vegetables'})",4.737890864500306
+154,"frozenset({'pip fruit', 'root vegetables'})","frozenset({'other vegetables', 'whole milk'})",4.716272378516624
+160,"frozenset({'onions', 'other vegetables'})","frozenset({'root vegetables', 'whole milk'})",4.673596673596673
+162,"frozenset({'whipped/sour cream', 'root vegetables'})","frozenset({'yogurt', 'other vegetables'})",4.661397345823575
+167,"frozenset({'root vegetables', 'onions'})","frozenset({'other vegetables', 'whole milk'})",4.59794296400187
+170,"frozenset({'herbs', 'other vegetables'})",frozenset({'root vegetables'}),4.5872201492537314
+172,"frozenset({'citrus fruit', 'root vegetables', 'whole milk', 'tropical fruit'})",frozenset({'other vegetables'}),4.577509196006306
+175,"frozenset({'onions', 'whole milk'})",frozenset({'butter'}),4.549379384781435
+177,"frozenset({'long life bakery product', 'whole milk'})",frozenset({'chocolate'}),4.545944779982744
+180,"frozenset({'yogurt', 'butter', 'other vegetables'})",frozenset({'tropical fruit'}),4.5381136950904395
+181,"frozenset({'citrus fruit', 'other vegetables', 'tropical fruit'})",frozenset({'root vegetables'}),4.535678349823915
+182,"frozenset({'beef', 'tropical fruit'})",frozenset({'root vegetables'}),4.526057213930349
+184,"frozenset({'whole milk', 'onions', 'other vegetables'})",frozenset({'root vegetables'}),4.516647531572905
+186,"frozenset({'butter', 'tropical fruit'})","frozenset({'other vegetables', 'whole milk'})",4.499708850931677
+187,"frozenset({'citrus fruit', 'whipped/sour cream'})","frozenset({'other vegetables', 'whole milk'})",4.495885818772856
+188,"frozenset({'cream cheese', 'other vegetables'})","frozenset({'yogurt', 'whole milk'})",4.495395577065269
+191,"frozenset({'whole milk', 'other vegetables', 'domestic eggs'})",frozenset({'butter'}),4.474183031313974
+192,"frozenset({'yogurt', 'other vegetables', 'tropical fruit'})",frozenset({'butter'}),4.474183031313974
+193,"frozenset({'beef', 'soda'})",frozenset({'root vegetables'}),4.472539645522389
+197,"frozenset({'frozen vegetables', 'root vegetables'})","frozenset({'other vegetables', 'whole milk'})",4.454257246376812
+198,"frozenset({'root vegetables', 'tropical fruit'})","frozenset({'other vegetables', 'whole milk'})",4.454257246376812
+201,"frozenset({'frozen vegetables', 'other vegetables'})","frozenset({'root vegetables', 'whole milk'})",4.43991683991684
+206,"frozenset({'fruit/vegetable juice', 'root vegetables'})","frozenset({'other vegetables', 'whole milk'})",4.416509303610907
+214,"frozenset({'root vegetables', 'other vegetables', 'tropical fruit'})",frozenset({'citrus fruit'}),4.3935671208398475
+215,"frozenset({'citrus fruit', 'root vegetables'})","frozenset({'other vegetables', 'whole milk'})",4.377459707646177
+219,"frozenset({'curd', 'whole milk', 'tropical fruit'})",frozenset({'yogurt'}),4.368223852040817
+220,"frozenset({'yogurt', 'whole milk', 'root vegetables', 'other vegetables'})",frozenset({'tropical fruit'}),4.331835799859055
+224,"frozenset({'whipped/sour cream', 'tropical fruit'})","frozenset({'other vegetables', 'whole milk'})",4.323249680306905
+226,"frozenset({'butter', 'root vegetables'})","frozenset({'other vegetables', 'whole milk'})",4.313965679561794
+227,"frozenset({'fruit/vegetable juice', 'other vegetables'})","frozenset({'yogurt', 'whole milk'})",4.3114407708426485
+232,"frozenset({'hygiene articles', 'whole milk'})",frozenset({'butter'}),4.296636085626911
+233,"frozenset({'pip fruit', 'other vegetables'})","frozenset({'root vegetables', 'whole milk'})",4.29625375150667
+235,"frozenset({'yogurt', 'whole milk', 'other vegetables', 'tropical fruit'})",frozenset({'root vegetables'}),4.281405472636816
+236,"frozenset({'butter', 'tropical fruit'})",frozenset({'whipped/sour cream'}),4.270516717325228
+237,"frozenset({'root vegetables', 'domestic eggs'})","frozenset({'other vegetables', 'whole milk'})",4.264714384828863
+239,"frozenset({'yogurt', 'butter'})","frozenset({'root vegetables', 'whole milk'})",4.259788634788635
+242,"frozenset({'butter', 'other vegetables'})","frozenset({'root vegetables', 'whole milk'})",4.255463976276159
+245,"frozenset({'butter', 'domestic eggs'})","frozenset({'other vegetables', 'whole milk'})",4.219822654462242
+246,"frozenset({'butter', 'root vegetables'})","frozenset({'yogurt', 'whole milk'})",4.216385383768952
+250,"frozenset({'other vegetables', 'domestic eggs'})","frozenset({'root vegetables', 'whole milk'})",4.201435365818928
+251,"frozenset({'citrus fruit', 'beef'})",frozenset({'root vegetables'}),4.200346160762454
+253,"frozenset({'whole milk', 'butter', 'other vegetables'})",frozenset({'domestic eggs'}),4.184394145677332
+257,"frozenset({'rolls/buns', 'other vegetables', 'tropical fruit'})",frozenset({'root vegetables'}),4.17020013568521
+258,"frozenset({'yogurt', 'pip fruit', 'other vegetables'})",frozenset({'tropical fruit'}),4.169391957364341
+261,"frozenset({'citrus fruit', 'root vegetables'})",frozenset({'beef'}),4.162545665151921
+264,"frozenset({'other vegetables', 'butter milk'})",frozenset({'pip fruit'}),4.147164242040902
+267,"frozenset({'root vegetables', 'brown bread'})","frozenset({'other vegetables', 'whole milk'})",4.142459239130435
+269,"frozenset({'whipped/sour cream', 'yogurt'})",frozenset({'curd'}),4.140239110911541
+273,"frozenset({'pastry', 'tropical fruit'})","frozenset({'yogurt', 'whole milk'})",4.119084182605054
+276,"frozenset({'citrus fruit', 'root vegetables', 'other vegetables'})",frozenset({'tropical fruit'}),4.110997112023104
+277,"frozenset({'other vegetables', 'beef'})","frozenset({'root vegetables', 'whole milk'})",4.110476455837282
+279,"frozenset({'citrus fruit', 'other vegetables'})","frozenset({'root vegetables', 'whole milk'})",4.103796374923136
+280,"frozenset({'curd', 'tropical fruit'})","frozenset({'other vegetables', 'whole milk'})",4.101444791218253
+281,"frozenset({'root vegetables', 'domestic eggs'})",frozenset({'butter'}),4.095516949703949
+284,"frozenset({'citrus fruit', 'whole milk', 'other vegetables'})",frozenset({'root vegetables'}),4.085492945429104
+285,"frozenset({'pip fruit', 'root vegetables'})","frozenset({'yogurt', 'whole milk'})",4.083188024150979
+290,"frozenset({'root vegetables', 'soda'})",frozenset({'beef'}),4.0619837336383275
+293,"frozenset({'citrus fruit', 'root vegetables', 'tropical fruit'})",frozenset({'other vegetables'}),4.060693641618497
+295,"frozenset({'whipped/sour cream', 'root vegetables'})","frozenset({'other vegetables', 'whole milk'})",4.056555706521739
+298,"frozenset({'yogurt', 'root vegetables'})","frozenset({'other vegetables', 'whole milk'})",4.050918991783636
+299,"frozenset({'citrus fruit', 'chicken'})",frozenset({'root vegetables'}),4.0475471905179985
+302,"frozenset({'sausage', 'tropical fruit'})","frozenset({'yogurt', 'whole milk'})",4.038907361532449
+304,"frozenset({'butter', 'other vegetables'})",frozenset({'whipped/sour cream'}),4.036397019116535
+305,"frozenset({'whole milk', 'other vegetables', 'domestic eggs'})",frozenset({'whipped/sour cream'}),4.03522654006213
+306,"frozenset({'yogurt', 'other vegetables', 'tropical fruit'})",frozenset({'whipped/sour cream'}),4.03522654006213
+307,"frozenset({'yogurt', 'pip fruit'})",frozenset({'curd'}),4.0295208522016654
+309,"frozenset({'yogurt', 'whole milk', 'tropical fruit'})",frozenset({'whipped/sour cream'}),4.025941263268123

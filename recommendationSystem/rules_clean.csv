@@ -1,0 +1,122 @@
+,lh,rh,lift
+0,"citrus fruit, whole milk, other vegetables","root vegetables, tropical fruit",11.506831219806765
+1,Instant food products,hamburger meat,11.42143769597027
+2,"citrus fruit, root vegetables, whole milk","tropical fruit, other vegetables",9.59663204280768
+3,"root vegetables, tropical fruit, whole milk","citrus fruit, other vegetables",9.097785867748868
+4,flour,sugar,8.46311223504206
+5,"root vegetables, tropical fruit, other vegetables","citrus fruit, whole milk",8.399035812672176
+6,"tropical fruit, other vegetables, whole milk","root vegetables, yogurt",8.066765091863516
+7,"citrus fruit, root vegetables, tropical fruit","whole milk, other vegetables",7.397248641304349
+8,"root vegetables, tropical fruit","citrus fruit, other vegetables",7.361026059740083
+9,"citrus fruit, tropical fruit, whole milk","root vegetables, other vegetables",7.351232097217534
+10,"citrus fruit, root vegetables, other vegetables","whole milk, tropical fruit",7.185261123680243
+11,"citrus fruit, tropical fruit, other vegetables","root vegetables, whole milk",7.121983695017404
+12,"butter, tropical fruit","yogurt, other vegetables",7.050853128136501
+13,"citrus fruit, root vegetables","tropical fruit, other vegetables",7.045358340659697
+14,"curd, tropical fruit","yogurt, whole milk",6.8923289788143975
+15,"root vegetables, tropical fruit, whole milk","yogurt, other vegetables",6.8317588218949705
+16,"root vegetables, yogurt, whole milk","tropical fruit, other vegetables",6.819172329087343
+17,"root vegetables, yogurt, other vegetables","whole milk, tropical fruit",6.515464112658994
+18,"butter, tropical fruit","yogurt, whole milk",6.010500388903292
+19,"root vegetables, pip fruit","tropical fruit, other vegetables",6.009276231739155
+20,processed cheese,white bread,5.975445303932901
+21,"whipped/sour cream, tropical fruit","yogurt, other vegetables",5.927555448408871
+22,"yogurt, tropical fruit, other vegetables","root vegetables, whole milk",5.914417278053642
+23,"root vegetables, yogurt, tropical fruit","whole milk, other vegetables",5.846212635869565
+24,"butter, yogurt","tropical fruit, other vegetables",5.8044145420207744
+25,"citrus fruit, tropical fruit, other vegetables, whole milk",root vegetables,5.804237739872069
+26,"onions, whole milk","root vegetables, other vegetables",5.675334511486998
+27,"whipped/sour cream, tropical fruit","yogurt, whole milk",5.6435491619515314
+28,"root vegetables, tropical fruit","yogurt, other vegetables",5.452205591193474
+29,"root vegetables, tropical fruit, other vegetables, whole milk",citrus fruit,5.428284015240538
+30,"curd, yogurt","tropical fruit, whole milk",5.423713235294119
+31,"butter, yogurt","tropical fruit, whole milk",5.417918669871795
+32,"whipped/sour cream, pip fruit","whole milk, other vegetables",5.286371237458194
+33,liquor,bottled beer,5.240594013529793
+34,herbs,"root vegetables, whole milk",5.23954002079002
+35,"root vegetables, yogurt","tropical fruit, whole milk",5.212371290127195
+36,"butter, whipped/sour cream","whole milk, other vegetables",5.21148097826087
+37,"citrus fruit, root vegetables, whole milk, other vegetables",tropical fruit,5.183003535971713
+38,"root vegetables, tropical fruit, other vegetables","yogurt, whole milk",5.163039402438841
+39,"whipped/sour cream, tropical fruit","root vegetables, other vegetables",5.121102625599596
+40,"whole milk, berries",whipped/sour cream,5.050990462215702
+41,herbs,"root vegetables, other vegetables",5.012473175965666
+42,"whipped/sour cream, yogurt","tropical fruit, whole milk",4.983326263197587
+43,"yogurt, tropical fruit, whole milk","root vegetables, other vegetables",4.95758562087738
+44,"herbs, whole milk",root vegetables,4.949369108405341
+45,"yogurt, pip fruit","tropical fruit, whole milk",4.94207681442851
+46,"yogurt, tropical fruit, whole milk",curd,4.912713253752754
+47,"whipped/sour cream, whole milk, other vegetables",butter,4.887423547400612
+48,"whole milk, cream cheese","yogurt, other vegetables",4.834041691965189
+49,"root vegetables, tropical fruit","yogurt, whole milk",4.828813663343767
+50,"butter, whole milk, other vegetables",whipped/sour cream,4.814724157409152
+51,"root vegetables, pip fruit","tropical fruit, whole milk",4.790174082453494
+52,"whipped/sour cream, domestic eggs","whole milk, other vegetables",4.77241847826087
+53,"citrus fruit, root vegetables","tropical fruit, whole milk",4.755539898320071
+54,"citrus fruit, tropical fruit","root vegetables, other vegetables",4.737890864500306
+55,"root vegetables, pip fruit","whole milk, other vegetables",4.716272378516624
+56,"onions, other vegetables","root vegetables, whole milk",4.673596673596673
+57,"root vegetables, whipped/sour cream","yogurt, other vegetables",4.661397345823575
+58,"onions, root vegetables","whole milk, other vegetables",4.59794296400187
+59,"herbs, other vegetables",root vegetables,4.5872201492537314
+60,"citrus fruit, root vegetables, tropical fruit, whole milk",other vegetables,4.577509196006306
+61,"onions, whole milk",butter,4.549379384781435
+62,"whole milk, long life bakery product",chocolate,4.545944779982744
+63,"butter, yogurt, other vegetables",tropical fruit,4.53811369509044
+64,"citrus fruit, tropical fruit, other vegetables",root vegetables,4.535678349823915
+65,"beef, tropical fruit",root vegetables,4.526057213930349
+66,"onions, whole milk, other vegetables",root vegetables,4.516647531572905
+67,"butter, tropical fruit","whole milk, other vegetables",4.499708850931677
+68,"citrus fruit, whipped/sour cream","whole milk, other vegetables",4.495885818772856
+69,"other vegetables, cream cheese","yogurt, whole milk",4.495395577065269
+70,"whole milk, other vegetables, domestic eggs",butter,4.474183031313974
+71,"yogurt, tropical fruit, other vegetables",butter,4.474183031313974
+72,"soda, beef",root vegetables,4.472539645522389
+73,"root vegetables, frozen vegetables","whole milk, other vegetables",4.454257246376812
+74,"root vegetables, tropical fruit","whole milk, other vegetables",4.454257246376812
+75,"other vegetables, frozen vegetables","root vegetables, whole milk",4.43991683991684
+76,"root vegetables, fruit/vegetable juice","whole milk, other vegetables",4.416509303610907
+77,"root vegetables, tropical fruit, other vegetables",citrus fruit,4.393567120839848
+78,"citrus fruit, root vegetables","whole milk, other vegetables",4.377459707646177
+79,"curd, tropical fruit, whole milk",yogurt,4.368223852040817
+80,"root vegetables, yogurt, whole milk, other vegetables",tropical fruit,4.331835799859055
+81,"whipped/sour cream, tropical fruit","whole milk, other vegetables",4.323249680306905
+82,"butter, root vegetables","whole milk, other vegetables",4.313965679561794
+83,"other vegetables, fruit/vegetable juice","yogurt, whole milk",4.3114407708426485
+84,"hygiene articles, whole milk",butter,4.296636085626911
+85,"pip fruit, other vegetables","root vegetables, whole milk",4.29625375150667
+86,"yogurt, tropical fruit, other vegetables, whole milk",root vegetables,4.281405472636816
+87,"butter, tropical fruit",whipped/sour cream,4.270516717325228
+88,"root vegetables, domestic eggs","whole milk, other vegetables",4.264714384828863
+89,"butter, yogurt","root vegetables, whole milk",4.259788634788635
+90,"butter, other vegetables","root vegetables, whole milk",4.255463976276159
+91,"butter, domestic eggs","whole milk, other vegetables",4.219822654462242
+92,"butter, root vegetables","yogurt, whole milk",4.216385383768952
+93,"other vegetables, domestic eggs","root vegetables, whole milk",4.201435365818928
+94,"citrus fruit, beef",root vegetables,4.200346160762454
+95,"butter, whole milk, other vegetables",domestic eggs,4.184394145677332
+96,"tropical fruit, other vegetables, rolls/buns",root vegetables,4.17020013568521
+97,"yogurt, pip fruit, other vegetables",tropical fruit,4.169391957364341
+98,"citrus fruit, root vegetables",beef,4.162545665151921
+99,"butter milk, other vegetables",pip fruit,4.147164242040902
+100,"root vegetables, brown bread","whole milk, other vegetables",4.142459239130435
+101,"whipped/sour cream, yogurt",curd,4.140239110911541
+102,"pastry, tropical fruit","yogurt, whole milk",4.119084182605054
+103,"citrus fruit, root vegetables, other vegetables",tropical fruit,4.110997112023104
+104,"beef, other vegetables","root vegetables, whole milk",4.110476455837282
+105,"citrus fruit, other vegetables","root vegetables, whole milk",4.103796374923136
+106,"curd, tropical fruit","whole milk, other vegetables",4.101444791218253
+107,"root vegetables, domestic eggs",butter,4.095516949703949
+108,"citrus fruit, whole milk, other vegetables",root vegetables,4.085492945429104
+109,"root vegetables, pip fruit","yogurt, whole milk",4.083188024150979
+110,"root vegetables, soda",beef,4.061983733638328
+111,"citrus fruit, root vegetables, tropical fruit",other vegetables,4.060693641618497
+112,"root vegetables, whipped/sour cream","whole milk, other vegetables",4.056555706521739
+113,"root vegetables, yogurt","whole milk, other vegetables",4.050918991783636
+114,"citrus fruit, chicken",root vegetables,4.047547190517999
+115,"tropical fruit, sausage","yogurt, whole milk",4.038907361532449
+116,"butter, other vegetables",whipped/sour cream,4.036397019116535
+117,"whole milk, other vegetables, domestic eggs",whipped/sour cream,4.03522654006213
+118,"yogurt, tropical fruit, other vegetables",whipped/sour cream,4.03522654006213
+119,"yogurt, pip fruit",curd,4.0295208522016654
+120,"yogurt, tropical fruit, whole milk",whipped/sour cream,4.025941263268123
