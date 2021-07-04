@@ -21,7 +21,7 @@ export default {
       Producer: { name: "Producer", value: "/producer" },
       Consumer: { name: "Consumer", value: "/consumer" },
       Store: { name: "Store", value: "/store" },
-      About: { name: "About", value: "/about" },
+      // About: { name: "About", value: "/about" },
       Account: { name: "Account", value: "/account" },
     },
   }),

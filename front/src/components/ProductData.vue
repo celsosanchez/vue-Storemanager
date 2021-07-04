@@ -151,13 +151,25 @@
                 <td v-if="key == 'image_url'" align="center">
                   <v-img contain max-width="300" :src="value"></v-img>
                 </td>
+                <td v-else-if="key == 'image_nutrition_small_url'" align="center">
+                  <v-img contain max-width="200" :src="value"></v-img>
+                </td>
+                <td v-else-if="key == 'image_small_url'" align="center">
+                  <v-img contain max-width="200" :src="value"></v-img>
+                </td>
+                <td v-else-if="key == 'image_ingredients_small_url'" align="center">
+                  <v-img contain max-width="200" :src="value"></v-img>
+                </td>
+                <td v-else-if="key == 'url'" align="center">
+                  <a :href="`${value}`">{{value}}</a>
+                </td>
                 <td
-                  v-if="key == 'first_packaging_code_geo' && value.length == 0"
+                  v-else-if="key == 'first_packaging_code_geo' && value.length == 0"
                 >
                   No Data
                 </td>
                 <td
-                  v-if="key == 'first_packaging_code_geo' && value.length != 0"
+                  v-else-if="key == 'first_packaging_code_geo' && value.length != 0"
                   align="center"
                 >
                   <GmapMap
@@ -179,7 +191,7 @@
                     />
                   </GmapMap>
                 </td>
-                 <td v-if="key == 'deliveryDistance'" align="center">
+                 <td v-else-if="key == 'deliveryDistance'" align="center">
                   {{(value*1609.34).toFixed(2)}} m - {{(value*1609.34*0.9).toFixed(2)}} g CO2 
                 </td>
                 <td

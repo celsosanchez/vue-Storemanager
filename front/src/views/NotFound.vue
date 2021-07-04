@@ -1,12 +1,20 @@
 <template>
-<div>
-  <div class="col-full text-center"></div>
-  <h1 @click="asd">404</h1>
-  <h3>
-    Sorry the requested link {{$router.history.current.path}}  doesn't
-    exist
-  </h3> 
-  <router-link to="/">Go back Home </router-link>
+  <div>
+    <v-container>
+      <v-row>
+        <v-col align="center">
+          <div class="col-full text-center"></div>
+          <v-img max-width="400" src="@/assets/404-error.jpg"></v-img>
+          <h3>
+            Sorry the requested link :
+            {{ $router.history.current.path }} doesn't exist
+          </h3>
+          <v-btn icon @click="goHome">
+            <v-icon>mdi-home</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 <script>
@@ -17,8 +25,9 @@ export default {
     };
   },
   methods: {
-    asd() {
-      console.log(this.$router.history.current.path);
+    goHome() {
+      // console.log(this.$router.history.current.path);
+      this.$router.push({ path: `/` });
     },
   },
 };

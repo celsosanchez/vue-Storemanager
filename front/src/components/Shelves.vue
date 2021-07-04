@@ -133,13 +133,13 @@ export default {
     getData(store = this.store) {
       if (!this.dataLoading) {
         this.dataLoading = true;
-        this.list = [];
+        // this.list = [];
         axios
           .get(`http://${config.server.address}/store`, {
             params: { storeName: store },
           })
           .then((res) => {
-            if (res.data.found[0]) this.list = res.data.found[0].Shelves;
+            if (res.data.found[0]){this.list=[]; this.list = res.data.found[0].Shelves;}
             else this.list = [];
             this.dataLoading = false;
           })
